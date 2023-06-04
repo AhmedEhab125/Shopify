@@ -44,7 +44,7 @@ class MainActivity : AppCompatActivity() {
         binding.vpScreenTitles.adapter=vpFragmentAdapter
         TabLayoutMediator(binding.TabLayoutScreens,binding.vpScreenTitles,
             TabLayoutMediator.TabConfigurationStrategy { tab, position ->tab .icon=getDrawable(iconList.get(position))
-            tab.text = categorysList[position]
+          //  tab.text = categorysList[position]
             }).attach()
 
     }
