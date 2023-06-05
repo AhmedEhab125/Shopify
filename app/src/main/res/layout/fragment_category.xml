@@ -1,14 +1,196 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/category_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".category.CategoryFragment">
+    tools:context=".category.view.CategoryFragment" >
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-</FrameLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <EditText
+                    android:id="@+id/category_search"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:ems="10"
+                    android:hint="@string/category_search_hint"
+                    android:inputType="textPersonName"
+                    android:minHeight="48dp"
+                    android:drawableStart="@drawable/baseline_search_24"
+                    android:paddingStart="12dp"
+                    android:drawablePadding="12dp"
+                    android:background="@drawable/textplain_background"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <RadioGroup
+                    android:id="@+id/radioGroup"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginEnd="8dp"
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/category_search">
+
+                    <RadioButton
+                        android:id="@+id/radio_women"
+                        android:layout_width="73dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="20dp"
+                        android:layout_marginVertical="5dp"
+                        android:width="50dp"
+                        android:background="@drawable/radiobutton_selector"
+                        android:button="@android:color/transparent"
+                        android:elevation="4dp"
+                        android:padding="5dp"
+                        android:text="WOMEN"
+                        android:textAlignment="center"
+                        android:textColor="@drawable/radiobutton_text_color" />
+
+                    <RadioButton
+                        android:id="@+id/radio_kid"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="20dp"
+                        android:layout_marginVertical="5dp"
+                        android:width="50dp"
+                        android:background="@drawable/radiobutton_selector"
+                        android:button="@android:color/transparent"
+                        android:elevation="4dp"
+                        android:padding="5dp"
+                        android:text="KID"
+                        android:textAlignment="center"
+                        android:textColor="@drawable/radiobutton_text_color" />
+
+                    <RadioButton
+                        android:id="@+id/radio_men"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="20dp"
+                        android:layout_marginVertical="5dp"
+                        android:width="50dp"
+                        android:background="@drawable/radiobutton_selector"
+                        android:button="@android:color/transparent"
+                        android:elevation="4dp"
+                        android:padding="5dp"
+                        android:text="MEN"
+                        android:textAlignment="center"
+                        android:textColor="@drawable/radiobutton_text_color" />
+
+                    <RadioButton
+                        android:id="@+id/radio_sale"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="20dp"
+                        android:layout_marginVertical="5dp"
+                        android:width="50dp"
+                        android:background="@drawable/radiobutton_selector"
+                        android:button="@android:color/transparent"
+                        android:elevation="4dp"
+                        android:padding="5dp"
+                        android:text="SALE"
+                        android:textAlignment="center"
+                        android:textColor="@drawable/radiobutton_text_color" />
+
+
+                </RadioGroup>
+
+                <RadioGroup
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="60dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="60dp"
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/radioGroup">
+
+                    <RadioButton
+                        android:id="@+id/radio_shirts"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="20dp"
+                        android:layout_marginVertical="5dp"
+                        android:width="50dp"
+                        android:background="@drawable/radiobutton_selector"
+                        android:button="@android:color/transparent"
+                        android:drawableStart="@drawable/tshirt"
+                        android:elevation="4dp"
+                        android:padding="5dp"
+                        android:paddingStart="12dp"
+
+                        android:textAlignment="center"
+                        android:textColor="@drawable/radiobutton_text_color" />
+
+                    <RadioButton
+                        android:id="@+id/radio_shoes"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="20dp"
+                        android:layout_marginVertical="5dp"
+                        android:width="50dp"
+                        android:background="@drawable/radiobutton_selector"
+                        android:button="@android:color/transparent"
+                        android:drawableStart="@drawable/sport_shoe"
+                        android:elevation="4dp"
+                        android:padding="5dp"
+                        android:paddingStart="12dp"
+
+                        android:textAlignment="center"
+                        android:textColor="@drawable/radiobutton_text_color" />
+
+
+                    <RadioButton
+                        android:id="@+id/radio_accessories"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="20dp"
+                        android:layout_marginVertical="5dp"
+                        android:width="50dp"
+                        android:background="@drawable/radiobutton_selector"
+                        android:button="@android:color/transparent"
+                        android:drawableStart="@drawable/jewelry"
+                        android:elevation="4dp"
+                        android:padding="5dp"
+                        android:paddingStart="12dp"
+                        android:textAlignment="center"
+                        android:textColor="@drawable/radiobutton_text_color" />
+
+
+                </RadioGroup>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/category_rv"
+                android:layout_width="match_parent"
+                android:layout_height="524dp" />
+
+
+        </LinearLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>
