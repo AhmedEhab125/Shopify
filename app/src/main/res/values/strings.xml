@@ -12,4 +12,10 @@
     <string name="whishList">WhishList</string>
     <string name="price">Price</string>
     <string name="createdAt">Created At</string>
+    <string name="login_email_hint">Email</string>
+    <string name="login_pass_hint">Password</string>
+    <string name="forget_pass">Forget Password</string>
+    <string name="login_btn">Login</string>
+    <string name="regester_TF">Dont have account ?</string>
+    <string name="register_btn">SignUp</string>
 </resources>

@@ -10,6 +10,10 @@ import com.example.shopify.databinding.ActivityMainBinding
 import com.example.shopify.detailsScreen.ProductDetailsFragment
 import com.example.shopify.favourite.view.FavouriteFragment
 import com.example.shopify.home.view.HomeFragment
+import com.example.shopify.favourite.FavouriteFragment
+import com.example.shopify.home.HomeFragment
+import com.example.shopify.login.LoginFragment
+import com.example.shopify.setting.SettingFragment
 import com.google.android.material.tabs.TabLayoutMediator
 
 class MainActivity : AppCompatActivity() {
