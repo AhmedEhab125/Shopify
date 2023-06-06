@@ -6,4 +6,10 @@
     <string name="brand">Brands</string>
     <string name="cartButton">Proceed To Checkout</string>
     <string name="total">Total Cost:</string>
+    <string name="welcome">Welcome</string>
+    <string name="orders">Orders</string>
+    <string name="more">More</string>
+    <string name="whishList">WhishList</string>
+    <string name="price">Price</string>
+    <string name="createdAt">Created At</string>
 </resources>
