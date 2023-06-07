@@ -21,4 +21,20 @@
     <string name="welcometo_tv">Welcome To</string>
     <string name="signupPassHint">Confirm Password</string>
     <string name="signUpBtn">Sign Up</string>
+    <string name="appartment">Appartment</string>
+    <string name="building_no">Building</string>
+    <string name="street">Street</string>
+    <string name="city">City</string>
+    <string name="payment_methods">Payment Methods</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="onlline_payment">Onlline Payment</string>
+    <string name="paymrnt_method">Payment Methhods</string>
+    <string name="cash_on_delevary">cash on delevary</string>
+    <string name="check_out" >Check Out</string>
+    <string name="products_fees">Products fees :</string>
+    <string name="delevary_fees">Delevary Fees :</string>
+    <string name="vat">VAT :</string>
+    <string name="total_fees">Total Fees : </string>
+    <string name="discount">Discount :</string>
+    <string name="voutcher">voutcher</string>
 </resources>
