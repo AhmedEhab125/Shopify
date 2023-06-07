@@ -16,16 +16,7 @@ import androidx.constraintlayout.widget.Constraints
 import com.example.shopify.R
 import com.example.shopify.databinding.FragmentSettingBinding
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [SettingFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class SettingFragment : Fragment() {
     lateinit var binding: FragmentSettingBinding
 
@@ -42,7 +33,11 @@ class SettingFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.AboutUscardView.setOnClickListener {
-        //    aboutUstDialog()
+         aboutUstDialog()
+        }
+
+        binding.ContactUscardView.setOnClickListener {
+            contactUstDialog()
         }
 
 
@@ -57,18 +52,33 @@ class SettingFragment : Fragment() {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setContentView(R.layout.about_as_dailog)
         val window: Window? = dialog.getWindow()
-        //  window?.setBackgroundDrawableResource(R.color.transparent);
+        window?.setBackgroundDrawableResource(android.R.color.transparent)
         window?.setLayout(
             Constraints.LayoutParams.MATCH_PARENT,
             Constraints.LayoutParams.WRAP_CONTENT
         )
         //window?.setBackgroundDrawableResource(R.color.transparent);
-        dialog.setCanceledOnTouchOutside(false)
+        dialog.setCanceledOnTouchOutside(true)
         dialog.show()
 
-        dialog.findViewById<ImageView>(R.id.aboutUs_cancel).setOnClickListener{
-            dialog.dismiss()
-        }
+
+    }
+
+
+    fun contactUstDialog() {
+        var dialog = Dialog(requireContext())
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(R.layout.contact_us_dailog)
+        val window: Window? = dialog.getWindow()
+        window?.setBackgroundDrawableResource(android.R.color.transparent)
+        window?.setLayout(
+            Constraints.LayoutParams.MATCH_PARENT,
+            Constraints.LayoutParams.WRAP_CONTENT
+        )
+        //window?.setBackgroundDrawableResource(R.color.transparent);
+        dialog.setCanceledOnTouchOutside(true)
+        dialog.show()
+
     }
 
 

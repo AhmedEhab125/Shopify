@@ -12,6 +12,7 @@ import com.example.shopify.detailsScreen.ProductDetailsFragment
 import com.example.shopify.favourite.view.FavouriteFragment
 import com.example.shopify.home.view.HomeFragment
 import com.example.shopify.setting.SettingFragment
+import com.example.shopify.signup.SignupFragment
 import com.google.android.material.tabs.TabLayoutMediator
 
 class MainActivity : AppCompatActivity() {
