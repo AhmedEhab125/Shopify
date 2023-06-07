@@ -3,6 +3,7 @@ package com.example.shopify.mainActivity
 import VPFragmentAdapter
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.Settings
 import com.example.shopify.R
 import com.example.shopify.cart.view.CartFragment
 import com.example.shopify.category.view.CategoryFragment
@@ -10,9 +11,6 @@ import com.example.shopify.databinding.ActivityMainBinding
 import com.example.shopify.detailsScreen.ProductDetailsFragment
 import com.example.shopify.favourite.view.FavouriteFragment
 import com.example.shopify.home.view.HomeFragment
-import com.example.shopify.favourite.FavouriteFragment
-import com.example.shopify.home.HomeFragment
-import com.example.shopify.login.LoginFragment
 import com.example.shopify.setting.SettingFragment
 import com.google.android.material.tabs.TabLayoutMediator
 
@@ -44,7 +42,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         vpFragmentAdapter= VPFragmentAdapter(listOf(
             HomeFragment(), CategoryFragment(),
-            CartFragment(), FavouriteFragment(),ProductDetailsFragment()
+            CartFragment(), FavouriteFragment(),SettingFragment()
         ),supportFragmentManager,this.lifecycle)
         binding.vpScreenTitles.adapter=vpFragmentAdapter
         TabLayoutMediator(binding.TabLayoutScreens,binding.vpScreenTitles,
