@@ -27,7 +27,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="100dp"
 
         android:layout_marginEnd="24dp"
         android:hint="@string/login_email_hint"
@@ -118,7 +118,7 @@
         app:layout_constraintTop_toBottomOf="@+id/login_btn" />
 
     <TextView
-        android:id="@+id/textView8"
+        android:id="@+id/signUp_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/register_btn"
@@ -127,6 +127,67 @@
         app:layout_constraintEnd_toEndOf="@+id/login_btn"
         app:layout_constraintStart_toEndOf="@+id/textView4"
         app:layout_constraintTop_toTopOf="@+id/textView4" />
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="175dp"
+        android:layout_height="150dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="35dp"
+        android:src="@drawable/shoping"
+        app:layout_constraintStart_toEndOf="@+id/textView2"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="170dp"
+        android:layout_height="3dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="30dp"
+        android:background="@color/black"
+        app:layout_constraintStart_toEndOf="@+id/textView9"
+        app:layout_constraintTop_toBottomOf="@+id/signUp_tv" />
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
+        android:layout_width="55dp"
+        android:layout_height="52dp"
+        android:layout_marginTop="32dp"
+        app:cardCornerRadius="60dp"
+        app:cardElevation="50dp"
+        app:cardPreventCornerOverlap="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view">
+
+        <ImageView
+            android:id="@+id/img_google"
+            android:layout_width="57dp"
+            android:layout_height="55dp"
+            app:srcCompat="@drawable/unnamed" />
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/textView9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="OR Use"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
+
+    <View
+        android:id="@+id/view2"
+        android:layout_width="170dp"
+        android:layout_height="3dp"
+        android:layout_marginEnd="4dp"
+        android:background="@color/black"
+        app:layout_constraintEnd_toStartOf="@+id/textView9"
+        app:layout_constraintTop_toTopOf="@+id/view" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
