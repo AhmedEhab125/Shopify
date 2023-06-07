@@ -18,4 +18,7 @@
     <string name="login_btn">Login</string>
     <string name="regester_TF">Dont have account ?</string>
     <string name="register_btn">SignUp</string>
+    <string name="welcometo_tv">Welcome To</string>
+    <string name="signupPassHint">Confirm Password</string>
+    <string name="signUpBtn">Sign Up</string>
 </resources>
