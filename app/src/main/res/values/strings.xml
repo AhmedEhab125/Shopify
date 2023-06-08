@@ -37,4 +37,5 @@
     <string name="total_fees">Total Fees : </string>
     <string name="discount">Discount :</string>
     <string name="voutcher">voutcher</string>
+    <string name="logout">LogOut</string>
 </resources>
