@@ -50,7 +50,7 @@ class HomeFragment : Fragment(){
         super.onViewCreated(view, savedInstanceState)
         brandsAdapter = BrandsAdapter(listOf())
         homeBinding.brandsRV.adapter = brandsAdapter
-        homeBinding.brandsRV.layoutManager = GridLayoutManager(requireContext(),3)
+        homeBinding.brandsRV.layoutManager = GridLayoutManager(requireContext(),2)
     }
 
     override fun onPause() {

@@ -25,7 +25,7 @@ class ProductsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         productsBinding.productsRV.adapter = productsAdapter
-        productsBinding.productsRV.layoutManager = GridLayoutManager(requireContext(),3)
+        productsBinding.productsRV.layoutManager = GridLayoutManager(requireContext(),2)
     }
 
 
