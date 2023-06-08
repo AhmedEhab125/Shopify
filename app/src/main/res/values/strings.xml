@@ -6,7 +6,7 @@
     <string name="brand">Brands</string>
     <string name="cartButton">Proceed To Checkout</string>
     <string name="total">Total Cost:</string>
-    <string name="welcome">Welcome</string>
+    <string name="welcome">Welcome,</string>
     <string name="orders">Orders</string>
     <string name="more">More</string>
     <string name="whishList">WhishList</string>
@@ -30,7 +30,7 @@
     <string name="onlline_payment">Onlline Payment</string>
     <string name="paymrnt_method">Payment Methhods</string>
     <string name="cash_on_delevary">cash on delevary</string>
-    <string name="check_out" >Check Out</string>
+    <string name="check_out">Check Out</string>
     <string name="products_fees">Products fees :</string>
     <string name="delevary_fees">Delevary Fees :</string>
     <string name="vat">VAT :</string>

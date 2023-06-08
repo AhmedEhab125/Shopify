@@ -39,7 +39,7 @@ class HomeFragment : Fragment(){
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
                 handler.removeCallbacks(runnable)
-                handler.postDelayed(runnable,2000)
+                handler.postDelayed(runnable,5000)
             }
         })
 
@@ -50,7 +50,7 @@ class HomeFragment : Fragment(){
         super.onViewCreated(view, savedInstanceState)
         brandsAdapter = BrandsAdapter(listOf())
         homeBinding.brandsRV.adapter = brandsAdapter
-        homeBinding.brandsRV.layoutManager = GridLayoutManager(requireContext(),2)
+        homeBinding.brandsRV.layoutManager = GridLayoutManager(requireContext(),3)
     }
 
     override fun onPause() {
@@ -60,7 +60,7 @@ class HomeFragment : Fragment(){
 
     override fun onResume() {
         super.onResume()
-        handler.postDelayed(runnable,3000)
+        handler.postDelayed(runnable,5000)
     }
     private fun init(){
         handler = Handler(Looper.myLooper()!!)
