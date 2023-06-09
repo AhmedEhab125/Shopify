@@ -15,6 +15,7 @@ import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.Constraints
 import com.example.shopify.R
 import com.example.shopify.databinding.FragmentSettingBinding
+import com.example.shopify.mainActivity.MainActivity
 
 
 class SettingFragment : Fragment() {
@@ -41,6 +42,10 @@ class SettingFragment : Fragment() {
         }
 
 
+    }
+    override fun onResume() {
+        super.onResume()
+        (context as MainActivity).hideNavigationBar(true)
     }
 
 

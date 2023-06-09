@@ -5,8 +5,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.shopify.R
 import com.example.shopify.databinding.FragmentPersonalBinding
+import com.example.shopify.mainActivity.MainActivity
 
 
 class PersonalFragment : Fragment() {
@@ -35,6 +38,16 @@ class PersonalFragment : Fragment() {
         personalBinding.whishListMore.setOnClickListener {
             print("more of WishList")
         }
+
+        personalBinding.settingsBtn.setOnClickListener {
+            //from_personal_to_settings
+            Navigation.findNavController(requireView()).navigate(R.id.from_personal_to_settings)
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        (context as MainActivity).hideNavigationBar(true)
     }
 
 
