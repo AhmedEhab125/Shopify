@@ -17,6 +17,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.example.shopify.Models.brands.BrandModel
 import com.example.shopify.R
 import com.example.shopify.databinding.FragmentHomeBinding
+import com.example.shopify.home.model.HomeRepo
 import com.example.shopify.home.viewModel.HomeViewModel
 import com.example.shopify.home.viewModel.HomeViewModelFactory
 import com.example.shopify.mainActivity.MainActivity
@@ -44,7 +45,7 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        homeViewModelFactory = HomeViewModelFactory(RemoteSource(ShopifyAPi.retrofitService))
+        homeViewModelFactory = HomeViewModelFactory(HomeRepo(RemoteSource(ShopifyAPi.retrofitService)))
         homeViewModel = ViewModelProvider(
             requireActivity(),
             homeViewModelFactory
