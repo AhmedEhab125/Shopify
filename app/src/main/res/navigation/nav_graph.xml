@@ -66,4 +66,9 @@
         android:name="com.example.shopify.setting.SettingFragment"
         android:label="fragment_setting"
         tools:layout="@layout/fragment_setting" />
+    <fragment
+        android:id="@+id/productDetailsFragment"
+        android:name="com.example.shopify.detailsScreen.view.ProductDetailsFragment"
+        android:label="fragment_product_deatils"
+        tools:layout="@layout/fragment_product_deatils" />
 </navigation>

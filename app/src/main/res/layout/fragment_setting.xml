@@ -46,11 +46,11 @@
                 android:text="Sidibesh Alexandria"
                 android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="@+id/textView"
-                app:layout_constraintEnd_toStartOf="@+id/btn_change_address"
+                app:layout_constraintEnd_toStartOf="@+id/btn_add_to_fav"
                 app:layout_constraintTop_toTopOf="@+id/textView" />
 
             <ToggleButton
-                android:id="@+id/btn_change_address"
+                android:id="@+id/btn_add_to_fav"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_marginEnd="16dp"
