@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.example.shopify.home.view.HomeFragment"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home" />
+    <fragment
+        android:id="@+id/cartFragment"
+        android:name="com.example.shopify.cart.view.CartFragment"
+        android:label="fragment_cart"
+        tools:layout="@layout/fragment_cart" >
+        <action
+            android:id="@+id/from_cart_to_login"
+            app:destination="@id/loginFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/favouriteFragment"
+        android:name="com.example.shopify.favourite.view.FavouriteFragment"
+        android:label="fragment_favourite"
+        tools:layout="@layout/fragment_favourite" />
+    <fragment
+        android:id="@+id/categoryFragment"
+        android:name="com.example.shopify.category.view.CategoryFragment"
+        android:label="fragment_category"
+        tools:layout="@layout/fragment_category" />
+    <fragment
+        android:id="@+id/personalFragment"
+        android:name="com.example.shopify.personal.view.PersonalFragment"
+        android:label="fragment_personal"
+        tools:layout="@layout/fragment_personal" >
+        <action
+            android:id="@+id/from_personal_to_settings"
+            app:destination="@id/settingFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.example.shopify.login.LoginFragment"
+        android:label="fragment_login"
+        tools:layout="@layout/fragment_login" >
+        <action
+            android:id="@+id/from_login_to_signUp"
+            app:destination="@id/signupFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/signupFragment"
+        android:name="com.example.shopify.signup.SignupFragment"
+        android:label="fragment_signup"
+        tools:layout="@layout/fragment_signup" >
+        <action
+            android:id="@+id/from_signUp_to_cart"
+            app:destination="@id/cartFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addressFragment"
+        android:name="com.example.shopify.addressPicker.AddressFragment"
+        android:label="fragment_address"
+        tools:layout="@layout/fragment_address" />
+    <fragment
+        android:id="@+id/settingFragment"
+        android:name="com.example.shopify.setting.SettingFragment"
+        android:label="fragment_setting"
+        tools:layout="@layout/fragment_setting" />
+</navigation>

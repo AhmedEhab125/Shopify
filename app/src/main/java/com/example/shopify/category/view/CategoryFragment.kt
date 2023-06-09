@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.shopify.R
 import com.example.shopify.databinding.FragmentCategoryBinding
+import com.example.shopify.mainActivity.MainActivity
 
 
 class CategoryFragment : Fragment() {
@@ -56,6 +57,11 @@ class CategoryFragment : Fragment() {
       }
 
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        (context as MainActivity).hideNavigationBar(true)
     }
 
 

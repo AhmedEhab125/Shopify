@@ -14,6 +14,7 @@ import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
 import com.example.shopify.R
 import com.example.shopify.databinding.FragmentHomeBinding
+import com.example.shopify.mainActivity.MainActivity
 import java.lang.Math.abs
 
 class HomeFragment : Fragment(){
@@ -60,6 +61,7 @@ class HomeFragment : Fragment(){
 
     override fun onResume() {
         super.onResume()
+        (context as MainActivity).hideNavigationBar(true)
         handler.postDelayed(runnable,5000)
     }
     private fun init(){
@@ -85,5 +87,8 @@ class HomeFragment : Fragment(){
         }
         viewPager2.setPageTransformer(transformer)
     }
+
+
+
 
 }

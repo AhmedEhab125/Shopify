@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.shopify.R
 import com.example.shopify.databinding.FragmentFavouriteBinding
+import com.example.shopify.mainActivity.MainActivity
 
 class FavouriteFragment : Fragment() {
     private lateinit var favouriteBinding: FragmentFavouriteBinding
@@ -25,6 +26,11 @@ class FavouriteFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         favouriteBinding.favRV.adapter = favAdapter
         favouriteBinding.favRV.layoutManager = LinearLayoutManager(requireContext())
+    }
+
+    override fun onResume() {
+        super.onResume()
+        (context as MainActivity).hideNavigationBar(true)
     }
 
 

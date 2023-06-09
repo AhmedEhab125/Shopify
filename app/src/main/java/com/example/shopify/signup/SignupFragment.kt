@@ -5,7 +5,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.Navigation
+import com.example.shopify.R
 import com.example.shopify.databinding.FragmentSignupBinding
+import com.example.shopify.mainActivity.MainActivity
 
 class SignupFragment : Fragment() {
 lateinit var binding : FragmentSignupBinding
@@ -26,6 +29,18 @@ lateinit var binding : FragmentSignupBinding
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        //from_signUp_to_cart
+        binding.signUpBtn.setOnClickListener {
+            Navigation.findNavController(requireView()).navigate(R.id.from_signUp_to_cart)
+        }
+
+    }
+
+
+    override fun onResume() {
+        super.onResume()
+        (context as MainActivity).hideNavigationBar(false)
     }
 
 }
