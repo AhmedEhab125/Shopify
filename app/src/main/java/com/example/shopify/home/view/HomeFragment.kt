@@ -7,40 +7,59 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
+import com.example.shopify.Models.brands.BrandModel
 import com.example.shopify.R
 import com.example.shopify.databinding.FragmentHomeBinding
+import com.example.shopify.home.model.HomeRepo
+import com.example.shopify.home.viewModel.HomeViewModel
+import com.example.shopify.home.viewModel.HomeViewModelFactory
 import com.example.shopify.mainActivity.MainActivity
+import com.example.shopify.nework.ApiState
+import com.example.shopify.nework.ShopifyAPi
+import com.example.shopify.repo.RemoteSource
+import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.launch
 import java.lang.Math.abs
 
-class HomeFragment : Fragment(){
+class HomeFragment : Fragment() {
     private lateinit var homeBinding: FragmentHomeBinding
     private lateinit var brandsAdapter: BrandsAdapter
     private lateinit var handler: Handler
-    private lateinit var adsImages:ArrayList<Int>
+    private lateinit var adsImages: ArrayList<Int>
     private lateinit var adsAdapter: AdsAdapter
     private lateinit var viewPager2: ViewPager2
-    private val runnable =Runnable {
-        viewPager2.currentItem = viewPager2.currentItem+1
+    lateinit var homeViewModel: HomeViewModel
+    lateinit var homeViewModelFactory: HomeViewModelFactory
+    private val runnable = Runnable {
+        viewPager2.currentItem = viewPager2.currentItem + 1
     }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        homeViewModelFactory = HomeViewModelFactory(HomeRepo(RemoteSource(ShopifyAPi.retrofitService)))
+        homeViewModel = ViewModelProvider(
+            requireActivity(),
+            homeViewModelFactory
+        ).get(HomeViewModel::class.java)
         homeBinding = FragmentHomeBinding.inflate(inflater)
         //homeBinding.homeSearch
         viewPager2 = homeBinding.dicountsSlider
         init()
         setUpTarnsformer()
-        viewPager2.registerOnPageChangeCallback(object :ViewPager2.OnPageChangeCallback(){
+        viewPager2.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
                 handler.removeCallbacks(runnable)
-                handler.postDelayed(runnable,5000)
+                handler.postDelayed(runnable, 5000)
             }
         })
 
@@ -51,7 +70,9 @@ class HomeFragment : Fragment(){
         super.onViewCreated(view, savedInstanceState)
         brandsAdapter = BrandsAdapter(listOf())
         homeBinding.brandsRV.adapter = brandsAdapter
-        homeBinding.brandsRV.layoutManager = GridLayoutManager(requireContext(),2)
+        homeBinding.brandsRV.layoutManager = GridLayoutManager(requireContext(), 2)
+        setBrandData()
+        homeViewModel.getBrands()
     }
 
     override fun onPause() {
@@ -62,9 +83,10 @@ class HomeFragment : Fragment(){
     override fun onResume() {
         super.onResume()
         (context as MainActivity).hideNavigationBar(true)
-        handler.postDelayed(runnable,5000)
+        handler.postDelayed(runnable, 5000)
     }
-    private fun init(){
+
+    private fun init() {
         handler = Handler(Looper.myLooper()!!)
         adsImages = ArrayList()
         adsImages.add(R.drawable.headphone)
@@ -72,14 +94,15 @@ class HomeFragment : Fragment(){
         adsImages.add(R.drawable.cart)
         adsImages.add(R.drawable.user)
         adsImages.add(R.drawable.heart)
-        adsAdapter = AdsAdapter(adsImages,viewPager2)
+        adsAdapter = AdsAdapter(adsImages, viewPager2)
         homeBinding.dicountsSlider.adapter = adsAdapter
         viewPager2.clipToPadding = false
         viewPager2.clipChildren = false
         viewPager2.getChildAt(0).overScrollMode = RecyclerView.OVER_SCROLL_NEVER
     }
+
     private fun setUpTarnsformer() {
-       val transformer = CompositePageTransformer()
+        val transformer = CompositePageTransformer()
         transformer.addTransformer(MarginPageTransformer(40))
         transformer.addTransformer { page, position ->
 
@@ -88,7 +111,29 @@ class HomeFragment : Fragment(){
         viewPager2.setPageTransformer(transformer)
     }
 
+    fun setBrandData() {
+        lifecycleScope.launch {
+            homeViewModel.accessBrandsList.collect() { result ->
+                when (result) {
+                    is ApiState.Success<*> -> {
+                        homeBinding.progressBar.visibility = View.GONE
 
+                        var brands = result.date as BrandModel?
+                        brandsAdapter.setBrandsList(brands?.smart_collections ?: listOf())
+                    }
+                    is ApiState.Failure -> {
+                        homeBinding.progressBar.visibility = View.GONE
+
+                    }
+                    is ApiState.Loading -> {
+                        homeBinding.progressBar.visibility = View.VISIBLE
+                    }
+
+                }
+
+            }
+        }
+    }
 
 
 }
