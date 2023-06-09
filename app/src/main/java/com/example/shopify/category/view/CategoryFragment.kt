@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.GridLayout
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.shopify.R
@@ -55,6 +56,8 @@ class CategoryFragment : Fragment() {
       binding.radioWomen.setOnClickListener {
           myAdapter.updateData(myProducts)
       }
+
+
 
 
     }
