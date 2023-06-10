@@ -27,7 +27,7 @@ import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
-  //  lateinit var vpFragmentAdapter: VPFragmentAdapter
+    //  lateinit var vpFragmentAdapter: VPFragmentAdapter
     lateinit var navController: NavController
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,46 +47,46 @@ class MainActivity : AppCompatActivity() {
 
 
 
-    /*  val iconList= listOf(
-            R.drawable.home,
-            R.drawable.menu,
-            R.drawable.cart,
-            R.drawable.heart,
-            R.drawable.user
+        /*  val iconList= listOf(
+                R.drawable.home,
+                R.drawable.menu,
+                R.drawable.cart,
+                R.drawable.heart,
+                R.drawable.user
 
-        )
-        val categorysList= listOf(
-            "home",
-            "Categories",
-            "cart",
-            "Favourite",
-            "user"
+            )
+            val categorysList= listOf(
+                "home",
+                "Categories",
+                "cart",
+                "Favourite",
+                "user"
 
-        )
+            )
 
 
-        binding= ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        vpFragmentAdapter= VPFragmentAdapter(listOf(
-            HomeFragment(),CategoryFragment(),
-            CartFragment(), FavouriteFragment(),SettingFragment()
-        ),supportFragmentManager,this.lifecycle)
-        binding.vpScreenTitles.adapter=vpFragmentAdapter
-        TabLayoutMediator(binding.TabLayoutScreens,binding.vpScreenTitles,
-            TabLayoutMediator.TabConfigurationStrategy { tab, position ->tab .icon=getDrawable(iconList.get(position))
-          //  tab.text = categorysList[position]
-            }).attach()
-        binding.vpScreenTitles.isUserInputEnabled = false*/
+            binding= ActivityMainBinding.inflate(layoutInflater)
+            setContentView(binding.root)
+            vpFragmentAdapter= VPFragmentAdapter(listOf(
+                HomeFragment(),CategoryFragment(),
+                CartFragment(), FavouriteFragment(),SettingFragment()
+            ),supportFragmentManager,this.lifecycle)
+            binding.vpScreenTitles.adapter=vpFragmentAdapter
+            TabLayoutMediator(binding.TabLayoutScreens,binding.vpScreenTitles,
+                TabLayoutMediator.TabConfigurationStrategy { tab, position ->tab .icon=getDrawable(iconList.get(position))
+              //  tab.text = categorysList[position]
+                }).attach()
+            binding.vpScreenTitles.isUserInputEnabled = false*/
 
     }
- /*   override fun onBackPressed() {
-        if (binding.vpScreenTitles.getCurrentItem() !== 0) {
-            binding.vpScreenTitles.setCurrentItem( binding.vpScreenTitles.getCurrentItem() - 1, false)
-        } else {
-            finish()
+    /*   override fun onBackPressed() {
+           if (binding.vpScreenTitles.getCurrentItem() !== 0) {
+               binding.vpScreenTitles.setCurrentItem( binding.vpScreenTitles.getCurrentItem() - 1, false)
+           } else {
+               finish()
 
-        }
-    }*/
+           }
+       }*/
 
 
     fun hideNavigationBar(isVisable : Boolean) {
