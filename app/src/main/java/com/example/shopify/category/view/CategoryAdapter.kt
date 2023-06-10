@@ -1,22 +1,15 @@
 package com.example.shopify.category.view
 
-import android.app.AlertDialog
 import android.content.Context
-import android.content.DialogInterface
-import android.location.Address
-import android.location.Geocoder
-import android.os.RemoteException
-import android.text.Html
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.example.shopify.Models.productDetails.Product
 import com.example.shopify.databinding.CategoryItemBinding
-import java.io.IOException
-import java.util.*
 
-class CategoryAdapter  (private var myProducts: List<FakeCategoryModel>) : RecyclerView.Adapter<CategoryAdapter.ViewHolder>() {
+class CategoryAdapter  (private var myProducts: List<Product>) : RecyclerView.Adapter<CategoryAdapter.ViewHolder>() {
 
     lateinit var binding: CategoryItemBinding
 
@@ -27,18 +20,19 @@ class CategoryAdapter  (private var myProducts: List<FakeCategoryModel>) : Recyc
         return ViewHolder(binding)
     }
 
-    fun updateData(myNewProducts:List<FakeCategoryModel>){
+    fun updateData(myNewProducts: List<Product>){
         this.myProducts = myNewProducts
         notifyDataSetChanged()
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        var product : FakeCategoryModel = myProducts.get(position)
+        var product  = myProducts.get(position)
 
-        holder.binding.categoryProudctSalary.text = product.salary
-        holder.binding.ctegoryProductImgV.setImageResource(product.img)
+        holder.binding.categoryProudctSalary.text = product.title
+        Glide.with(holder.binding.root).load(product.image?.src).into(holder.binding.ctegoryProductImgV)
+
         holder.binding.categoryAddToFav.setOnClickListener {
-            Log.i("Fav",product.salary)
+            product.title?.let { it1 -> Log.i("Fav", it1) }
         }
 
 

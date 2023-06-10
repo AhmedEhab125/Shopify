@@ -7,7 +7,7 @@ import com.example.shopify.nework.ShopifyApiService
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
-class RemoteSource(var network : ShopifyApiService) : IBrands, ProductDetalisInterface,CollectionProductsInterface {
+class RemoteSource(var network : ShopifyApiService) : IBrands, ProductDetalisInterface,CollectionProductsInterface,IAllProducts {
     override suspend fun getBrands(): Flow<BrandModel?> {
         return flowOf(network.getBrands().body())
     }
@@ -18,5 +18,9 @@ class RemoteSource(var network : ShopifyApiService) : IBrands, ProductDetalisInt
 
     override suspend fun getCollectionProducts(id:Long): Flow<CollectProductsModel?> {
         return  flowOf(network.getCollectionProducts(id).body())
+    }
+
+    override suspend fun getAllProducts(): Flow<CollectProductsModel?> {
+        return  flowOf(network.getAllProducts().body())
     }
 }
