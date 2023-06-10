@@ -3,10 +3,13 @@ package com.example.shopify.home.view
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.text.Editable
+import android.text.TextWatcher
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
@@ -15,6 +18,7 @@ import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
 import com.example.shopify.Models.brands.BrandModel
+import com.example.shopify.Models.brands.SmartCollection
 import com.example.shopify.R
 import com.example.shopify.databinding.FragmentHomeBinding
 import com.example.shopify.home.model.HomeRepo
@@ -37,6 +41,7 @@ class HomeFragment : Fragment() {
     private lateinit var viewPager2: ViewPager2
     lateinit var homeViewModel: HomeViewModel
     lateinit var homeViewModelFactory: HomeViewModelFactory
+    lateinit var smartCollections : List<SmartCollection>
     private val runnable = Runnable {
         viewPager2.currentItem = viewPager2.currentItem + 1
     }
@@ -73,6 +78,7 @@ class HomeFragment : Fragment() {
         homeBinding.brandsRV.layoutManager = GridLayoutManager(requireContext(), 2)
         setBrandData()
         homeViewModel.getBrands()
+        searchForBrands()
     }
 
     override fun onPause() {
@@ -119,7 +125,8 @@ class HomeFragment : Fragment() {
                         homeBinding.progressBar.visibility = View.GONE
 
                         var brands = result.date as BrandModel?
-                        brandsAdapter.setBrandsList(brands?.smart_collections ?: listOf())
+                        smartCollections = brands?.smart_collections ?: listOf()
+                        brandsAdapter.setBrandsList(smartCollections)
                     }
                     is ApiState.Failure -> {
                         homeBinding.progressBar.visibility = View.GONE
@@ -133,6 +140,42 @@ class HomeFragment : Fragment() {
 
             }
         }
+    }
+
+
+    fun searchForBrands(){
+        homeBinding.homeSearch.addTextChangedListener(object :TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+                filterBrands(s.toString())
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+
+            }
+
+        })
+    }
+
+
+
+    fun filterBrands(text:String){
+        var filterdBrands = mutableListOf<SmartCollection>()
+        for(brand in smartCollections){
+            if (brand.title.lowercase().contains(text.lowercase()) ) {
+               filterdBrands.add(brand)
+            }
+
+        }
+        brandsAdapter.setBrandsList(filterdBrands)
+        if (filterdBrands.isEmpty()){
+            Toast.makeText(requireContext(),"Sorry,No Data Founded",Toast.LENGTH_SHORT)
+        }
+
     }
 
 
