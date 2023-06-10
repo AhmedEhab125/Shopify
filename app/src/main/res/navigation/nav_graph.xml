@@ -9,7 +9,11 @@
         android:id="@+id/homeFragment"
         android:name="com.example.shopify.home.view.HomeFragment"
         android:label="fragment_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/homeFragment_to_productsFragment"
+            app:destination="@id/productsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/cartFragment"
         android:name="com.example.shopify.cart.view.CartFragment"
@@ -71,4 +75,13 @@
         android:name="com.example.shopify.detailsScreen.view.ProductDetailsFragment"
         android:label="fragment_product_deatils"
         tools:layout="@layout/fragment_product_deatils" />
+    <fragment
+        android:id="@+id/productsFragment"
+        android:name="com.example.shopify.products.view.ProductsFragment"
+        android:label="fragment_products"
+        tools:layout="@layout/fragment_products" >
+        <argument
+            android:name="id"
+            app:argType="long" />
+    </fragment>
 </navigation>
