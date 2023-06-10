@@ -2,14 +2,18 @@ package com.example.shopify.products.view
 
 import android.app.ProgressDialog
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.shopify.Models.productDetails.Product
 import com.example.shopify.Models.products.CollectProductsModel
 import com.example.shopify.databinding.FragmentProductsBinding
 import com.example.shopify.nework.ApiState
@@ -26,7 +30,7 @@ class ProductsFragment : Fragment() {
     private lateinit var productsBinding: FragmentProductsBinding
     private lateinit var productsAdapter: ProductsAdapter
     private lateinit var viewModel: ProductsViewModel
-    private lateinit var progressDialog: ProgressDialog
+    lateinit var myProducts : List<Product>
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -36,8 +40,6 @@ class ProductsFragment : Fragment() {
         val factory =
             ProductsViewModelFactory(CollectionProductsRepo(RemoteSource(ShopifyAPi.retrofitService)))
         viewModel = ViewModelProvider(requireActivity(), factory)[ProductsViewModel::class.java]
-        progressDialog = ProgressDialog(context)
-        progressDialog.setMessage("loading")
         return productsBinding.root
     }
 
@@ -48,6 +50,7 @@ class ProductsFragment : Fragment() {
         productsBinding.productsRV.adapter = productsAdapter
         productsBinding.productsRV.layoutManager = GridLayoutManager(requireContext(), 2)
         updateRecycleView()
+        searchForProduct()
     }
 
     private fun updateRecycleView() {
@@ -55,22 +58,56 @@ class ProductsFragment : Fragment() {
             viewModel.collectionProducts.collect {
                 when (it) {
                     is ApiState.Loading -> {
-                        progressDialog.show()
+                       productsBinding.progressBar2.visibility = View.VISIBLE
                     }
                     is ApiState.Failure->{
-                        progressDialog.hide()
+                        productsBinding.progressBar2.visibility = View.GONE
                         print(it.error)
                     }
                     is ApiState.Success<*>->{
-                        progressDialog.hide()
+                        productsBinding.progressBar2.visibility = View.GONE
                         var collectionProduct = it.date as CollectProductsModel
-                        productsAdapter.updateList(collectionProduct.products)
+                        myProducts = collectionProduct.products
+                        productsAdapter.updateList(myProducts)
                     }
                 }
             }
         }
 
     }
+
+    fun searchForProduct(){
+        productsBinding.productSearch.addTextChangedListener(object :TextWatcher{
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                filterProducts(s.toString())
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+
+            }
+
+        })
+    }
+
+
+    fun filterProducts(text:String){
+       var filtteredProducts = mutableListOf<Product>()
+        for (product in myProducts){
+            if (product.title?.lowercase()?.contains(text.lowercase())!!){
+                filtteredProducts.add(product)
+            }
+        }
+        productsAdapter.updateList(filtteredProducts)
+        if (filtteredProducts.isEmpty()){
+            Toast.makeText(requireContext(),"Sorry,No Data Founded", Toast.LENGTH_SHORT)
+        }
+
+    }
+
 
 
 }
