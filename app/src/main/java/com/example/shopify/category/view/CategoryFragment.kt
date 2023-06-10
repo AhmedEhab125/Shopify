@@ -87,6 +87,7 @@ class CategoryFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+
         (context as MainActivity).hideNavigationBar(true)
     }
 
@@ -116,6 +117,20 @@ class CategoryFragment : Fragment() {
             }
         }
 
+    }
+
+    override fun onPause() {
+        super.onPause()
+        disableAllRadioBtns()
+
+    }
+    fun disableAllRadioBtns(){
+        binding.radioShoes.isChecked = false
+        binding.radioAccessories.isChecked = false
+        binding.radioShirts.isChecked = false
+        binding.radioMen.isChecked = false
+        binding.radioKid.isChecked = false
+        binding.radioWomen.isChecked = false
     }
 
 
