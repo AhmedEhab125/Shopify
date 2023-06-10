@@ -26,4 +26,7 @@ interface ShopifyApiService {
     @Headers("X-Shopify-Access-Token: ${Constants.accesstoken}")
     @GET("admin/api/2023-04/collections/{id}/products.json")
     suspend fun getCollectionProducts(@Path(value = "id") id:Long) : Response<CollectProductsModel>
+    @Headers("X-Shopify-Access-Token: ${Constants.accesstoken}")
+    @GET("admin/api/2023-04/products.json")
+    suspend fun getAllProducts() : Response<CollectProductsModel>
 }
