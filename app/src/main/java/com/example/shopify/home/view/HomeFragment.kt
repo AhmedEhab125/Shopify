@@ -89,11 +89,12 @@ class HomeFragment : Fragment() {
     private fun init() {
         handler = Handler(Looper.myLooper()!!)
         adsImages = ArrayList()
-        adsImages.add(R.drawable.headphone)
-        adsImages.add(R.drawable.home)
-        adsImages.add(R.drawable.cart)
-        adsImages.add(R.drawable.user)
-        adsImages.add(R.drawable.heart)
+        adsImages.add(R.drawable.discount1)
+        adsImages.add(R.drawable.discount2)
+        adsImages.add(R.drawable.discount3)
+        adsImages.add(R.drawable.discount4)
+        adsImages.add(R.drawable.discount5)
+        adsImages.add(R.drawable.discount6)
         adsAdapter = AdsAdapter(adsImages, viewPager2)
         homeBinding.dicountsSlider.adapter = adsAdapter
         viewPager2.clipToPadding = false
@@ -105,7 +106,6 @@ class HomeFragment : Fragment() {
         val transformer = CompositePageTransformer()
         transformer.addTransformer(MarginPageTransformer(40))
         transformer.addTransformer { page, position ->
-
             page.scaleY = 0.85f
         }
         viewPager2.setPageTransformer(transformer)
