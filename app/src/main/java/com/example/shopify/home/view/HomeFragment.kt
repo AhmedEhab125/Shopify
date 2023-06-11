@@ -172,7 +172,7 @@ class HomeFragment : Fragment() {
         }
         brandsAdapter.setBrandsList(filterdBrands)
         if (filterdBrands.isEmpty()){
-            Toast.makeText(requireContext(),"Sorry,No Data Founded",Toast.LENGTH_SHORT)
+            Toast.makeText(requireContext(),"Sorry,No Data Founded",Toast.LENGTH_SHORT).show()
         }
 
     }

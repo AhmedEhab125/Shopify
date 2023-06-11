@@ -15,9 +15,9 @@ import kotlinx.coroutines.launch
 class ProductDetalisViewModel (var remoteSource: ProductDetalisInterface) : ViewModel() {
     private var _productInfo = MutableStateFlow<ApiState>(ApiState.Loading)
     var  productInfo : StateFlow<ApiState> = _productInfo
-    fun getProductDetalis() {
+    fun getProductDetalis(id:Long) {
         viewModelScope.launch(Dispatchers.IO) {
-            remoteSource.getProductDetalis().catch { error ->
+            remoteSource.getProductDetalis(id).catch { error ->
                 _productInfo.value = ApiState.Failure(error)
             }.collect { myProduct ->
                 _productInfo.value = ApiState.Success(myProduct)

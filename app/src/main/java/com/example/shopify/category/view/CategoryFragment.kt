@@ -1,12 +1,16 @@
 package com.example.shopify.category.view
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.shopify.Models.productDetails.Product
 import com.example.shopify.Models.products.CollectProductsModel
@@ -22,7 +26,7 @@ import com.example.shopify.repo.RemoteSource
 import kotlinx.coroutines.launch
 
 
-class CategoryFragment : Fragment() {
+class CategoryFragment : Fragment(),OnClickToShowDetalisOfCategory {
     lateinit var binding: FragmentCategoryBinding
     lateinit var myProducts: List<Product>
     lateinit var categoryViewModel: CategoryViewModel
@@ -52,19 +56,13 @@ class CategoryFragment : Fragment() {
             categoryViewModelFactory
         ).get(CategoryViewModel::class.java)
 
-        var pro1 = FakeCategoryModel("10000", R.drawable.heart)
-        var pro2 = FakeCategoryModel("1200", R.drawable.cart)
-        var pro3 = FakeCategoryModel("5000", R.drawable.home)
-        var pro4 = FakeCategoryModel("1256", R.drawable.img)
-
         myProducts = listOf()
-        myAdapter = CategoryAdapter(listOf())
+        myAdapter = CategoryAdapter(listOf(),this)
         binding.categoryRv.apply {
             adapter = myAdapter
             layoutManager = GridLayoutManager(requireContext(), 2)
         }
-
-        var myNewProducts = listOf(pro4, pro3, pro2, pro1)
+        searchForCategory()
         setProductList()
         categoryViewModel.getAllProducts()
 
@@ -87,6 +85,7 @@ class CategoryFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+
         (context as MainActivity).hideNavigationBar(true)
     }
 
@@ -116,6 +115,57 @@ class CategoryFragment : Fragment() {
             }
         }
 
+    }
+
+    override fun onPause() {
+        super.onPause()
+        disableAllRadioBtns()
+
+    }
+    fun disableAllRadioBtns(){
+        binding.radioShoes.isChecked = false
+        binding.radioAccessories.isChecked = false
+        binding.radioShirts.isChecked = false
+        binding.radioMen.isChecked = false
+        binding.radioKid.isChecked = false
+        binding.radioWomen.isChecked = false
+    }
+
+
+    fun searchForCategory(){
+        binding.categorySearch.addTextChangedListener(object :TextWatcher{
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+               filterMyProducts(s.toString())
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+
+            }
+
+        })
+    }
+
+
+    fun filterMyProducts(text:String){
+        var fillterdProducts = mutableListOf<Product>()
+        for (product in myProducts){
+            if (product.title?.lowercase()?.contains(text.lowercase())!!){
+                fillterdProducts.add(product)
+            }
+        }
+        myAdapter.updateData(fillterdProducts)
+        if (fillterdProducts.isEmpty()){
+            Toast.makeText(requireContext(),"Sorry,No Data Founded", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    override fun showDetalisFromCategory(prouctId: Long) {
+        val action = CategoryFragmentDirections.fromCategoryToDetalis(prouctId)
+        Navigation.findNavController(requireView()).navigate(action)
     }
 
 

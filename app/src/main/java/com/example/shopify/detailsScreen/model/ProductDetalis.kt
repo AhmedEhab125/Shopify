@@ -6,7 +6,7 @@ import com.example.shopify.repo.ProductDetalisInterface
 import kotlinx.coroutines.flow.Flow
 
 class ConcreteProductDetalis(var remoteSource: ProductDetalisInterface) : ProductDetalisInterface {
-    override suspend fun getProductDetalis(): Flow<ProductModel?> {
-      return  remoteSource.getProductDetalis()
+    override suspend fun getProductDetalis(id:Long): Flow<ProductModel?> {
+      return  remoteSource.getProductDetalis(id)
     }
 }
