@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.shopify.Models.productDetails.Product
 import com.example.shopify.Models.products.CollectProductsModel
@@ -25,7 +26,7 @@ import com.example.shopify.repo.RemoteSource
 import kotlinx.coroutines.launch
 
 
-class CategoryFragment : Fragment() {
+class CategoryFragment : Fragment(),OnClickToShowDetalisOfCategory {
     lateinit var binding: FragmentCategoryBinding
     lateinit var myProducts: List<Product>
     lateinit var categoryViewModel: CategoryViewModel
@@ -56,7 +57,7 @@ class CategoryFragment : Fragment() {
         ).get(CategoryViewModel::class.java)
 
         myProducts = listOf()
-        myAdapter = CategoryAdapter(listOf())
+        myAdapter = CategoryAdapter(listOf(),this)
         binding.categoryRv.apply {
             adapter = myAdapter
             layoutManager = GridLayoutManager(requireContext(), 2)
@@ -158,13 +159,14 @@ class CategoryFragment : Fragment() {
         }
         myAdapter.updateData(fillterdProducts)
         if (fillterdProducts.isEmpty()){
-            Toast.makeText(requireContext(),"Sorry,No Data Founded", Toast.LENGTH_SHORT)
+            Toast.makeText(requireContext(),"Sorry,No Data Founded", Toast.LENGTH_SHORT).show()
         }
     }
 
-
-
-
+    override fun showDetalisFromCategory(prouctId: Long) {
+        val action = CategoryFragmentDirections.fromCategoryToDetalis(prouctId)
+        Navigation.findNavController(requireView()).navigate(action)
+    }
 
 
 }

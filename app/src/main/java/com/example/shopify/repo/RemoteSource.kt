@@ -12,8 +12,8 @@ class RemoteSource(var network : ShopifyApiService) : IBrands, ProductDetalisInt
         return flowOf(network.getBrands().body())
     }
 
-    override suspend fun getProductDetalis(): Flow<ProductModel?> {
-        return flowOf(network.getProductDetails().body())
+    override suspend fun getProductDetalis(id: Long): Flow<ProductModel?> {
+        return flowOf(network.getProductDetails(id).body())
     }
 
     override suspend fun getCollectionProducts(id:Long): Flow<CollectProductsModel?> {

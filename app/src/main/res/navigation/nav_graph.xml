@@ -32,7 +32,11 @@
         android:id="@+id/categoryFragment"
         android:name="com.example.shopify.category.view.CategoryFragment"
         android:label="fragment_category"
-        tools:layout="@layout/fragment_category" />
+        tools:layout="@layout/fragment_category" >
+        <action
+            android:id="@+id/from_category_to_detalis"
+            app:destination="@id/productDetailsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/personalFragment"
         android:name="com.example.shopify.personal.view.PersonalFragment"
@@ -74,7 +78,11 @@
         android:id="@+id/productDetailsFragment"
         android:name="com.example.shopify.detailsScreen.view.ProductDetailsFragment"
         android:label="fragment_product_deatils"
-        tools:layout="@layout/fragment_product_deatils" />
+        tools:layout="@layout/fragment_product_deatils" >
+        <argument
+            android:name="product_Id"
+            app:argType="long" />
+    </fragment>
     <fragment
         android:id="@+id/productsFragment"
         android:name="com.example.shopify.products.view.ProductsFragment"
@@ -83,5 +91,8 @@
         <argument
             android:name="id"
             app:argType="long" />
+        <action
+            android:id="@+id/from_product_to_details"
+            app:destination="@id/productDetailsFragment" />
     </fragment>
 </navigation>

@@ -10,7 +10,7 @@ import com.example.shopify.Models.products.CollectProductsModel
 import com.example.shopify.R
 import com.example.shopify.databinding.BrandCardBinding
 
-class ProductsAdapter (var products: List<Product>): RecyclerView.Adapter<ProductsAdapter.ProductViewHolder>() {
+class ProductsAdapter (var products: List<Product> , var listener : OnClickToShowDetalis): RecyclerView.Adapter<ProductsAdapter.ProductViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
         val binding = BrandCardBinding.inflate( LayoutInflater.from(parent.context),parent,false)
@@ -30,6 +30,9 @@ class ProductsAdapter (var products: List<Product>): RecyclerView.Adapter<Produc
         Log.i("essam image", ""+productsModel.image)
         Glide.with(holder.binding.root).load(productsModel.image?.src).into(holder.binding.brandImg)
         holder.binding.brandName.text = productsModel.title
+        holder.binding.root.setOnClickListener {
+            listener.ShowProductDetalis(productsModel.id ?: 8350702272834)
+        }
     }
     inner class ProductViewHolder(var binding: BrandCardBinding) : RecyclerView.ViewHolder(binding.root)
 }

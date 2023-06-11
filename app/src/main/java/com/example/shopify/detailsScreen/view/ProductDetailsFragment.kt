@@ -44,8 +44,8 @@ class ProductDetailsFragment : Fragment() {
         productDetalisFactory = ProductDetalisFactory(ConcreteProductDetalis(RemoteSource(ShopifyAPi.retrofitService)))
 
         productDetalisViewModel = ViewModelProvider(requireActivity(), productDetalisFactory).get(ProductDetalisViewModel::class.java)
-
-        productDetalisViewModel.getProductDetalis()
+        val productIdRecived = requireArguments().getLong("product_Id")
+        productDetalisViewModel.getProductDetalis(productIdRecived)
 
       lifecycleScope.launch {
           productDetalisViewModel.productInfo.collect {

@@ -5,6 +5,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface ProductDetalisInterface  {
 
-    suspend fun getProductDetalis() : Flow<ProductModel?>
+    suspend fun getProductDetalis(id:Long) : Flow<ProductModel?>
 
 }
