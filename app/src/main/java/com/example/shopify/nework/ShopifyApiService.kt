@@ -20,8 +20,8 @@ interface ShopifyApiService {
     suspend fun getBrands() : Response<BrandModel>
 
     @Headers("X-Shopify-Access-Token: ${Constants.accesstoken}")
-    @GET("admin/api/2023-04/products/8350702272834.json")
-    suspend fun getProductDetails() : Response<ProductModel>
+    @GET("admin/api/2023-04/products/{id}.json")
+    suspend fun getProductDetails(@Path(value = "id") id: Long) : Response<ProductModel>
 
     @Headers("X-Shopify-Access-Token: ${Constants.accesstoken}")
     @GET("admin/api/2023-04/collections/{id}/products.json")

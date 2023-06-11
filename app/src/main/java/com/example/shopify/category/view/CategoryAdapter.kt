@@ -9,7 +9,7 @@ import com.bumptech.glide.Glide
 import com.example.shopify.Models.productDetails.Product
 import com.example.shopify.databinding.CategoryItemBinding
 
-class CategoryAdapter  (private var myProducts: List<Product>) : RecyclerView.Adapter<CategoryAdapter.ViewHolder>() {
+class CategoryAdapter  (private var myProducts: List<Product> , val listener:OnClickToShowDetalisOfCategory) : RecyclerView.Adapter<CategoryAdapter.ViewHolder>() {
 
     lateinit var binding: CategoryItemBinding
 
@@ -33,6 +33,9 @@ class CategoryAdapter  (private var myProducts: List<Product>) : RecyclerView.Ad
 
         holder.binding.categoryAddToFav.setOnClickListener {
             product.title?.let { it1 -> Log.i("Fav", it1) }
+        }
+        holder.binding.root.setOnClickListener {
+            listener.showDetalisFromCategory(product.id ?: 8350702272834)
         }
 
 

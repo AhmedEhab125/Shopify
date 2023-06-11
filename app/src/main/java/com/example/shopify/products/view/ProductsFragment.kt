@@ -12,9 +12,11 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.shopify.Models.productDetails.Product
 import com.example.shopify.Models.products.CollectProductsModel
+import com.example.shopify.R
 import com.example.shopify.databinding.FragmentProductsBinding
 import com.example.shopify.nework.ApiState
 import com.example.shopify.nework.ShopifyAPi
@@ -26,7 +28,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 
-class ProductsFragment : Fragment() {
+class ProductsFragment : Fragment(),OnClickToShowDetalis {
     private lateinit var productsBinding: FragmentProductsBinding
     private lateinit var productsAdapter: ProductsAdapter
     private lateinit var viewModel: ProductsViewModel
@@ -36,7 +38,7 @@ class ProductsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         productsBinding = FragmentProductsBinding.inflate(inflater)
-        productsAdapter = ProductsAdapter(listOf())
+        productsAdapter = ProductsAdapter(listOf(),this)
         val factory =
             ProductsViewModelFactory(CollectionProductsRepo(RemoteSource(ShopifyAPi.retrofitService)))
         viewModel = ViewModelProvider(requireActivity(), factory)[ProductsViewModel::class.java]
@@ -51,6 +53,7 @@ class ProductsFragment : Fragment() {
         productsBinding.productsRV.layoutManager = GridLayoutManager(requireContext(), 2)
         updateRecycleView()
         searchForProduct()
+
     }
 
     private fun updateRecycleView() {
@@ -93,7 +96,6 @@ class ProductsFragment : Fragment() {
         })
     }
 
-
     fun filterProducts(text:String){
        var filtteredProducts = mutableListOf<Product>()
         for (product in myProducts){
@@ -103,11 +105,15 @@ class ProductsFragment : Fragment() {
         }
         productsAdapter.updateList(filtteredProducts)
         if (filtteredProducts.isEmpty()){
-            Toast.makeText(requireContext(),"Sorry,No Data Founded", Toast.LENGTH_SHORT)
+            Toast.makeText(requireContext(),"Sorry,No Data Founded", Toast.LENGTH_SHORT).show()
         }
 
     }
 
+    override fun ShowProductDetalis(productId: Long) {
+        val action = ProductsFragmentDirections.fromProductToDetails(productId)
+        Navigation.findNavController(requireView()).navigate(action)
+    }
 
 
 }
