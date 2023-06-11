@@ -38,4 +38,7 @@
     <string name="discount">Discount :</string>
     <string name="voutcher">voutcher</string>
     <string name="logout">LogOut</string>
+    <string name="couponCode">Coupon Code</string>
+    <string name="coupon_body">To get the discount enter the code to checkout</string>
+    <string name="copy">Copy</string>
 </resources>

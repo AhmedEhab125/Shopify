@@ -21,6 +21,7 @@ import com.example.shopify.Models.brands.BrandModel
 import com.example.shopify.Models.brands.SmartCollection
 import com.example.shopify.R
 import com.example.shopify.databinding.FragmentHomeBinding
+import com.example.shopify.home.model.Ads
 import com.example.shopify.home.model.HomeRepo
 import com.example.shopify.home.viewModel.HomeViewModel
 import com.example.shopify.home.viewModel.HomeViewModelFactory
@@ -28,15 +29,13 @@ import com.example.shopify.mainActivity.MainActivity
 import com.example.shopify.nework.ApiState
 import com.example.shopify.nework.ShopifyAPi
 import com.example.shopify.repo.RemoteSource
-import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
-import java.lang.Math.abs
 
 class HomeFragment : Fragment() {
     private lateinit var homeBinding: FragmentHomeBinding
     private lateinit var brandsAdapter: BrandsAdapter
     private lateinit var handler: Handler
-    private lateinit var adsImages: ArrayList<Int>
+    private lateinit var ads: ArrayList<Ads>
     private lateinit var adsAdapter: AdsAdapter
     private lateinit var viewPager2: ViewPager2
     lateinit var homeViewModel: HomeViewModel
@@ -94,14 +93,14 @@ class HomeFragment : Fragment() {
 
     private fun init() {
         handler = Handler(Looper.myLooper()!!)
-        adsImages = ArrayList()
-        adsImages.add(R.drawable.discount1)
-        adsImages.add(R.drawable.discount2)
-        adsImages.add(R.drawable.discount3)
-        adsImages.add(R.drawable.discount4)
-        adsImages.add(R.drawable.discount5)
-        adsImages.add(R.drawable.discount6)
-        adsAdapter = AdsAdapter(adsImages, viewPager2)
+        ads = ArrayList()
+        ads.add(Ads(R.drawable.discount1,"RXKJ2Q"))
+        ads.add(Ads(R.drawable.discount2,"ALC1"))
+        ads.add(Ads(R.drawable.discount3,"IMA1115"))
+        ads.add(Ads(R.drawable.discount4,"TEZL"))
+        ads.add(Ads(R.drawable.discount5,"TEPU"))
+        ads.add(Ads(R.drawable.discount6,"A21C"))
+        adsAdapter = AdsAdapter(ads, viewPager2)
         homeBinding.dicountsSlider.adapter = adsAdapter
         viewPager2.clipToPadding = false
         viewPager2.clipChildren = false
