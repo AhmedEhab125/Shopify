@@ -41,4 +41,13 @@
     <string name="couponCode">Coupon Code</string>
     <string name="coupon_body">To get the discount enter the code to checkout</string>
     <string name="copy">Copy</string>
+    <string name="signUpFirstName">First Name</string>
+    <string name="signUpLastName">Last Name</string>
+    <string name="signUpAdress">Building No,street</string>
+    <string name="signUpCountry">Country</string>
+    <string name="signUpCity">City</string>
+    <string name="signUpPhone">Phone</string>
+
+
+
 </resources>
