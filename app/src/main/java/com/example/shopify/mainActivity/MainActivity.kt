@@ -1,6 +1,7 @@
 package com.example.shopify.mainActivity
 
 import VPFragmentAdapter
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.Settings
@@ -20,6 +21,7 @@ import com.example.shopify.home.view.HomeFragment
 import com.example.shopify.products.view.ProductsFragment
 import com.example.shopify.setting.SettingFragment
 import com.example.shopify.signup.SignupFragment
+import com.example.shopify.utiltes.Constants
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.Dispatchers
@@ -27,25 +29,25 @@ import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
+
     //  lateinit var vpFragmentAdapter: VPFragmentAdapter
     lateinit var navController: NavController
+    lateinit var configrations: SharedPreferences
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        configrations = getSharedPreferences("Configuration", MODE_PRIVATE)!!
 
 
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.my_nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
-        val  bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
+        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
 
         NavigationUI.setupWithNavController(bottomNavigationView, navController)
-
-
-
-
-
+        setConfigartions()
 
         /*  val iconList= listOf(
                 R.drawable.home,
@@ -87,12 +89,17 @@ class MainActivity : AppCompatActivity() {
 
            }
        }*/
+    fun setConfigartions(){
+        if (!configrations.contains(Constants.currency)) {
+            configrations.edit().putString(Constants.currency,Constants.dollar).apply()
+        }
+    }
 
 
-    fun hideNavigationBar(isVisable : Boolean) {
-        if (isVisable){
+    fun hideNavigationBar(isVisable: Boolean) {
+        if (isVisable) {
             binding.bottomNavigationView.visibility = View.VISIBLE
-        }else{
+        } else {
             binding.bottomNavigationView.visibility = View.GONE
         }
     }

@@ -65,7 +65,11 @@
         android:id="@+id/settingFragment"
         android:name="com.example.shopify.setting.SettingFragment"
         android:label="fragment_setting"
-        tools:layout="@layout/fragment_setting" />
+        tools:layout="@layout/fragment_setting" >
+        <action
+            android:id="@+id/action_settingFragment_to_addressFragment"
+            app:destination="@id/addressFragment" />
+    </fragment>
     <fragment
         android:id="@+id/productDetailsFragment"
         android:name="com.example.shopify.detailsScreen.view.ProductDetailsFragment"

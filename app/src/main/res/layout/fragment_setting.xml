@@ -111,10 +111,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                android:text="USD"
+                android:text="EGY"
                 android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="@+id/textView1"
-                app:layout_constraintEnd_toStartOf="@+id/currency_spinner"
+                app:layout_constraintEnd_toStartOf="@+id/btn_change_Currncy"
                 app:layout_constraintTop_toTopOf="@+id/textView1"
                 app:layout_constraintVertical_bias="0.0" />
 
@@ -126,7 +126,7 @@
                 android:background="@drawable/right_arrow"
                 android:textOff=""
                 android:textOn=""
-                android:visibility="gone"
+                android:visibility="visible"
                 app:layout_constraintBottom_toBottomOf="@+id/tv_Currncy"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/tv_Currncy" />
@@ -141,16 +141,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/textView1"
                />
-
-            <Spinner
-                android:id="@+id/currency_spinner"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_marginEnd="16dp"
-                android:background="@drawable/right_arrow"
-                app:layout_constraintBottom_toBottomOf="@+id/tv_Currncy"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/tv_Currncy" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

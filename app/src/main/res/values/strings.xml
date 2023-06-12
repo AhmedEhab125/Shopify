@@ -48,6 +48,8 @@
     <string name="signUpCity">City</string>
     <string name="signUpPhone">Phone</string>
     <string name="add_address">add address</string>
+    <string name="currency">currency</string>
+    <string name="pound">pound</string>
 
 
 </resources>
