@@ -33,6 +33,7 @@ class SettingFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        createCurrencyDropDownList()
         binding.AboutUscardView.setOnClickListener {
          aboutUstDialog()
         }
@@ -46,6 +47,23 @@ class SettingFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         (context as MainActivity).hideNavigationBar(true)
+    }
+    fun createCurrencyDropDownList(){
+        val currencyList = arrayOf("LE", "USD")
+        val adapter = ArrayAdapter(requireContext(),
+            android.R.layout.simple_spinner_dropdown_item, currencyList)
+        binding.currencySpinner.adapter = adapter
+        binding.currencySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+                // Handle item selection here
+                binding.tvCurrncy.text = currencyList[position]
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {
+                // Do nothing
+            }
+        }
+
     }
 
 

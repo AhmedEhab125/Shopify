@@ -41,4 +41,5 @@
     <string name="couponCode">Coupon Code</string>
     <string name="coupon_body">To get the discount enter the code to checkout</string>
     <string name="copy">Copy</string>
+    <string name="add_adress">Add  address</string>
 </resources>
