@@ -47,7 +47,7 @@
     <string name="signUpCountry">Country</string>
     <string name="signUpCity">City</string>
     <string name="signUpPhone">Phone</string>
-
+    <string name="add_address">add address</string>
 
 
 </resources>

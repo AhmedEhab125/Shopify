@@ -191,7 +191,7 @@
         android:layout_marginTop="8dp"
 
         android:backgroundTint="@color/blue_app_color"
-        android:text="@string/add_adress"
+        android:text="@string/add_address"
         app:cornerRadius="30dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
