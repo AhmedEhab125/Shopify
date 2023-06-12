@@ -1,31 +1,16 @@
 package com.example.shopify.mainActivity
 
-import VPFragmentAdapter
 import android.content.SharedPreferences
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.provider.Settings
-import android.util.Log
 import android.view.View
-import androidx.lifecycle.lifecycleScope
+import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import com.example.shopify.R
-import com.example.shopify.nework.ShopifyAPi
-import com.example.shopify.cart.view.CartFragment
-import com.example.shopify.category.view.CategoryFragment
 import com.example.shopify.databinding.ActivityMainBinding
-import com.example.shopify.favourite.view.FavouriteFragment
-import com.example.shopify.home.view.HomeFragment
-import com.example.shopify.products.view.ProductsFragment
-import com.example.shopify.setting.SettingFragment
-import com.example.shopify.signup.SignupFragment
 import com.example.shopify.utiltes.Constants
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.tabs.TabLayoutMediator
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding

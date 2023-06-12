@@ -93,7 +93,7 @@
     </fragment>
     <fragment
         android:id="@+id/addressListFragment"
-        android:name="com.example.shopify.addressList.AddressListFragment"
+        android:name="com.example.shopify.addressList.view.AddressListFragment"
         android:label="fragment_address_list"
         tools:layout="@layout/fragment_address_list" >
         <action
