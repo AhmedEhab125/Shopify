@@ -7,6 +7,7 @@
     android:layout_marginStart="5dp"
     android:layout_marginTop="5dp"
     android:layout_marginEnd="5dp"
+    android:layout_marginBottom="5dp"
     app:cardCornerRadius="20dp"
     app:cardElevation="10dp">
 
@@ -20,12 +21,11 @@
 
         <ImageView
             android:id="@+id/favImg"
-            android:layout_width="110dp"
-            android:layout_height="100dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_width="0dp"
+            android:layout_height="120dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintEnd_toStartOf="@+id/deleteBtn"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:srcCompat="@tools:sample/avatars" />
@@ -34,38 +34,36 @@
             android:id="@+id/favProductName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginBottom="23dp"
+            android:layout_marginTop="10dp"
             android:text="TextView"
             android:textColor="#000000"
             android:textSize="16sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/favProductPrice"
-            app:layout_constraintStart_toEndOf="@+id/favImg"
-            app:layout_constraintTop_toTopOf="@+id/favImg" />
+            app:layout_constraintEnd_toEndOf="@+id/favImg"
+            app:layout_constraintStart_toStartOf="@+id/favImg"
+            app:layout_constraintTop_toBottomOf="@+id/favImg" />
 
         <TextView
             android:id="@+id/favProductPrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginBottom="10dp"
+            android:layout_marginTop="5dp"
             android:text="TextView"
             android:textColor="#000000"
             android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="@+id/favImg"
-            app:layout_constraintStart_toEndOf="@+id/favImg"
+            app:layout_constraintEnd_toEndOf="@+id/favProductName"
+            app:layout_constraintStart_toStartOf="@+id/favProductName"
             app:layout_constraintTop_toBottomOf="@+id/favProductName" />
 
         <ImageView
             android:id="@+id/deleteBtn"
-            android:layout_width="40dp"
-            android:layout_height="48dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginBottom="10dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="10dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:srcCompat="@drawable/baseline_delete_24" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/round_clear_24"
+            android:scaleType="fitXY"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

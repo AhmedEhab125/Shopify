@@ -53,7 +53,7 @@
     </fragment>
     <fragment
         android:id="@+id/signupFragment"
-        android:name="com.example.shopify.signup.SignupFragment"
+        android:name="com.example.shopify.signup.sifnUpView.SignupFragment"
         android:label="fragment_signup"
         tools:layout="@layout/fragment_signup" />
     <fragment
