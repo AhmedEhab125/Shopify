@@ -1,5 +1,7 @@
 package com.example.shopify.nework
 
+import com.example.shopify.Models.addAddress.AddNewAddress
+import com.example.shopify.Models.addAddress.Address
 import com.example.shopify.Models.addressesmodel.AddressesModel
 import com.example.shopify.Models.brands.BrandModel
 import com.example.shopify.Models.collects.CollectModel
@@ -40,5 +42,9 @@ interface ShopifyApiService {
     @Headers("X-Shopify-Access-Token: ${Constants.accesstoken}")
     @GET("admin/api/2023-04/customers/{customerId}/addresses.json")
     suspend fun getCustomerAddresses(@Path(value = "customerId") id:Long) : Response<AddressesModel>
+    @Headers("X-Shopify-Access-Token: ${Constants.accesstoken}")
+    @POST("admin/api/2023-04/customers/{customerId}/addresses.json")
+    suspend fun addCustomerAddresse(@Path(value = "customerId") id:Long,@Body addresse: AddNewAddress) : Response<AddressesModel>
+
 
 }
