@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.Navigation
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.shopify.R
 import com.example.shopify.databinding.FragmentPersonalBinding
@@ -29,9 +30,9 @@ class PersonalFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         personalBinding.orderRV.adapter = ordersAdapter
-        personalBinding.orderRV.layoutManager = LinearLayoutManager(requireContext())
+        personalBinding.orderRV.layoutManager = GridLayoutManager(requireContext(),2)
         personalBinding.whishListRV.adapter = wishListAdapter
-        personalBinding.whishListRV.layoutManager = LinearLayoutManager(requireContext())
+        personalBinding.whishListRV.layoutManager = GridLayoutManager(requireContext(),2)
         personalBinding.orderMore.setOnClickListener {
             print("more of orders")
         }
