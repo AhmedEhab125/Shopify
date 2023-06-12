@@ -4,10 +4,13 @@ import com.example.shopify.Models.brands.BrandModel
 import com.example.shopify.Models.collects.CollectModel
 import com.example.shopify.Models.productDetails.ProductModel
 import com.example.shopify.Models.products.CollectProductsModel
+import com.example.shopify.Models.registrashonModel.CustomerRegistrationModel
 import com.example.shopify.utiltes.Constants
 import retrofit2.Response
+import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Headers
+import retrofit2.http.POST
 import retrofit2.http.Path
 
 interface ShopifyApiService {
@@ -29,4 +32,8 @@ interface ShopifyApiService {
     @Headers("X-Shopify-Access-Token: ${Constants.accesstoken}")
     @GET("admin/api/2023-04/products.json")
     suspend fun getAllProducts() : Response<CollectProductsModel>
+    @Headers("X-Shopify-Access-Token: ${Constants.accesstoken}")
+    @POST("admin/api/2023-04/customers.json")
+    suspend fun registerUserAtApi(@Body user : CustomerRegistrationModel) : Response<CustomerRegistrationModel>
+
 }
