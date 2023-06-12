@@ -31,8 +31,7 @@ class CartFragment : Fragment() {
         cartBinding.totalPrice.text="1000$"
 
         cartBinding.checkoutBtn.setOnClickListener {
-            Log.i("Milad","CheckOut Button")
-            Navigation.findNavController(requireView()).navigate(R.id.from_cart_to_login)
+        //    Navigation.findNavController(requireView()).navigate(R.id.from_cart_to_login)
         }
 
 
