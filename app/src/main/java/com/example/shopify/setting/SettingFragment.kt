@@ -55,7 +55,6 @@ class SettingFragment : Fragment() {
 
     }
     fun goToAddressScreen(){
-
         Navigation.findNavController(requireView()).navigate(R.id.action_settingFragment_to_addressListFragment)
     }
     override fun onResume() {

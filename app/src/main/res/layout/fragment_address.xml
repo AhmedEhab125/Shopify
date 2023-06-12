@@ -162,8 +162,9 @@
 
         android:hint="@string/phone_number"
         android:minHeight="48dp"
-        app:boxCornerRadiusBottomEnd="20dp"
+        android:visibility="gone"
 
+        app:boxCornerRadiusBottomEnd="20dp"
         app:boxCornerRadiusBottomStart="20dp"
         app:boxCornerRadiusTopEnd="20dp"
         app:boxCornerRadiusTopStart="20dp"
@@ -188,13 +189,13 @@
         android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
 
+        android:layout_marginTop="16dp"
         android:backgroundTint="@color/blue_app_color"
         android:text="@string/add_address"
         app:cornerRadius="30dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/phoneNoTF" />
+        app:layout_constraintTop_toBottomOf="@+id/cityAddressTF" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

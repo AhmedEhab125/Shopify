@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.shopify.Models.addressesmodel.AddressesModel
@@ -56,6 +57,14 @@ class AddressListFragment : Fragment() {
         setAddressList()
         addressesViewModel.getAllAddresses()
 
+        binding.btnAddAddresses.setOnClickListener {
+            goToAddAddressScreen()
+        }
+
+    }
+    fun goToAddAddressScreen(){
+
+        Navigation.findNavController(requireView()).navigate(R.id.action_addressListFragment_to_addressFragment)
     }
     fun setRecycleView(){
         myAdapter = AddressListAdapter(listOf())

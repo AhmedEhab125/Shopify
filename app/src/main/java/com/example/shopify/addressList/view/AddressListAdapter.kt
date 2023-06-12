@@ -19,7 +19,7 @@ class AddressListAdapter(var list: List<Addresse>) :
 
     override fun getItemCount(): Int {
         return list.size
-        // return 10
+
     }
 
     fun setAddressesList(list: List<Addresse>) {
