@@ -74,7 +74,7 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         brandsAdapter = BrandsAdapter(listOf())
         homeBinding.brandsRV.adapter = brandsAdapter
-        homeBinding.brandsRV.layoutManager = GridLayoutManager(requireContext(), 2)
+        homeBinding.brandsRV.layoutManager = GridLayoutManager(requireContext(), 2,RecyclerView.HORIZONTAL, false)
         setBrandData()
         homeViewModel.getBrands()
         searchForBrands()
