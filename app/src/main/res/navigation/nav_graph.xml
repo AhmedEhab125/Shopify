@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/homeFragment">
+    app:startDestination="@id/loginFragment">
 
     <fragment
         android:id="@+id/homeFragment"
@@ -18,11 +18,7 @@
         android:id="@+id/cartFragment"
         android:name="com.example.shopify.cart.view.CartFragment"
         android:label="fragment_cart"
-        tools:layout="@layout/fragment_cart" >
-        <action
-            android:id="@+id/from_cart_to_login"
-            app:destination="@id/loginFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_cart" />
     <fragment
         android:id="@+id/favouriteFragment"
         android:name="com.example.shopify.favourite.view.FavouriteFragment"
@@ -59,11 +55,7 @@
         android:id="@+id/signupFragment"
         android:name="com.example.shopify.signup.SignupFragment"
         android:label="fragment_signup"
-        tools:layout="@layout/fragment_signup" >
-        <action
-            android:id="@+id/from_signUp_to_cart"
-            app:destination="@id/cartFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_signup" />
     <fragment
         android:id="@+id/addressFragment"
         android:name="com.example.shopify.addressPicker.AddressFragment"
