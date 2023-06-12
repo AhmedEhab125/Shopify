@@ -1,5 +1,6 @@
-package com.example.shopify.signup
+package com.example.shopify.signup.sifnUpView
 
+import android.location.Address
 import android.os.Bundle
 import android.util.Log
 import android.util.Patterns
@@ -8,14 +9,24 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.navigation.Navigation
-import com.example.shopify.R
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import com.example.shopify.Models.productDetails.ProductModel
+import com.example.shopify.Models.registrashonModel.Addresse
+import com.example.shopify.Models.registrashonModel.Customer
+import com.example.shopify.Models.registrashonModel.CustomerRegistrationModel
 import com.example.shopify.databinding.FragmentSignupBinding
 import com.example.shopify.mainActivity.MainActivity
-import com.example.shopify.utiltes.MyValidation
+import com.example.shopify.nework.ApiState
+import com.example.shopify.nework.ShopifyAPi
+import com.example.shopify.repo.RemoteSource
+import com.example.shopify.signup.model.ConcreteRegisterUser
+import com.example.shopify.signup.signUpViewModel.SignUpViewModel
+import com.example.shopify.signup.signUpViewModel.SignUpViewModelFactory
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 class SignupFragment : Fragment() {
 lateinit var binding : FragmentSignupBinding
@@ -28,6 +39,8 @@ lateinit var address : String
 lateinit var city : String
 lateinit var country : String
 lateinit var phone:String
+lateinit var signupViewModel : SignUpViewModel
+lateinit var signupFactory : SignUpViewModelFactory
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         auth = FirebaseAuth.getInstance()
@@ -45,6 +58,10 @@ lateinit var phone:String
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        signupFactory = SignUpViewModelFactory(ConcreteRegisterUser(RemoteSource(ShopifyAPi.retrofitService)))
+        signupViewModel = ViewModelProvider(requireActivity(),signupFactory).get(SignUpViewModel::class.java)
+
+
         binding.signUpBtn.setOnClickListener {
              email = binding.signEmailTF.text.toString()
              password = binding.signPassTF.text.toString()
@@ -61,6 +78,7 @@ lateinit var phone:String
                       auth.signOut()
                       Toast.makeText(requireContext(),"Sign In Sussessfuly",Toast.LENGTH_SHORT).show()
                       //create User Object And Post It To API
+                      creatUser()
                       Log.i("user",firstName + "" + secondName + address + "" + city + "" + country + ""+ phone + "" +email )
                   }else{
                       Toast.makeText(requireContext(),it.exception.toString(),Toast.LENGTH_SHORT).show()
@@ -81,7 +99,7 @@ lateinit var phone:String
 
 
 
-    fun checkAllFalid() : Boolean{
+   private fun checkAllFalid() : Boolean{
         if(binding.signFirstNameTF.text.toString() == ""){
             binding.signFirstNameTFLayout.error = "This Is Required Filed"
             return false
@@ -138,5 +156,40 @@ lateinit var phone:String
 
       return true
     }
+
+
+   private fun creatUser(){
+       val address = listOf<Addresse>(Addresse(address1 = address,city,country,null,null,null,null,null))
+
+       val customer = Customer(null,addresses = address,email,firstName,secondName,password,password,phone,null,true)
+
+       val user = CustomerRegistrationModel(customer)
+       signupViewModel.registerUserToApi(user)
+
+       lifecycleScope.launch {
+           signupViewModel.productInfo.collect{
+               when(it){
+                   is ApiState.Loading -> {
+                       Log.i("Loading","It's Loading")
+                     //  binding.progressBar5.visibility = View.VISIBLE
+                   }
+                   is ApiState.Success<*> ->{
+                     val myUser = it.date as CustomerRegistrationModel
+                      Log.i("Mizooo",myUser.customer.id.toString())
+                   }
+                   else -> {
+                       val snakbar = Snackbar.make(
+                           requireView(),
+                           "There Is Failureee",
+                           Snackbar.LENGTH_LONG
+                       ).setAction("Action", null)
+                       snakbar.show()
+                   }
+               }
+           }
+       }
+
+   }
+
 
 }
