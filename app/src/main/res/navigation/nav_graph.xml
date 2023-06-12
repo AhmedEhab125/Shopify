@@ -58,7 +58,7 @@
         tools:layout="@layout/fragment_signup" />
     <fragment
         android:id="@+id/addressFragment"
-        android:name="com.example.shopify.addressPicker.AddressFragment"
+        android:name="com.example.shopify.addressPicker.view.AddressFragment"
         android:label="fragment_address"
         tools:layout="@layout/fragment_address" />
     <fragment
