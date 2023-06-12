@@ -1,9 +1,11 @@
 package com.example.shopify.nework
 
+import com.example.shopify.Models.addressesmodel.AddressesModel
 import com.example.shopify.Models.brands.BrandModel
 import com.example.shopify.Models.collects.CollectModel
 import com.example.shopify.Models.productDetails.ProductModel
 import com.example.shopify.Models.products.CollectProductsModel
+import com.example.shopify.Models.registrashonModel.Addresse
 import com.example.shopify.Models.registrashonModel.CustomerRegistrationModel
 import com.example.shopify.utiltes.Constants
 import retrofit2.Response
@@ -35,5 +37,8 @@ interface ShopifyApiService {
     @Headers("X-Shopify-Access-Token: ${Constants.accesstoken}")
     @POST("admin/api/2023-04/customers.json")
     suspend fun registerUserAtApi(@Body user : CustomerRegistrationModel) : Response<CustomerRegistrationModel>
+    @Headers("X-Shopify-Access-Token: ${Constants.accesstoken}")
+    @GET("admin/api/2023-04/customers/{customerId}/addresses.json")
+    suspend fun getCustomerAddresses(@Path(value = "customerId") id:Long) : Response<AddressesModel>
 
 }

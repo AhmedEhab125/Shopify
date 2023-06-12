@@ -5,4 +5,8 @@ object Constants {
     const val accesstoken = "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"
     const val secretKey = "6b4669b96493b0fda3430e65384fa92e"
     const val hostName = "mad43-alex-and-team1.myshopify.com/"
+    const val currency = "currency"
+    const val dollar = "Dollar"
+    const val pound = "Pound"
+
 }

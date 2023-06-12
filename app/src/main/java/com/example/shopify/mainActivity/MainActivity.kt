@@ -1,36 +1,38 @@
 package com.example.shopify.mainActivity
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import com.example.shopify.R
 import com.example.shopify.databinding.ActivityMainBinding
+import com.example.shopify.utiltes.Constants
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
+
     //  lateinit var vpFragmentAdapter: VPFragmentAdapter
     lateinit var navController: NavController
+    lateinit var configrations: SharedPreferences
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        configrations = getSharedPreferences("Configuration", MODE_PRIVATE)!!
 
 
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.my_nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
-        val  bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
+        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
 
         NavigationUI.setupWithNavController(bottomNavigationView, navController)
-
-
-
-
-
+        setConfigartions()
 
         /*  val iconList= listOf(
                 R.drawable.home,
@@ -72,12 +74,17 @@ class MainActivity : AppCompatActivity() {
 
            }
        }*/
+    fun setConfigartions(){
+        if (!configrations.contains(Constants.currency)) {
+            configrations.edit().putString(Constants.currency,Constants.dollar).apply()
+        }
+    }
 
 
-    fun hideNavigationBar(isVisable : Boolean) {
-        if (isVisable){
+    fun hideNavigationBar(isVisable: Boolean) {
+        if (isVisable) {
             binding.bottomNavigationView.visibility = View.VISIBLE
-        }else{
+        } else {
             binding.bottomNavigationView.visibility = View.GONE
         }
     }
