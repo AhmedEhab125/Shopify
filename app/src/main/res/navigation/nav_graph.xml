@@ -67,8 +67,8 @@
         android:label="fragment_setting"
         tools:layout="@layout/fragment_setting" >
         <action
-            android:id="@+id/action_settingFragment_to_addressFragment"
-            app:destination="@id/addressFragment" />
+            android:id="@+id/action_settingFragment_to_addressListFragment"
+            app:destination="@id/addressListFragment" />
     </fragment>
     <fragment
         android:id="@+id/productDetailsFragment"
@@ -90,5 +90,14 @@
         <action
             android:id="@+id/from_product_to_details"
             app:destination="@id/productDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addressListFragment"
+        android:name="com.example.shopify.addressList.AddressListFragment"
+        android:label="fragment_address_list"
+        tools:layout="@layout/fragment_address_list" >
+        <action
+            android:id="@+id/action_addressListFragment_to_addressFragment"
+            app:destination="@id/addressFragment" />
     </fragment>
 </navigation>

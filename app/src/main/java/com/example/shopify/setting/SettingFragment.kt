@@ -15,7 +15,9 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.Constraints
+import androidx.navigation.Navigation
 import com.example.shopify.R
+import com.example.shopify.category.view.CategoryFragmentDirections
 import com.example.shopify.databinding.FragmentSettingBinding
 import com.example.shopify.mainActivity.MainActivity
 import com.example.shopify.utiltes.Constants
@@ -46,27 +48,29 @@ class SettingFragment : Fragment() {
         binding.ContactUscardView.setOnClickListener {
             contactUstDialog()
         }
+        binding.addressCardView.setOnClickListener {
+            goToAddressScreen()
+        }
 
 
+    }
+    fun goToAddressScreen(){
+
+        Navigation.findNavController(requireView()).navigate(R.id.action_settingFragment_to_addressListFragment)
     }
     override fun onResume() {
         super.onResume()
         (context as MainActivity).hideNavigationBar(true)
     }
     fun createCurrencyDropDownList(){
-        val currencyList = arrayOf(Constants.pound, Constants.dollar)
+
         binding.tvCurrncy.text = configrations.getString(Constants.currency,Constants.pound)
-        println(configrations.getString(Constants.currency,Constants.pound))
-    binding.btnChangeCurrncy.setOnClickListener {
+    binding.CurrncycardView.setOnClickListener {
         currencyDialog()
     }
 
 
     }
-
-
-
-
 
     fun aboutUstDialog() {
         var dialog = Dialog(requireContext())

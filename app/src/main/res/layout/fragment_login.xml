@@ -164,7 +164,7 @@
 
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/cardView"
+        android:id="@+id/addressCardView"
         android:layout_width="55dp"
         android:layout_height="52dp"
         android:layout_marginTop="32dp"
