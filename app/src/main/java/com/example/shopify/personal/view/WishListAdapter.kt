@@ -21,7 +21,7 @@ class WishListAdapter (var wishList: List<String>): RecyclerView.Adapter<WishLis
         holder.binding.favImg.setImageResource(R.drawable.headphone)
         holder.binding.favProductName.text = "HeadPhone"
         holder.binding.favProductPrice.text = "120$"
-        holder.binding.deleteBtn.setImageResource(R.drawable.baseline_star_24)
+        holder.binding.deleteBtn.setImageResource(0)
     }
 
     inner class WishViewHolder(var binding: FavCardBinding) : RecyclerView.ViewHolder(binding.root)

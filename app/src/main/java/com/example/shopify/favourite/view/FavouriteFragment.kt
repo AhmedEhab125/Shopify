@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.shopify.R
 import com.example.shopify.databinding.FragmentFavouriteBinding
@@ -25,7 +26,7 @@ class FavouriteFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         favouriteBinding.favRV.adapter = favAdapter
-        favouriteBinding.favRV.layoutManager = LinearLayoutManager(requireContext())
+        favouriteBinding.favRV.layoutManager = GridLayoutManager(requireContext(),2)
     }
 
     override fun onResume() {
