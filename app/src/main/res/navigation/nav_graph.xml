@@ -18,7 +18,11 @@
         android:id="@+id/cartFragment"
         android:name="com.example.shopify.cart.view.CartFragment"
         android:label="fragment_cart"
-        tools:layout="@layout/fragment_cart" />
+        tools:layout="@layout/fragment_cart" >
+        <action
+            android:id="@+id/action_cartFragment_to_addressListFragment"
+            app:destination="@id/addressListFragment" />
+    </fragment>
     <fragment
         android:id="@+id/favouriteFragment"
         android:name="com.example.shopify.favourite.view.FavouriteFragment"
@@ -41,6 +45,9 @@
         <action
             android:id="@+id/from_personal_to_settings"
             app:destination="@id/settingFragment" />
+        <action
+            android:id="@+id/action_personalFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
@@ -78,6 +85,9 @@
         <argument
             android:name="product_Id"
             app:argType="long" />
+        <action
+            android:id="@+id/action_productDetailsFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
     </fragment>
     <fragment
         android:id="@+id/productsFragment"
@@ -99,5 +109,13 @@
         <action
             android:id="@+id/action_addressListFragment_to_addressFragment"
             app:destination="@id/addressFragment" />
+        <action
+            android:id="@+id/action_addressListFragment_to_paymentFragment"
+            app:destination="@id/paymentFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/paymentFragment"
+        android:name="com.example.shopify.payment.PaymentFragment"
+        android:label="fragment_payment"
+        tools:layout="@layout/fragment_payment" />
 </navigation>
