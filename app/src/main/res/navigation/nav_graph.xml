@@ -48,6 +48,9 @@
         <action
             android:id="@+id/action_personalFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_personalFragment_to_orderListFragment"
+            app:destination="@id/orderListFragment" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
@@ -146,4 +149,9 @@
         android:name="com.example.shopify.payment.PaymentFragment"
         android:label="fragment_payment"
         tools:layout="@layout/fragment_payment" />
+    <fragment
+        android:id="@+id/orderListFragment"
+        android:name="com.example.shopify.orderDetails.view.OrderListFragment"
+        android:label="fragment_order_list"
+        tools:layout="@layout/fragment_order_list" />
 </navigation>
