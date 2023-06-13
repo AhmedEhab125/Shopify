@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.example.shopify.Models.productDetails.ProductModel
@@ -25,6 +26,7 @@ class ProductDetailsFragment : Fragment() {
     lateinit var productDetalisViewModel: ProductDetalisViewModel
     lateinit var productDetalisFactory : ProductDetalisFactory
     lateinit var myProduct : ProductModel
+    var noOfItems = 1
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -73,6 +75,23 @@ class ProductDetailsFragment : Fragment() {
               }
           }
       }
+
+      binding.noOfItemsTv.text = noOfItems.toString()
+
+      binding.btnIncrementNoItem.setOnClickListener {
+          noOfItems++
+          binding.noOfItemsTv.text = noOfItems.toString()
+      }
+
+     binding.btnDecremenNoItems.setOnClickListener {
+         noOfItems--
+         if (noOfItems < 1){
+             noOfItems=1
+             Toast.makeText(requireContext(),"Choose Valid Number",Toast.LENGTH_SHORT).show()
+         }
+
+         binding.noOfItemsTv.text = noOfItems.toString()
+     }
 
     }
 

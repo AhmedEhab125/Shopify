@@ -11,12 +11,20 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.shopify.R
 import com.example.shopify.databinding.FragmentPersonalBinding
 import com.example.shopify.mainActivity.MainActivity
+import com.google.firebase.auth.FirebaseAuth
 
 
 class PersonalFragment : Fragment() {
     private lateinit var personalBinding: FragmentPersonalBinding
     private lateinit var ordersAdapter: OrdersAdapter
     private lateinit var wishListAdapter: WishListAdapter
+    lateinit var auth : FirebaseAuth
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        auth = FirebaseAuth.getInstance()
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -43,6 +51,11 @@ class PersonalFragment : Fragment() {
         personalBinding.settingsBtn.setOnClickListener {
             //from_personal_to_settings
             Navigation.findNavController(requireView()).navigate(R.id.from_personal_to_settings)
+        }
+
+        personalBinding.btnLogout.setOnClickListener {
+            auth.signOut()
+            // ha3ml fnish ll app wala l2 ??
         }
     }
 

@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.navigation.Navigation
 import com.example.shopify.R
+import com.example.shopify.database.UserFireBaseDataBase
 import com.example.shopify.databinding.FragmentLoginBinding
 import com.example.shopify.mainActivity.MainActivity
 import com.google.firebase.auth.FirebaseAuth
@@ -50,6 +51,9 @@ class LoginFragment : Fragment() {
                    if (it.isSuccessful){
                        Toast.makeText(requireContext(),"Log in Sussessfuly",Toast.LENGTH_SHORT).show()
                        Log.i("login",email + "" + password)
+                        UserFireBaseDataBase.getUserFromFireBase(auth.currentUser!!)
+                       Log.i("Hoba", auth.currentUser!!.uid)
+
                    }else{
                        Toast.makeText(requireContext(),it.exception.toString(),Toast.LENGTH_SHORT).show()
                        Log.i("erorr",it.exception.toString())
@@ -91,7 +95,6 @@ class LoginFragment : Fragment() {
             binding.loginPassTFLayout.errorIconDrawable = null
             return false
         }
-
 
         return true
     }
