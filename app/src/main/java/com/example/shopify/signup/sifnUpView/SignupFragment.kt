@@ -11,10 +11,12 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import com.example.shopify.Models.FireBaseModel.MyFireBaseUser
 import com.example.shopify.Models.productDetails.ProductModel
 import com.example.shopify.Models.registrashonModel.Addresse
 import com.example.shopify.Models.registrashonModel.Customer
 import com.example.shopify.Models.registrashonModel.CustomerRegistrationModel
+import com.example.shopify.database.UserFireBaseDataBase
 import com.example.shopify.databinding.FragmentSignupBinding
 import com.example.shopify.mainActivity.MainActivity
 import com.example.shopify.nework.ApiState
@@ -25,7 +27,7 @@ import com.example.shopify.signup.signUpViewModel.SignUpViewModel
 import com.example.shopify.signup.signUpViewModel.SignUpViewModelFactory
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
-import kotlinx.coroutines.flow.collect
+import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.launch
 
 class SignupFragment : Fragment() {
@@ -78,7 +80,8 @@ lateinit var signupFactory : SignUpViewModelFactory
                       auth.signOut()
                       Toast.makeText(requireContext(),"Sign In Sussessfuly",Toast.LENGTH_SHORT).show()
                       //create User Object And Post It To API
-                      creatUser()
+                      val user = it.result.user
+                      creatUser(user as FirebaseUser)
                       Log.i("user",firstName + "" + secondName + address + "" + city + "" + country + ""+ phone + "" +email )
                   }else{
                       Toast.makeText(requireContext(),it.exception.toString(),Toast.LENGTH_SHORT).show()
@@ -158,7 +161,7 @@ lateinit var signupFactory : SignUpViewModelFactory
     }
 
 
-   private fun creatUser(){
+   private fun creatUser(fireBaseUser : FirebaseUser){
        val address = listOf<Addresse>(Addresse(address1 = address,city,country,null,null,null,null,null))
 
        val customer = Customer(null,addresses = address,email,firstName,secondName,password,password,phone,null,true)
@@ -175,6 +178,11 @@ lateinit var signupFactory : SignUpViewModelFactory
                    }
                    is ApiState.Success<*> ->{
                      val myUser = it.date as CustomerRegistrationModel
+                      var userName = myUser.customer.first_name
+                      var userId = myUser.customer.id
+                      var userDraftOrder = -1
+                      val userFirebase = MyFireBaseUser(userName,userId?: 6955526881602 ,userDraftOrder.toLong())
+                       UserFireBaseDataBase.insertUserInFireBase(userFirebase,fireBaseUser)
                       Log.i("Mizooo",myUser.customer.id.toString())
                    }
                    else -> {
