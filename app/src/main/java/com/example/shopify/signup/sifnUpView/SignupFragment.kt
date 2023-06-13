@@ -11,13 +11,16 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.Navigation
 import com.example.shopify.Models.FireBaseModel.MyFireBaseUser
 import com.example.shopify.Models.productDetails.ProductModel
 import com.example.shopify.Models.registrashonModel.Addresse
 import com.example.shopify.Models.registrashonModel.Customer
 import com.example.shopify.Models.registrashonModel.CustomerRegistrationModel
+import com.example.shopify.R
 import com.example.shopify.database.UserFireBaseDataBase
 import com.example.shopify.databinding.FragmentSignupBinding
+import com.example.shopify.login.LoginFragmentDirections
 import com.example.shopify.mainActivity.MainActivity
 import com.example.shopify.nework.ApiState
 import com.example.shopify.nework.ShopifyAPi
@@ -31,18 +34,18 @@ import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.launch
 
 class SignupFragment : Fragment() {
-lateinit var binding : FragmentSignupBinding
-lateinit var auth : FirebaseAuth
-lateinit var password : String
-lateinit var email : String
-lateinit var firstName : String
-lateinit var secondName : String
-lateinit var address : String
-lateinit var city : String
-lateinit var country : String
-lateinit var phone:String
-lateinit var signupViewModel : SignUpViewModel
-lateinit var signupFactory : SignUpViewModelFactory
+    lateinit var binding : FragmentSignupBinding
+    lateinit var auth : FirebaseAuth
+    lateinit var password : String
+    lateinit var email : String
+    lateinit var firstName : String
+    lateinit var secondName : String
+    lateinit var address : String
+    lateinit var city : String
+    lateinit var country : String
+    lateinit var phone:String
+    lateinit var signupViewModel : SignUpViewModel
+    lateinit var signupFactory : SignUpViewModelFactory
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         auth = FirebaseAuth.getInstance()
@@ -53,7 +56,7 @@ lateinit var signupFactory : SignUpViewModelFactory
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-             binding = FragmentSignupBinding.inflate(inflater, container, false)
+        binding = FragmentSignupBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -65,9 +68,9 @@ lateinit var signupFactory : SignUpViewModelFactory
 
 
         binding.signUpBtn.setOnClickListener {
-             email = binding.signEmailTF.text.toString()
-             password = binding.signPassTF.text.toString()
-             firstName = binding.signFirstNameTF.text.toString()
+            email = binding.signEmailTF.text.toString()
+            password = binding.signPassTF.text.toString()
+            firstName = binding.signFirstNameTF.text.toString()
             secondName = binding.signLastNameTF.text.toString()
             phone = binding.signPhoneTF.text.toString()
             address = binding.signStreetTF.text.toString()
@@ -76,17 +79,21 @@ lateinit var signupFactory : SignUpViewModelFactory
             if (checkAllFalid()){
                 binding.signUpPrograssBar.visibility = View.VISIBLE
                 auth.createUserWithEmailAndPassword(email,password).addOnCompleteListener {
-                  if (it.isSuccessful){
-                      auth.signOut()
-                      Toast.makeText(requireContext(),"Sign In Sussessfuly",Toast.LENGTH_SHORT).show()
-                      //create User Object And Post It To API
-                      val user = it.result.user
-                      creatUser(user as FirebaseUser)
-                      Log.i("user",firstName + "" + secondName + address + "" + city + "" + country + ""+ phone + "" +email )
-                  }else{
-                      Toast.makeText(requireContext(),it.exception.toString(),Toast.LENGTH_SHORT).show()
-                      Log.i("erorr",it.exception.toString())
-                  }
+                    if (it.isSuccessful){
+                        auth.signOut()
+                        Toast.makeText(requireContext(),"Sign In Sussessfuly",Toast.LENGTH_SHORT).show()
+                        //create User Object And Post It To API
+                        val user = it.result.user
+                        creatUser(user as FirebaseUser)
+                        Log.i("user",firstName + "" + secondName + address + "" + city + "" + country + ""+ phone + "" +email )
+                        val from =requireArguments().getString("from")!!
+                        val id = requireArguments().getLong("id")
+                        val action = SignupFragmentDirections.actionSignupFragmentToLoginFragment(from,id)
+                        Navigation.findNavController(requireView()).navigate(action)
+                    }else{
+                        Toast.makeText(requireContext(),it.exception.toString(),Toast.LENGTH_SHORT).show()
+                        Log.i("erorr",it.exception.toString())
+                    }
                     binding.signUpPrograssBar.visibility = View.GONE
                 }
             }
@@ -102,7 +109,7 @@ lateinit var signupFactory : SignUpViewModelFactory
 
 
 
-   private fun checkAllFalid() : Boolean{
+    private fun checkAllFalid() : Boolean{
         if(binding.signFirstNameTF.text.toString() == ""){
             binding.signFirstNameTFLayout.error = "This Is Required Filed"
             return false
@@ -111,10 +118,10 @@ lateinit var signupFactory : SignUpViewModelFactory
             binding.signLastNameTFLayout.error = "This Is Required Filed"
             return false
         }
-       val email = binding.signEmailTF.text
+        val email = binding.signEmailTF.text
         if(binding.signEmailTF.text.toString() == ""){
-           binding.signEmailTFLayout.error = "This Is Required Filed"
-           return false
+            binding.signEmailTFLayout.error = "This Is Required Filed"
+            return false
         }
         if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
             binding.signEmailTFLayout.error = "Check Email Format"
@@ -157,47 +164,47 @@ lateinit var signupFactory : SignUpViewModelFactory
             return false
         }
 
-      return true
+        return true
     }
 
 
-   private fun creatUser(fireBaseUser : FirebaseUser){
-       val address = listOf<Addresse>(Addresse(address1 = address,city,country,null,null,null,null,null))
+    private fun creatUser(fireBaseUser : FirebaseUser){
+        val address = listOf<Addresse>(Addresse(address1 = address,city,country,null,null,null,null,null))
 
-       val customer = Customer(null,addresses = address,email,firstName,secondName,password,password,phone,null,true)
+        val customer = Customer(null,addresses = address,email,firstName,secondName,password,password,phone,null,true)
 
-       val user = CustomerRegistrationModel(customer)
-       signupViewModel.registerUserToApi(user)
+        val user = CustomerRegistrationModel(customer)
+        signupViewModel.registerUserToApi(user)
 
-       lifecycleScope.launch {
-           signupViewModel.productInfo.collect{
-               when(it){
-                   is ApiState.Loading -> {
-                       Log.i("Loading","It's Loading")
-                     //  binding.progressBar5.visibility = View.VISIBLE
-                   }
-                   is ApiState.Success<*> ->{
-                     val myUser = it.date as CustomerRegistrationModel
-                      var userName = myUser.customer.first_name
-                      var userId = myUser.customer.id
-                      var userDraftOrder = -1
-                      val userFirebase = MyFireBaseUser(userName,userId?: 6955526881602 ,userDraftOrder.toLong())
-                       UserFireBaseDataBase.insertUserInFireBase(userFirebase,fireBaseUser)
-                      Log.i("Mizooo",myUser.customer.id.toString())
-                   }
-                   else -> {
-                       val snakbar = Snackbar.make(
-                           requireView(),
-                           "There Is Failureee",
-                           Snackbar.LENGTH_LONG
-                       ).setAction("Action", null)
-                       snakbar.show()
-                   }
-               }
-           }
-       }
+        lifecycleScope.launch {
+            signupViewModel.productInfo.collect{
+                when(it){
+                    is ApiState.Loading -> {
+                        Log.i("Loading","It's Loading")
+                        //  binding.progressBar5.visibility = View.VISIBLE
+                    }
+                    is ApiState.Success<*> ->{
+                        val myUser = it.date as CustomerRegistrationModel
+                        var userName = myUser.customer.first_name
+                        var userId = myUser.customer.id
+                        var userDraftOrder = -1
+                        val userFirebase = MyFireBaseUser(userName,userId?: 6955526881602 ,userDraftOrder.toLong())
+                        UserFireBaseDataBase.insertUserInFireBase(userFirebase,fireBaseUser)
+                        Log.i("Mizooo",myUser.customer.id.toString())
+                    }
+                    else -> {
+                        val snakbar = Snackbar.make(
+                            requireView(),
+                            "There Is Failureee",
+                            Snackbar.LENGTH_LONG
+                        ).setAction("Action", null)
+                        snakbar.show()
+                    }
+                }
+            }
+        }
 
-   }
+    }
 
 
 }

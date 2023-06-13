@@ -56,6 +56,7 @@ class AdsAdapter(var ads:ArrayList<Ads>, var viewPager2: ViewPager2):RecyclerVie
             var clip: ClipData = ClipData.newPlainText("coupon", code)
             clipboard.setPrimaryClip(clip)
             Toast.makeText(context, "Copied", Toast.LENGTH_LONG).show()
+            dialog.dismiss()
         }
         val window: Window? = dialog.getWindow()
         window?.setBackgroundDrawableResource(android.R.color.transparent)

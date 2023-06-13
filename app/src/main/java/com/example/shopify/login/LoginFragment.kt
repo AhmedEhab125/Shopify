@@ -17,8 +17,8 @@ import com.google.firebase.auth.FirebaseAuth
 
 
 class LoginFragment : Fragment() {
-  lateinit var binding:FragmentLoginBinding
-  lateinit var auth : FirebaseAuth
+    lateinit var binding:FragmentLoginBinding
+    lateinit var auth : FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,30 +37,38 @@ class LoginFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        val goto = requireArguments().getString("from")
         binding.signUpTv.setOnClickListener {
             //from_login_to_signUp
-            Navigation.findNavController(requireView()).navigate(R.id.from_login_to_signUp)
+            val action = LoginFragmentDirections.fromLoginToSignUp(goto!!,requireArguments().getLong("id"))
+            Navigation.findNavController(requireView()).navigate(action)
         }
         binding.loginBtn.setOnClickListener {
-           var email = binding.loginEmailTF.text.toString()
-           var password = binding.loginPassTF.text.toString()
-           if (isDataValid()){
-               binding.loginProgressBar.visibility = View.VISIBLE
-               auth.signInWithEmailAndPassword(email,password).addOnCompleteListener {
-                   if (it.isSuccessful){
-                       Toast.makeText(requireContext(),"Log in Sussessfuly",Toast.LENGTH_SHORT).show()
-                       Log.i("login",email + "" + password)
+            var email = binding.loginEmailTF.text.toString()
+            var password = binding.loginPassTF.text.toString()
+            if (isDataValid()){
+                binding.loginProgressBar.visibility = View.VISIBLE
+                auth.signInWithEmailAndPassword(email,password).addOnCompleteListener {
+                    if (it.isSuccessful){
+                        Toast.makeText(requireContext(),"Log in Sussessfuly",Toast.LENGTH_SHORT).show()
+                        Log.i("login",email + "" + password)
                         UserFireBaseDataBase.getUserFromFireBase(auth.currentUser!!)
-                       Log.i("Hoba", auth.currentUser!!.uid)
-
-                   }else{
-                       Toast.makeText(requireContext(),it.exception.toString(),Toast.LENGTH_SHORT).show()
-                       Log.i("erorr",it.exception.toString())
-                   }
-                   binding.loginProgressBar.visibility = View.GONE
-               }
-           }
+                        Log.i("Hoba", auth.currentUser!!.uid)
+                        when (goto){
+                            "details" -> {
+                                val id = requireArguments().getLong("id")
+                                val action = LoginFragmentDirections.actionLoginFragmentToProductDetailsFragment(id)
+                                Navigation.findNavController(requireView()).navigate(action)
+                            }
+                            "personal"-> Navigation.findNavController(requireView()).navigate(R.id.action_loginFragment_to_homeFragment)
+                        }
+                    }else{
+                        Toast.makeText(requireContext(),it.exception.toString(),Toast.LENGTH_SHORT).show()
+                        Log.i("erorr",it.exception.toString())
+                    }
+                    binding.loginProgressBar.visibility = View.GONE
+                }
+            }
 
         }
 
