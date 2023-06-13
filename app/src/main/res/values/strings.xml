@@ -11,7 +11,7 @@
     <string name="more">More</string>
     <string name="whishList">WhishList</string>
     <string name="price">Price:</string>
-    <string name="createdAt">"Created At: "</string>
+    <string name="createdAt">Created At: </string>
     <string name="login_email_hint">Email</string>
     <string name="login_pass_hint">Password</string>
     <string name="forget_pass">Forget Password</string>
@@ -50,6 +50,7 @@
     <string name="add_address">add address</string>
     <string name="currency">currency</string>
     <string name="pound">pound</string>
+    <string name="order_list" >Order List </string>
 
 
 </resources>

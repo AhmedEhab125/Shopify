@@ -42,7 +42,7 @@ class PersonalFragment : Fragment() {
         personalBinding.whishListRV.adapter = wishListAdapter
         personalBinding.whishListRV.layoutManager = GridLayoutManager(requireContext(),2)
         personalBinding.orderMore.setOnClickListener {
-            print("more of orders")
+            Navigation.findNavController(requireView()).navigate(R.id.action_personalFragment_to_orderListFragment)
         }
         personalBinding.whishListMore.setOnClickListener {
             print("more of WishList")

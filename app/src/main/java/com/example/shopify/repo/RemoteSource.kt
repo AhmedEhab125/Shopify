@@ -4,6 +4,7 @@ import com.example.shopify.Models.addAddress.AddNewAddress
 import com.example.shopify.Models.addAddress.Address
 import com.example.shopify.Models.addressesmodel.AddressesModel
 import com.example.shopify.Models.brands.BrandModel
+import com.example.shopify.Models.orderList.RetriveOrderModel
 import com.example.shopify.Models.productDetails.ProductModel
 import com.example.shopify.Models.products.CollectProductsModel
 import com.example.shopify.Models.registrashonModel.Addresse
@@ -14,7 +15,7 @@ import kotlinx.coroutines.flow.flowOf
 
 class RemoteSource(var network: ShopifyApiService) : IBrands, ProductDetalisInterface,
     CollectionProductsInterface, IAllProducts, RegisterUserInterFace, IAddresses,
-    IAddCustomerAddress {
+    IAddCustomerAddress ,IOrderList{
     override suspend fun getBrands(): Flow<BrandModel?> {
         return flowOf(network.getBrands().body())
     }
@@ -41,5 +42,9 @@ class RemoteSource(var network: ShopifyApiService) : IBrands, ProductDetalisInte
 
     override suspend fun addAddress(customerId: Long, addresse: AddNewAddress): Flow<AddressesModel?> {
         return flowOf(network.addCustomerAddresse(customerId, addresse).body())
+    }
+
+    override suspend fun getOrderList(): Flow<RetriveOrderModel?> {
+       return  flowOf(network.getAllOrders().body())
     }
 }
