@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 class AddAddressViewModel(var remoteSource: IAddCustomerAddress) : ViewModel() {
     private var _allAddressesList = MutableStateFlow<ApiState>(ApiState.Loading)
     var accessAllAddressesList: StateFlow<ApiState> = _allAddressesList
-    fun addAddresses(customerId: Long = 6955526881602,address: AddNewAddress) {
+    fun addAddresses(customerId: Long ,address: AddNewAddress) {
         viewModelScope.launch(Dispatchers.IO) {
             remoteSource.addAddress(customerId,address).catch { error ->
                 _allAddressesList.value = ApiState.Failure(error)

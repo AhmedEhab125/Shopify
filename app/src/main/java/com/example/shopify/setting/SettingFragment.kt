@@ -21,6 +21,8 @@ import com.example.shopify.category.view.CategoryFragmentDirections
 import com.example.shopify.databinding.FragmentSettingBinding
 import com.example.shopify.mainActivity.MainActivity
 import com.example.shopify.utiltes.Constants
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.ktx.Firebase
 
 
 class SettingFragment : Fragment() {
@@ -41,6 +43,9 @@ class SettingFragment : Fragment() {
         configrations = activity?.getSharedPreferences("Configuration", AppCompatActivity.MODE_PRIVATE)!!
 
         createCurrencyDropDownList()
+        if(FirebaseAuth.getInstance().currentUser==null){
+            binding.addressCardView.visibility = View.GONE
+        }
         binding.AboutUscardView.setOnClickListener {
          aboutUstDialog()
         }

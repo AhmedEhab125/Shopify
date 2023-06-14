@@ -32,6 +32,7 @@ class CategoryFragment : Fragment(),OnClickToShowDetalisOfCategory {
     lateinit var categoryViewModel: CategoryViewModel
     lateinit var categoryViewModelFactory: CategoryViewModelFactory
     lateinit var myAdapter : CategoryAdapter
+    lateinit var filteredList :List<Product>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -57,6 +58,7 @@ class CategoryFragment : Fragment(),OnClickToShowDetalisOfCategory {
         ).get(CategoryViewModel::class.java)
 
         myProducts = listOf()
+        filteredList = myProducts
         myAdapter = CategoryAdapter(listOf(),this)
         binding.categoryRv.apply {
             adapter = myAdapter
@@ -67,20 +69,40 @@ class CategoryFragment : Fragment(),OnClickToShowDetalisOfCategory {
         categoryViewModel.getAllProducts()
 
         binding.radioShoes.setOnClickListener {
-            var filteredList = myProducts.filter { it.product_type.equals("SHOES")  }
-            myAdapter.updateData(filteredList)
+            filterList()
         }
 
         binding.radioAccessories.setOnClickListener {
-            var filteredList = myProducts.filter { it.product_type.equals("ACCESSORIES")  }
-            myAdapter.updateData(filteredList)
+            filterList()
         }
         binding.radioShirts.setOnClickListener {
-            var filteredList = myProducts.filter { it.product_type.equals("T-SHIRTS")  }
-            myAdapter.updateData(filteredList)
+            filterList()
+        }
+        binding.radioWomen.setOnClickListener {
+            filterList()
+        }
+        binding.radioMen.setOnClickListener {
+            filterList()
+        }
+        binding.radioKid.setOnClickListener {
+            filterList()
+        }
+        binding.radioSale.setOnClickListener {
+            filterList()
         }
 
 
+
+    }
+    fun filterList(){
+        if (!filterByType().equals("")){
+        filteredList = myProducts.filter { it.product_type.equals(filterByType())  && it.tags?.contains(filterByGender()) ?: true  }
+        }else{
+            filteredList = myProducts.filter {  it.tags?.contains(filterByGender()) ?: true  }
+
+        }
+
+        myAdapter.updateData(filteredList)
     }
 
     override fun onResume() {
@@ -147,6 +169,40 @@ class CategoryFragment : Fragment(),OnClickToShowDetalisOfCategory {
             }
 
         })
+    }
+    fun filterByGender():String{
+
+        when((binding.rgGender.checkedRadioButtonId)){
+            R.id.radio_men ->{
+                return " men"
+            }
+            R.id.radio_kid ->{
+                return "kid"
+            }
+            R.id.radio_women ->{
+                return  "women"
+            }
+            else -> {
+                return ""
+            }
+        }
+    }
+    fun filterByType():String{
+
+        when((binding.rgAccsesories.checkedRadioButtonId)){
+            R.id.radio_accessories ->{
+                return "ACCESSORIES"
+            }
+            R.id.radio_shirts ->{
+                return "T-SHIRTS"
+            }
+            R.id.radio_shoes ->{
+                return  "SHOES"
+            }
+            else -> {
+                return ""
+            }
+        }
     }
 
 

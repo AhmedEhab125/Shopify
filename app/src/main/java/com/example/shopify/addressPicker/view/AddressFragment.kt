@@ -15,6 +15,7 @@ import com.example.shopify.addressList.viewModel.AddressesViewModelFactory
 import com.example.shopify.addressPicker.model.AddAddressRepo
 import com.example.shopify.addressPicker.viewModel.AddAddressViewModel
 import com.example.shopify.addressPicker.viewModel.AddAddressViewModelFactory
+import com.example.shopify.database.LocalDataSource
 import com.example.shopify.databinding.FragmentAddressBinding
 import com.example.shopify.nework.ShopifyAPi
 import com.example.shopify.repo.RemoteSource
@@ -46,7 +47,8 @@ lateinit var addAddressViewModelFactory: AddAddressViewModelFactory
                 binding.tvAddressLoc.text.toString()
                 ,binding.tvCity.text.toString(),binding.tvContryAddress.text.toString(),binding.tvContryAddress.text.toString()
             ))
-            addAddressViewModel.addAddresses(address = address)
+            var userId = LocalDataSource.getInstance().readFromShared(requireContext())?.userId
+            userId?.let { userId -> addAddressViewModel.addAddresses(customerId = userId,address = address) }
         }
 
     }

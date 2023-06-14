@@ -30,9 +30,9 @@ class OrderListAdapter(var list: List<Order>) :
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        var date = list[position].created_at.split("T")
+        var date = list[position].created_at?.split("T")
         holder.binding.tvOrderPrice.text = list[position].current_total_price
-        holder.binding.tvOrderTime.text = date[0]
+        holder.binding.tvOrderTime.text = date?.get(0) ?: ""
         holder.binding.cvOrders.setOnClickListener {
             val bundle = Bundle().apply {
                 putSerializable("order", list[position])
