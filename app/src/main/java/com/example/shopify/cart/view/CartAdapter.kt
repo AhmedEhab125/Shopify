@@ -3,25 +3,47 @@ package com.example.shopify.cart.view
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.example.shopify.Models.draftOrderCreation.LineItem
 import com.example.shopify.R
-import com.example.shopify.databinding.BrandCardBinding
+import com.example.shopify.cart.model.Communicator
 import com.example.shopify.databinding.CartCardBinding
 
-class CartAdapter(cartList: List<String>):RecyclerView.Adapter<CartAdapter.CartViewHolder>() {
+class CartAdapter(var cartList: List<LineItem>,val cartDelegate:Communicator) :
+    RecyclerView.Adapter<CartAdapter.CartViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CartViewHolder {
-        val binding = CartCardBinding.inflate( LayoutInflater.from(parent.context),parent,false)
+        val binding = CartCardBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return CartViewHolder(binding)
     }
 
     override fun getItemCount(): Int {
-       return 10
+        return cartList.size
+    }
+
+    fun updateCartList(list: List<LineItem>) {
+        cartList = list
+        notifyDataSetChanged()
     }
 
     override fun onBindViewHolder(holder: CartViewHolder, position: Int) {
-       holder.binding.productImg.setImageResource(R.drawable.headphone)
-        holder.binding.productName.text = "HeadPhone"
-        holder.binding.productPrice.text = "120$"
+        var cartItem = cartList[position]
+        if(cartItem.sku !=null){
+            var id_imageUrl =( cartItem.sku as String).split(",")
+            var id = id_imageUrl[0]
+            var imageUrl = id_imageUrl[1]
+            Glide.with(holder.binding.root).load(imageUrl).into(holder.binding.productImg)
+        }
+        holder.binding.productName.text = cartItem.title
+        holder.binding.productPrice.text = cartItem.price
+        holder.binding.countLabel.text = cartItem.quantity.toString()
+        holder.binding.productInc.setOnClickListener{
+            cartDelegate.addItem(position,1)
+        }
+        holder.binding.productDec.setOnClickListener{
+            cartDelegate.subItem(position,1)
+        }
     }
-    inner class CartViewHolder(var binding: CartCardBinding): RecyclerView.ViewHolder(binding.root)
+
+    inner class CartViewHolder(var binding: CartCardBinding) : RecyclerView.ViewHolder(binding.root)
 }

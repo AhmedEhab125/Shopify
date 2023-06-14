@@ -7,7 +7,7 @@ data class LineItem(
     val price: String?,
     val product_id: Any?,
     val properties: List<Any>?,
-    val quantity: Int?,
+    var quantity: Int?,
     val sku: Any?,
     val title: String?,
     val variant_id: Any?,
