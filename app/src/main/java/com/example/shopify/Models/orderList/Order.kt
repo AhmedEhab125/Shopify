@@ -1,29 +1,21 @@
 package com.example.shopify.Models.orderList
 
+import java.io.Serializable
+
 data class Order(
     val admin_graphql_api_id: String,
     val app_id: Long,
     val billing_address: BillingAddress,
-    val browser_ip: Any,
     val buyer_accepts_marketing: Boolean,
-    val cancel_reason: Any,
-    val cancelled_at: Any,
-    val cart_token: Any,
-    val checkout_id: Any,
-    val checkout_token: Any,
-    val client_details: Any,
-    val closed_at: Any,
-    val company: Any,
-    val confirmed: Boolean,
+
+    val confirmed: Boolean?,
     val contact_email: String,
     val created_at: String,
     val currency: String,
     val current_subtotal_price: String,
     val current_subtotal_price_set: CurrentSubtotalPriceSet,
-    val current_total_additional_fees_set: Any,
     val current_total_discounts: String,
     val current_total_discounts_set: CurrentTotalDiscountsSet,
-    val current_total_duties_set: Any,
     val current_total_price: String,
     val current_total_price_set: CurrentTotalPriceSet,
     val current_total_tax: String,
@@ -35,32 +27,18 @@ data class Order(
     val financial_status: String,
 
     val id: Long,
-    val landing_site: Any,
-    val landing_site_ref: Any,
     val line_items: List<LineItem>,
-    val location_id: Any,
-    val merchant_of_record_app_id: Any,
+
     val name: String,
-    val note: Any,
-    val note_attributes: List<Any>,
     val number: Int,
     val order_number: Int,
     val order_status_url: String,
-    val original_total_additional_fees_set: Any,
-    val original_total_duties_set: Any,
     val payment_gateway_names: List<String>,
-    val payment_terms: Any,
-    val phone: Any,
+
     val presentment_currency: String,
     val processed_at: String,
-    val reference: Any,
-    val referring_site: Any,
-    val refunds: List<Any>,
     val shipping_address: ShippingAddress,
-    val shipping_lines: List<Any>,
-    val source_identifier: Any,
     val source_name: String,
-    val source_url: Any,
     val subtotal_price: String,
     val subtotal_price_set: SubtotalPriceSet,
     val tags: String,
@@ -81,5 +59,4 @@ data class Order(
     val total_tip_received: String,
     val total_weight: Int,
     val updated_at: String,
-    val user_id: Any
-)
+) : Serializable

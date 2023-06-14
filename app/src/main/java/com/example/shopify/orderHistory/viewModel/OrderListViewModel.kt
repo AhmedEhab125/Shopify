@@ -1,4 +1,4 @@
-package com.example.shopify.orderDetails.viewModel
+package com.example.shopify.orderHistory.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

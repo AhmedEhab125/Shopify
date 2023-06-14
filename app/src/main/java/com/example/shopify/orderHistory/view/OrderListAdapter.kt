@@ -1,10 +1,13 @@
-package com.example.shopify.orderDetails.view
+package com.example.shopify.orderHistory.view
 
 import android.content.Context
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import com.example.shopify.Models.orderList.Order
+import com.example.shopify.R
 import com.example.shopify.databinding.OrderItemBinding
 
 class OrderListAdapter(var list: List<Order>) :
@@ -30,6 +33,12 @@ class OrderListAdapter(var list: List<Order>) :
         var date = list[position].created_at.split("T")
         holder.binding.tvOrderPrice.text = list[position].current_total_price
         holder.binding.tvOrderTime.text = date[0]
+        holder.binding.cvOrders.setOnClickListener {
+            val bundle = Bundle().apply {
+                putSerializable("order", list[position])
+            }
+            Navigation.findNavController(it).navigate(R.id.action_orderListFragment_to_orderDetailsFragment,bundle)
+        }
 
 
     }

@@ -1,4 +1,4 @@
-package com.example.shopify.orderDetails.model
+package com.example.shopify.orderHistory.model
 
 import com.example.shopify.Models.orderList.RetriveOrderModel
 import com.example.shopify.repo.IOrderList

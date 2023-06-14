@@ -1,4 +1,4 @@
-package com.example.shopify.orderDetails.view
+package com.example.shopify.orderHistory.view
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -8,14 +8,12 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.shopify.Models.brands.BrandModel
 import com.example.shopify.Models.orderList.Order
 import com.example.shopify.databinding.FragmentOrderListBinding
-import com.example.shopify.home.viewModel.HomeViewModel
 import com.example.shopify.nework.ApiState
-import com.example.shopify.orderDetails.model.OrderListRepo
-import com.example.shopify.orderDetails.viewModel.OrderListViewModel
-import com.example.shopify.orderDetails.viewModel.OrderListViewModelFactory
+import com.example.shopify.orderHistory.model.OrderListRepo
+import com.example.shopify.orderHistory.viewModel.OrderListViewModel
+import com.example.shopify.orderHistory.viewModel.OrderListViewModelFactory
 import kotlinx.coroutines.launch
 
 

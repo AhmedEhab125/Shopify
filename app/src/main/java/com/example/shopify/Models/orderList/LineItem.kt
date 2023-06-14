@@ -2,11 +2,8 @@ package com.example.shopify.Models.orderList
 
 data class LineItem(
     val admin_graphql_api_id: String,
-    val discount_allocations: List<Any>,
-    val duties: List<Any>,
     val fulfillable_quantity: Int,
     val fulfillment_service: String,
-    val fulfillment_status: Any,
     val gift_card: Boolean,
     val grams: Int,
     val id: Long,
@@ -15,7 +12,6 @@ data class LineItem(
     val price_set: PriceSet,
     val product_exists: Boolean,
     val product_id: Long,
-    val properties: List<Any>,
     val quantity: Int,
     val requires_shipping: Boolean,
     val sku: String,
