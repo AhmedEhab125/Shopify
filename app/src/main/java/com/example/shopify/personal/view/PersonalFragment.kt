@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.shopify.Models.FireBaseModel.MyFireBaseUser
 import com.example.shopify.R
+import com.example.shopify.database.LocalDataSource
 import com.example.shopify.databinding.FragmentPersonalBinding
 import com.example.shopify.login.LoginFragmentDirections
 import com.example.shopify.mainActivity.MainActivity
@@ -59,6 +60,8 @@ class PersonalFragment : Fragment() {
                 Navigation.findNavController(requireView()).navigate(action)
             }
         }else{
+            val logineUser = LocalDataSource.getInstance().readFromShared(requireContext())
+            personalBinding.userName.text = logineUser?.firsName ?: "GEdooooooo"
             personalBinding.orderRV.adapter = ordersAdapter
             personalBinding.orderRV.layoutManager = GridLayoutManager(requireContext(),2)
             personalBinding.whishListRV.adapter = wishListAdapter
@@ -71,13 +74,13 @@ class PersonalFragment : Fragment() {
             }
             personalBinding.btnLogout.setOnClickListener {
                 auth.signOut()
-                // ha3ml fnish ll app wala l2 ??
+                LocalDataSource.getInstance().deleteCash(requireContext())
+                Navigation.findNavController(requireView()).navigate(R.id.from_logout_to_home)
             }
         }
 
 
         personalBinding.settingsBtn.setOnClickListener {
-            //from_personal_to_settings
             Navigation.findNavController(requireView()).navigate(R.id.from_personal_to_settings)
         }
 

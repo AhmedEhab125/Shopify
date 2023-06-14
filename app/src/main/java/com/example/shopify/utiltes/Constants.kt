@@ -8,5 +8,6 @@ object Constants {
     const val currency = "currency"
     const val dollar = "Dollar"
     const val pound = "Pound"
+    const val emailRegex = "[a-zA-Z0-9._-]+@(gmail|Gmail).com"
 
 }

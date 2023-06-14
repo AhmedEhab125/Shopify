@@ -1,23 +1,17 @@
 package com.example.shopify.nework
 
 import com.example.shopify.Models.addAddress.AddNewAddress
-import com.example.shopify.Models.addAddress.Address
 import com.example.shopify.Models.addressesmodel.AddressesModel
 import com.example.shopify.Models.brands.BrandModel
 import com.example.shopify.Models.collects.CollectModel
+import com.example.shopify.Models.draftOrderCreation.DraftOrderPost
 import com.example.shopify.Models.orderList.RetriveOrderModel
 import com.example.shopify.Models.productDetails.ProductModel
 import com.example.shopify.Models.products.CollectProductsModel
-import com.example.shopify.Models.registrashonModel.Addresse
 import com.example.shopify.Models.registrashonModel.CustomerRegistrationModel
 import com.example.shopify.utiltes.Constants
 import retrofit2.Response
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.Headers
-import retrofit2.http.POST
-import retrofit2.http.Path
-import retrofit2.http.Query
+import retrofit2.http.*
 
 interface ShopifyApiService {
 
@@ -54,4 +48,9 @@ interface ShopifyApiService {
     @Headers("X-Shopify-Access-Token: ${Constants.accesstoken}")
     @GET("admin/api/2023-04/products.json")
     suspend fun getSelectedProductsDetails(@Query("ids") id: String) : Response<CollectProductsModel>
+
+    @Headers("X-Shopify-Access-Token: ${Constants.accesstoken}")
+    @POST("admin/api/2023-04/draft_orders.json")
+    suspend fun createDraftOrder(@Body draftOrder:DraftOrderPost) : Response<DraftOrderPost>
+
 }

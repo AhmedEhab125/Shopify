@@ -1,5 +1,6 @@
 package com.example.shopify.database
 
+import android.content.Context
 import android.util.Log
 import com.example.shopify.Models.FireBaseModel.MyFireBaseUser
 import com.google.android.gms.tasks.Task
@@ -25,7 +26,7 @@ class UserFireBaseDataBase {
         }
 
 
-       fun getUserFromFireBase(user : FirebaseUser)  {
+       fun getUserFromFireBase(context:Context,user : FirebaseUser)  {
        //     var myUser :MyFireBaseUser?= null
             var dbRfrence = FirebaseDatabase.getInstance().getReference().child("Users").child(user.uid)
 
@@ -35,7 +36,7 @@ class UserFireBaseDataBase {
                     val myUser = snapshot.getValue(MyFireBaseUser::class.java)
                     if (myUser !=null) {
                         Log.i("MiladMizo", myUser.toString())
-                        // write user in sharedPrefrence
+                       LocalDataSource.getInstance().writeInShared(context,myUser)
                     }
                 }
 
@@ -47,6 +48,8 @@ class UserFireBaseDataBase {
             })
 
         }
+
+
 
 
 

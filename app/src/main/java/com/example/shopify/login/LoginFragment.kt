@@ -52,7 +52,7 @@ class LoginFragment : Fragment() {
                     if (it.isSuccessful){
                         Toast.makeText(requireContext(),"Log in Sussessfuly",Toast.LENGTH_SHORT).show()
                         Log.i("login",email + "" + password)
-                        UserFireBaseDataBase.getUserFromFireBase(auth.currentUser!!)
+                        UserFireBaseDataBase.getUserFromFireBase(requireContext(),auth.currentUser!!)
                         Log.i("Hoba", auth.currentUser!!.uid)
                         when (goto){
                             "details" -> {
