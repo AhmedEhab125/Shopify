@@ -54,7 +54,7 @@ class OrderDetailsFragment : Fragment() {
         order = (arguments?.getSerializable("order") as? Order)!!
         setProductList()
         var ids =""
-        order.line_items.forEach { item -> ids+="${item.product_id}," }
+        order.line_items?.forEach { item -> ids+="${item.product_id}," }
         println(ids)
         orderDetailsViewModel.getSelectedProducts(ids)
     }
@@ -64,7 +64,7 @@ class OrderDetailsFragment : Fragment() {
         binding.rvOrderProducts.layoutManager = LinearLayoutManager(requireContext())
         if (order != null) {
             val address =
-                "${order.shipping_address.address1} ${order.shipping_address.city} ${order.shipping_address.country}"
+                "${order.shipping_address?.address1} ${order.shipping_address?.city} ${order.shipping_address?.country}"
             binding.tvOrderEmail.text = "${order.customer?.first_name} ${order.customer?.last_name}"
             binding.tvOrderAddress.text = address
             binding.tvOrderPhome.text = order.customer?.phone ?: ""
@@ -77,7 +77,7 @@ class OrderDetailsFragment : Fragment() {
                             // homeBinding.progressBar.visibility = View.GONE
 
                             var apiProduct = result.date as List<Product>
-                            myAdapter.setProductList(order.line_items, apiProduct)
+                            order?.line_items?.let { myAdapter.setProductList(it, apiProduct) }
 
                         }
                         is ApiState.Failure -> {

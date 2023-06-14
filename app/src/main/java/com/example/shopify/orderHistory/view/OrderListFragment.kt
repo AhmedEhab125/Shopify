@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.shopify.Models.orderList.Order
+import com.example.shopify.database.LocalDataSource
 import com.example.shopify.databinding.FragmentOrderListBinding
 import com.example.shopify.nework.ApiState
 import com.example.shopify.orderHistory.model.OrderListRepo
@@ -45,11 +46,12 @@ class OrderListFragment : Fragment() {
         binding.rvOrders.adapter = myAdapter
         binding.rvOrders.layoutManager = LinearLayoutManager(requireContext())
         setOrderList()
-        orderListViewModel.getOrders(6930820727106)
+        var userId =LocalDataSource.getInstance().readFromShared(requireContext())?.userId
+        userId?.let { orderListViewModel.getOrders(it) }
     }
     fun setOrderList(){
         lifecycleScope.launch {
-            orderListViewModel.accessOrderList.collect() { result ->
+            orderListViewModel.accessOrderList.collect { result ->
                 when (result) {
                     is ApiState.Success<*> -> {
                        // homeBinding.progressBar.visibility = View.GONE

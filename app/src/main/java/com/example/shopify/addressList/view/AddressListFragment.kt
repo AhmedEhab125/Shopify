@@ -21,6 +21,7 @@ import com.example.shopify.category.model.CategoryRepo
 import com.example.shopify.category.view.CategoryAdapter
 import com.example.shopify.category.viewModel.CategoryViewModel
 import com.example.shopify.category.viewModel.CategoryViewModelFactory
+import com.example.shopify.database.LocalDataSource
 import com.example.shopify.databinding.FragmentAddressListBinding
 import com.example.shopify.nework.ApiState
 import com.example.shopify.nework.ShopifyAPi
@@ -55,7 +56,7 @@ class AddressListFragment : Fragment() {
         ).get(AddressesViewModel::class.java)
         setRecycleView()
         setAddressList()
-        addressesViewModel.getAllAddresses()
+        LocalDataSource.getInstance().readFromShared(requireContext())?.userId?.let { addressesViewModel.getAllAddresses(customerId = it) }
 
         binding.btnAddAddresses.setOnClickListener {
             goToAddAddressScreen()
