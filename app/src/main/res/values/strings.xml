@@ -60,6 +60,9 @@
     <string name="total_price">Total price : </string>
     <string name="address">Address : </string>
     <string name="order_items">Order items</string>
+    <string name="deleteBtn">Delete</string>
+    <string name="deleteMessage" >Are You Sure</string>
+    <string name="deleteMessageBody">You want delete this item from cart</string>
 
 
 </resources>

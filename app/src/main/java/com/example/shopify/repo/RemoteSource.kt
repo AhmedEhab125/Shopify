@@ -1,5 +1,6 @@
 package com.example.shopify.repo
 
+import android.util.Log
 import com.example.shopify.Models.addAddress.AddNewAddress
 import com.example.shopify.Models.addAddress.Address
 import com.example.shopify.Models.addressesmodel.AddressesModel
@@ -16,7 +17,7 @@ import kotlinx.coroutines.flow.flowOf
 
 class RemoteSource(var network: ShopifyApiService) : IBrands, ProductDetalisInterface,
     CollectionProductsInterface, IAllProducts, RegisterUserInterFace, IAddresses,
-    IAddCustomerAddress ,IOrderList,ISelectedProducts{
+    IAddCustomerAddress ,IOrderList,ISelectedProducts,ICart{
     override suspend fun getBrands(): Flow<BrandModel?> {
         return flowOf(network.getBrands().body())
     }
@@ -55,5 +56,13 @@ class RemoteSource(var network: ShopifyApiService) : IBrands, ProductDetalisInte
 
     override suspend fun getSelectedProducts(ids :String): Flow<CollectProductsModel?> {
         return flowOf(network.getSelectedProductsDetails(ids).body())
+    }
+
+    override suspend fun getCartItems(draftId:Long):Flow<DraftOrderPost?>  {
+       return flowOf(network.getCartDraftOrder(draftId).body())
+    }
+
+    override suspend fun upDateCartOrderDraft(draftID:Long,draftOrder: DraftOrderPost) {
+        network.updateCartDraftOrder(draftID,draftOrder)
     }
 }
