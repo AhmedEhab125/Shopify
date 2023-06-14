@@ -4,6 +4,7 @@ import com.example.shopify.Models.addAddress.AddNewAddress
 import com.example.shopify.Models.addAddress.Address
 import com.example.shopify.Models.addressesmodel.AddressesModel
 import com.example.shopify.Models.brands.BrandModel
+import com.example.shopify.Models.draftOrderCreation.DraftOrderPost
 import com.example.shopify.Models.orderList.RetriveOrderModel
 import com.example.shopify.Models.productDetails.ProductModel
 import com.example.shopify.Models.products.CollectProductsModel
@@ -34,6 +35,10 @@ class RemoteSource(var network: ShopifyApiService) : IBrands, ProductDetalisInte
 
     override suspend fun createUserAtApi(user: CustomerRegistrationModel): Flow<CustomerRegistrationModel?> {
         return flowOf(network.registerUserAtApi(user).body())
+    }
+
+    override suspend fun createWishDraftOrder(draftOrder: DraftOrderPost): Flow<DraftOrderPost?> {
+        return flowOf(network.createDraftOrder(draftOrder).body())
     }
 
     override suspend fun getAddresses(customerId: Long): Flow<AddressesModel?> {
