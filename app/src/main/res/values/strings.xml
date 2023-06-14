@@ -26,7 +26,7 @@
     <string name="street">Street</string>
     <string name="city">City</string>
     <string name="payment_methods">Payment Methods</string>
-    <string name="phone_number">Phone Number</string>
+    <string name="phone_number">Phone Number : </string>
     <string name="onlline_payment">Onlline Payment</string>
     <string name="paymrnt_method">Payment Methhods</string>
     <string name="cash_on_delevary">cash on delevary</string>
@@ -55,7 +55,11 @@
     <string name="loginDialogCancel">Cancel</string>
     <string name="loginDialogOk">Login</string>
 
-    <string name="order_list" >Order List </string>
+    <string name="order_list">Order List </string>
+    <string name="contact_email">Name : </string>
+    <string name="total_price">Total price : </string>
+    <string name="address">Address : </string>
+    <string name="order_items">Order items</string>
 
 
 </resources>

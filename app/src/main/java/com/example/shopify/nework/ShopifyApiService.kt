@@ -17,6 +17,7 @@ import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.POST
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface ShopifyApiService {
 
@@ -50,4 +51,7 @@ interface ShopifyApiService {
     @Headers("X-Shopify-Access-Token: ${Constants.accesstoken}")
     @GET("admin/api/2023-04/orders.json")
     suspend fun getAllOrders() : Response<RetriveOrderModel>
+    @Headers("X-Shopify-Access-Token: ${Constants.accesstoken}")
+    @GET("admin/api/2023-04/products.json")
+    suspend fun getSelectedProductsDetails(@Query("ids") id: String) : Response<CollectProductsModel>
 }

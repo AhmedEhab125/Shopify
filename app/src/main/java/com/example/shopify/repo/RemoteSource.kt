@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.flowOf
 
 class RemoteSource(var network: ShopifyApiService) : IBrands, ProductDetalisInterface,
     CollectionProductsInterface, IAllProducts, RegisterUserInterFace, IAddresses,
-    IAddCustomerAddress ,IOrderList{
+    IAddCustomerAddress ,IOrderList,ISelectedProducts{
     override suspend fun getBrands(): Flow<BrandModel?> {
         return flowOf(network.getBrands().body())
     }
@@ -46,5 +46,9 @@ class RemoteSource(var network: ShopifyApiService) : IBrands, ProductDetalisInte
 
     override suspend fun getOrderList(): Flow<RetriveOrderModel?> {
        return  flowOf(network.getAllOrders().body())
+    }
+
+    override suspend fun getSelectedProducts(ids :String): Flow<CollectProductsModel?> {
+        return flowOf(network.getSelectedProductsDetails(ids).body())
     }
 }

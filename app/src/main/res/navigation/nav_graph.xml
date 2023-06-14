@@ -151,7 +151,16 @@
         tools:layout="@layout/fragment_payment" />
     <fragment
         android:id="@+id/orderListFragment"
-        android:name="com.example.shopify.orderDetails.view.OrderListFragment"
+        android:name="com.example.shopify.orderHistory.view.OrderListFragment"
         android:label="fragment_order_list"
-        tools:layout="@layout/fragment_order_list" />
+        tools:layout="@layout/fragment_order_list" >
+        <action
+            android:id="@+id/action_orderListFragment_to_orderDetailsFragment"
+            app:destination="@id/orderDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/orderDetailsFragment"
+        android:name="com.example.shopify.orderDetails.view.OrderDetailsFragment"
+        android:label="fragment_order_details"
+        tools:layout="@layout/fragment_order_details" />
 </navigation>
