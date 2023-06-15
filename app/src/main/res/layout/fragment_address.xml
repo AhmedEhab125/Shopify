@@ -152,7 +152,8 @@
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:maxLines="1"
-            android:singleLine="true">
+            android:singleLine="true"
+            android:inputType="textCapSentences">
 
         </com.google.android.material.textfield.TextInputEditText>
 

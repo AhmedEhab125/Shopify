@@ -43,10 +43,9 @@ lateinit var addAddressViewModelFactory: AddAddressViewModelFactory
             addAddressViewModelFactory
         ).get(AddAddressViewModel::class.java)
         binding.btnAddAddress.setOnClickListener {
-            var address = AddNewAddress( Address(
+            var address = AddNewAddress( com.example.shopify.Models.addAddress.Address(
                 binding.tvAddressLoc.text.toString()
-                ,binding.tvCity.text.toString(),binding.tvContryAddress.text.toString(),binding.tvContryAddress.text.toString()
-            ))
+                ,binding.tvCity.text.toString(),binding.tvContryAddress.text.toString()))
             var userId = LocalDataSource.getInstance().readFromShared(requireContext())?.userId
             userId?.let { userId -> addAddressViewModel.addAddresses(customerId = userId,address = address) }
         }
