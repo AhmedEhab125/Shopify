@@ -1,6 +1,7 @@
 package com.example.shopify.cart.view
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -27,22 +28,23 @@ class CartAdapter(var cartList: List<LineItem>,val cartDelegate:Communicator) :
     }
 
     override fun onBindViewHolder(holder: CartViewHolder, position: Int) {
-        var cartItem = cartList[position]
-        if(cartItem.sku !=null){
-            var id_imageUrl =( cartItem.sku as String).split(",")
-            var id = id_imageUrl[0]
-            var imageUrl = id_imageUrl[1]
-            Glide.with(holder.binding.root).load(imageUrl).into(holder.binding.productImg)
-        }
-        holder.binding.productName.text = cartItem.title
-        holder.binding.productPrice.text = cartItem.price
-        holder.binding.countLabel.text = cartItem.quantity.toString()
-        holder.binding.productInc.setOnClickListener{
-            cartDelegate.addItem(position,1)
-        }
-        holder.binding.productDec.setOnClickListener{
-            cartDelegate.subItem(position,1)
-        }
+          var cartItem = cartList[position]
+          if(cartItem.sku !=null){
+              var id_imageUrl =( cartItem.sku as String).split(",")
+              var id = id_imageUrl[0]
+              var imageUrl = id_imageUrl[1]
+              Glide.with(holder.binding.root).load(imageUrl).into(holder.binding.productImg)
+          }
+          holder.binding.productName.text = cartItem.title
+          holder.binding.productPrice.text = cartItem.price
+          holder.binding.countLabel.text = cartItem.quantity.toString()
+          holder.binding.productInc.setOnClickListener{
+              cartDelegate.addItem(position,1)
+          }
+          holder.binding.productDec.setOnClickListener{
+              cartDelegate.subItem(position,1)
+          }
+
     }
 
     inner class CartViewHolder(var binding: CartCardBinding) : RecyclerView.ViewHolder(binding.root)

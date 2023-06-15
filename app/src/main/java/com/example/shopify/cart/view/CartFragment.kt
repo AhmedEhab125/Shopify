@@ -11,8 +11,8 @@ import androidx.constraintlayout.widget.Constraints
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.shopify.Models.draftOrderCreation.DraftOrder
 import com.example.shopify.Models.draftOrderCreation.DraftOrderPost
 import com.example.shopify.Models.draftOrderCreation.LineItem
 import com.example.shopify.R
@@ -22,7 +22,6 @@ import com.example.shopify.cart.viewModel.CartViewModel
 import com.example.shopify.cart.viewModel.CartViewModelFactory
 import com.example.shopify.database.LocalDataSource
 import com.example.shopify.databinding.FragmentCartBinding
-import com.example.shopify.detailsScreen.view.ProductDetailsFragmentDirections
 import com.example.shopify.mainActivity.MainActivity
 import com.example.shopify.nework.ApiState
 import com.example.shopify.nework.ShopifyAPi
@@ -38,14 +37,16 @@ class CartFragment : Fragment(), Communicator {
     private lateinit var cartViewModel: CartViewModel
     private lateinit var draftOrderPost: DraftOrderPost
     private lateinit var cartItemsList: MutableList<LineItem>
+    private var flag = false
+    private var draftId: Long? = 0L
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         cartBinding = FragmentCartBinding.inflate(inflater)
-        cartAdapter = CartAdapter(listOf(),this)
+        cartAdapter = CartAdapter(listOf(), this)
         cartFactory = CartViewModelFactory(CartRepo(RemoteSource(ShopifyAPi.retrofitService)))
-
+        draftId = LocalDataSource.getInstance().readFromShared(requireContext())?.cartdraftOrderId
         return cartBinding.root
     }
 
@@ -55,21 +56,21 @@ class CartFragment : Fragment(), Communicator {
         cartBinding.cartRV.adapter = cartAdapter
         cartBinding.cartRV.layoutManager = LinearLayoutManager(requireContext())
 
-        if(FirebaseAuth.getInstance().currentUser!=null){
-            cartBinding.noData.visibility =View.GONE
-            val draftId =
-                LocalDataSource.getInstance().readFromShared(requireContext())?.cartdraftOrderId
-            cartViewModel.getCartItems(draftId?:0)
+        if (FirebaseAuth.getInstance().currentUser != null) {
+            cartBinding.noData.visibility = View.GONE
+
+            cartViewModel.getCartItems(draftId ?: 0)
             lifecycleScope.launch {
                 cartViewModel.accessCartItems.collect {
                     when (it) {
                         is ApiState.Success<*> -> {
+                            flag = true
                             cartBinding.cartProgressBar.visibility = View.GONE
-                            val data = it.date as? DraftOrderPost
-                            draftOrderPost = data?:draftOrderPost
-                            cartItemsList = data?.draft_order?.line_items as MutableList<LineItem>
+                            draftOrderPost = it.date as DraftOrderPost
+                            cartItemsList = (draftOrderPost.draft_order.line_items?: mutableListOf()) as MutableList<LineItem>
                             cartAdapter.updateCartList(cartItemsList)
                             calcTotalPrice()
+
                         }
                         is ApiState.Failure -> {
                             cartBinding.cartProgressBar.visibility = View.GONE
@@ -85,7 +86,7 @@ class CartFragment : Fragment(), Communicator {
                     }
                 }
             }
-        }else{
+        } else {
             cartBinding.cartProgressBar.visibility = View.GONE
             cartBinding.totalPrice.visibility = View.GONE
             cartBinding.textView2.visibility = View.GONE
@@ -114,9 +115,9 @@ class CartFragment : Fragment(), Communicator {
 
     override fun subItem(position: Int, amount: Int) {
         var quantity = cartItemsList[position].quantity!!
-        if(quantity > 1){
+        if (quantity > 1) {
             quantity -= amount
-        }else{
+        } else {
             deleteDialog(position)
         }
         cartItemsList[position].quantity = quantity
@@ -134,15 +135,19 @@ class CartFragment : Fragment(), Communicator {
 
     override fun onPause() {
         super.onPause()
-        if(FirebaseAuth.getInstance().currentUser!=null)
-        {
+        if(flag){
+        if(cartItemsList.size == 0 ){
+            var draftOrder2 = LineItem(null, null, "Custome Item", "20.0", null, null, 1,
+                null, "Custom Item", null, null, null
+            )
+            cartItemsList.add(0,draftOrder2)
+        }
             draftOrderPost.draft_order.line_items = cartItemsList
-            val draftId =
-                LocalDataSource.getInstance().readFromShared(requireContext())?.cartdraftOrderId
             cartViewModel.updateCartItem(draftId!!, draftOrderPost)
         }
     }
-    private fun deleteDialog(position:Int){
+
+    private fun deleteDialog(position: Int) {
         val dialog = Dialog(requireContext())
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setContentView(R.layout.delete_dialog)
