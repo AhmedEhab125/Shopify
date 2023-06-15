@@ -1,6 +1,7 @@
 package com.example.shopify.repo
 
 import android.util.Log
+import com.example.shopify.Models.RetriveOreder.RetriveOrder
 import com.example.shopify.Models.addAddress.AddNewAddress
 import com.example.shopify.Models.addAddress.Address
 import com.example.shopify.Models.addressesmodel.AddressesModel
@@ -67,7 +68,7 @@ class RemoteSource(var network: ShopifyApiService) : IBrands, ProductDetalisInte
         network.updateCartDraftOrder(draftID,draftOrder)
     }
 
-    override suspend fun createOrder(order: PostOrderModel): Flow<PostOrderModel?> {
+    override suspend fun createOrder(order: PostOrderModel): Flow<RetriveOrder?> {
         return  flowOf(network.createOrder(order).body())
     }
 }

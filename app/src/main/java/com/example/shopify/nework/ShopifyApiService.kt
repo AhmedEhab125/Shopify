@@ -1,5 +1,6 @@
 package com.example.shopify.nework
 
+import com.example.shopify.Models.RetriveOreder.RetriveOrder
 import com.example.shopify.Models.addAddress.AddNewAddress
 import com.example.shopify.Models.addressesmodel.AddressesModel
 import com.example.shopify.Models.brands.BrandModel
@@ -63,5 +64,5 @@ interface ShopifyApiService {
     suspend fun updateCartDraftOrder(@Path(value = "draftOrderId") draftId:Long,@Body draftOrder:DraftOrderPost)
     @Headers("X-Shopify-Access-Token: ${Constants.accesstoken}")
     @POST("admin/api/2023-04/orders.json")
-    suspend fun createOrder(@Body order:PostOrderModel) : Response<PostOrderModel>
+    suspend fun createOrder(@Body order:PostOrderModel) : Response<RetriveOrder>
 }
