@@ -41,8 +41,8 @@ data class Order(
     val shipping_address: ShippingAddress?,/*
     val source_name: String?,
     val subtotal_price: String?,
-    val subtotal_price_set: SubtotalPriceSet?,
-    val tags: String?,
+    val subtotal_price_set: SubtotalPriceSet?,*/
+    val tags: String?,/*
     val tax_lines: List<TaxLine>?,
     val taxes_included: Boolean?,
     val test: Boolean?,

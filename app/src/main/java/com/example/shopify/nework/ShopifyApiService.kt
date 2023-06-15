@@ -6,6 +6,7 @@ import com.example.shopify.Models.brands.BrandModel
 import com.example.shopify.Models.collects.CollectModel
 import com.example.shopify.Models.draftOrderCreation.DraftOrderPost
 import com.example.shopify.Models.orderList.RetriveOrderModel
+import com.example.shopify.Models.postOrderModel.PostOrderModel
 import com.example.shopify.Models.productDetails.ProductModel
 import com.example.shopify.Models.products.CollectProductsModel
 import com.example.shopify.Models.registrashonModel.CustomerRegistrationModel
@@ -60,4 +61,7 @@ interface ShopifyApiService {
     @Headers("X-Shopify-Access-Token: ${Constants.accesstoken}")
     @PUT("admin/api/2023-04/draft_orders/{draftOrderId}.json")
     suspend fun updateCartDraftOrder(@Path(value = "draftOrderId") draftId:Long,@Body draftOrder:DraftOrderPost)
+    @Headers("X-Shopify-Access-Token: ${Constants.accesstoken}")
+    @POST("admin/api/2023-04/orders.json")
+    suspend fun createOrder(@Body order:PostOrderModel) : Response<PostOrderModel>
 }
