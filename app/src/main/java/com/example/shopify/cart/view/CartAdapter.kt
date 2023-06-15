@@ -19,7 +19,7 @@ class CartAdapter(var cartList: List<LineItem>,val cartDelegate:Communicator) :
     }
 
     override fun getItemCount(): Int {
-        return cartList.size
+        return cartList.size-1
     }
 
     fun updateCartList(list: List<LineItem>) {
@@ -28,15 +28,14 @@ class CartAdapter(var cartList: List<LineItem>,val cartDelegate:Communicator) :
     }
 
     override fun onBindViewHolder(holder: CartViewHolder, position: Int) {
-          var cartItem = cartList[position]
-          if(!cartItem.sku.isNullOrEmpty()){
-              var id_imageUrl = cartItem.sku!!.split(",")
+          var cartItem = cartList[position+1]
+              var id_imageUrl = (cartItem.sku?:",").split(",")
               if(id_imageUrl.size == 2){
                   var id = id_imageUrl[0]
                   var imageUrl = id_imageUrl[1]
                   Glide.with(holder.binding.root).load(imageUrl).into(holder.binding.productImg)
               }
-          }
+
           holder.binding.productName.text = cartItem.title
           holder.binding.productPrice.text = cartItem.price
           holder.binding.countLabel.text = cartItem.quantity.toString()

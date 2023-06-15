@@ -130,7 +130,7 @@ class ProductDetailsFragment : Fragment() {
     private fun addToCart() {
         var res = isExist(myProduct.product?.title)
         if(res.first){
-            orderItemsList[res.second].quantity = orderItemsList[res.second].quantity?.plus(1)
+            orderItemsList[res.second].quantity = orderItemsList[res.second].quantity?.plus(noOfItems)
         }else{
             val lineItem = LineItem(
                 price= myProduct.product?.variants?.get(0)?.price,
@@ -144,8 +144,8 @@ class ProductDetailsFragment : Fragment() {
         val draftOrder = DraftOrderPost(DraftOrder(null, null, orderItemsList,
             "CartList", null, draftId))
         cartViewModel.updateCartItem(draftId, draftOrder)
-        Snackbar.make(binding.tvProductDetails,"Item Is Added To Cart",Snackbar.LENGTH_LONG).show()
-        //Toast.makeText(requireContext(),"Item Is Added To Cart",Toast.LENGTH_LONG).show()
+        //Snackbar.make(binding.tvProductDetails,"Item Is Added To Cart",Snackbar.LENGTH_LONG).show()
+        Toast.makeText(requireContext(),"Item Is Added To Cart",Toast.LENGTH_LONG).show()
     }
     private fun isExist(title:String?):Pair<Boolean,Int>{
         orderItemsList.forEach { item ->
