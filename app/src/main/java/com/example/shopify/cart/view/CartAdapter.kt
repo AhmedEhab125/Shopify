@@ -40,10 +40,10 @@ class CartAdapter(var cartList: List<LineItem>,val cartDelegate:Communicator) :
           holder.binding.productPrice.text = cartItem.price
           holder.binding.countLabel.text = cartItem.quantity.toString()
           holder.binding.productInc.setOnClickListener{
-              cartDelegate.addItem(position,1)
+              cartDelegate.addItem(position+1,1)
           }
           holder.binding.productDec.setOnClickListener{
-              cartDelegate.subItem(position,1)
+              cartDelegate.subItem(position+1,1)
           }
 
     }

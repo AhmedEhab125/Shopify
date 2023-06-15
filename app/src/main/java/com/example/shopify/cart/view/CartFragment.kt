@@ -59,7 +59,6 @@ class CartFragment : Fragment(), Communicator {
         cartBinding.cartRV.layoutManager = LinearLayoutManager(requireContext())
 
         if (FirebaseAuth.getInstance().currentUser != null) {
-            cartBinding.noData.visibility = View.GONE
 
             cartViewModel.getCartItems(draftId ?: 0)
             lifecycleScope.launch {
@@ -70,6 +69,14 @@ class CartFragment : Fragment(), Communicator {
                             cartBinding.cartProgressBar.visibility = View.GONE
                             draftOrderPost = it.date as DraftOrderPost
                             cartItemsList = (draftOrderPost.draft_order.line_items?: mutableListOf()) as MutableList<LineItem>
+                            if(cartItemsList.size ==1){
+                                cartBinding.lottieSplash.visibility = View.VISIBLE
+                                cartBinding.lottieMessage.visibility = View.VISIBLE
+                                cartBinding.lottieMessage.text = "There is no items."
+                            }else{
+                                cartBinding.lottieSplash.visibility = View.GONE
+                                cartBinding.lottieMessage.visibility = View.GONE
+                            }
                             cartAdapter.updateCartList(cartItemsList)
                             calcTotalPrice()
 
@@ -92,7 +99,9 @@ class CartFragment : Fragment(), Communicator {
             cartBinding.cartProgressBar.visibility = View.GONE
             cartBinding.totalPrice.visibility = View.GONE
             cartBinding.textView2.visibility = View.GONE
-            cartBinding.noData.visibility = View.VISIBLE
+            cartBinding.lottieSplash.visibility = View.VISIBLE
+            cartBinding.lottieMessage.visibility = View.VISIBLE
+            cartBinding.lottieMessage.text = "Please log in to view your cart items."
             cartBinding.checkoutBtn.visibility = View.GONE
         }
         cartBinding.checkoutBtn.setOnClickListener {

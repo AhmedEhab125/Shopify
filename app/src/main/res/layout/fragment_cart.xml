@@ -6,6 +6,21 @@
     android:layout_height="match_parent"
     tools:context=".cart.view.CartFragment" >
 
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/lottieSplash"
+        android:layout_width="0dp"
+        android:layout_height="450dp"
+        android:layout_centerInParent="true"
+        android:layout_marginHorizontal="10dp"
+        android:elevation="10dp"
+        app:layout_constraintBottom_toBottomOf="@+id/cartRV"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/searchimm" />
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/cartRV"
         android:layout_width="0dp"
@@ -84,15 +99,14 @@
         app:layout_constraintTop_toTopOf="@+id/cartRV" />
 
     <TextView
-        android:id="@+id/noData"
+        android:id="@+id/lottieMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="There Is No Data To Diplay"
-        android:textColor="#000000"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="@+id/cartRV"
-        app:layout_constraintEnd_toEndOf="@+id/cartRV"
-        app:layout_constraintStart_toStartOf="@+id/cartRV"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:text="TextView"
+        android:textColor="#090707"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toStartOf="@+id/guideline3"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lottieSplash" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

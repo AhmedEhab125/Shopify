@@ -62,7 +62,7 @@ class ProductDetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        observeAtGetOrderDraft()
+
         productIdRecived = requireArguments().getLong("product_Id")
         /*  imgAdapter = ImagePagerAdapter(requireContext()
               , intArrayOf(R.drawable.headphone,R.drawable.user,R.drawable.cart)
@@ -70,6 +70,7 @@ class ProductDetailsFragment : Fragment() {
         //  binding.imgsViewPager.adapter = imgAdapter
         binding.btnContinue.setOnClickListener {
             if (FirebaseAuth.getInstance().currentUser != null) {
+                observeAtGetOrderDraft()
                 addToCart()
             } else {
                 navToLoginScreen()
