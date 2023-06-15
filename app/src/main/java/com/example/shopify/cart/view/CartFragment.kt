@@ -69,14 +69,7 @@ class CartFragment : Fragment(), Communicator {
                             cartBinding.cartProgressBar.visibility = View.GONE
                             draftOrderPost = it.date as DraftOrderPost
                             cartItemsList = (draftOrderPost.draft_order.line_items?: mutableListOf()) as MutableList<LineItem>
-                            if(cartItemsList.size ==1){
-                                cartBinding.lottieSplash.visibility = View.VISIBLE
-                                cartBinding.lottieMessage.visibility = View.VISIBLE
-                                cartBinding.lottieMessage.text = "There is no items."
-                            }else{
-                                cartBinding.lottieSplash.visibility = View.GONE
-                                cartBinding.lottieMessage.visibility = View.GONE
-                            }
+                            showHideAnimation()
                             cartAdapter.updateCartList(cartItemsList)
                             calcTotalPrice()
 
@@ -133,9 +126,19 @@ class CartFragment : Fragment(), Communicator {
             cartAdapter.updateCartList(cartItemsList)
         } else {
             deleteDialog(position)
+
         }
     }
-
+    fun showHideAnimation(){
+        if(cartItemsList.size ==1){
+            cartBinding.lottieSplash.visibility = View.VISIBLE
+            cartBinding.lottieMessage.visibility = View.VISIBLE
+            cartBinding.lottieMessage.text = "There is no items."
+        }else{
+            cartBinding.lottieSplash.visibility = View.GONE
+            cartBinding.lottieMessage.visibility = View.GONE
+        }
+    }
     private fun calcTotalPrice() {
         var count = 0F
         cartItemsList.forEach { item ->
@@ -166,6 +169,7 @@ class CartFragment : Fragment(), Communicator {
             cartItemsList.removeAt(position)
             calcTotalPrice()
             cartAdapter.updateCartList(cartItemsList)
+            showHideAnimation()
             dialog.dismiss()
         }
         dialog.findViewById<Button>(R.id.cancel).setOnClickListener {
