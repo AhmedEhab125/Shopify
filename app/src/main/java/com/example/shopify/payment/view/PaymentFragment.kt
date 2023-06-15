@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.Navigation
+import com.example.shopify.Models.RetriveOreder.RetriveOrder
 import com.example.shopify.Models.addressesmodel.AddressesModel
 import com.example.shopify.Models.postOrderModel.Customer
 import com.example.shopify.Models.postOrderModel.LineItem
@@ -25,14 +27,13 @@ import com.example.shopify.payment.model.PaymentRepo
 import com.example.shopify.payment.viewModel.PaymentViewModel
 import com.example.shopify.payment.viewModel.PaymentViewModelFactory
 import com.example.shopify.repo.RemoteSource
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 
 class PaymentFragment : Fragment() {
 lateinit var binding: FragmentPaymentBinding
 lateinit var paymentViewModel: PaymentViewModel
 lateinit var paymentViewModelFactory: PaymentViewModelFactory
+lateinit var job :Job
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -55,13 +56,8 @@ lateinit var paymentViewModelFactory: PaymentViewModelFactory
             paymentViewModelFactory
         ).get(PaymentViewModel::class.java)
 
-        observeOrderCreated()
-
-
-
-
-
         binding.btnCheckout.setOnClickListener {
+            observeOrderCreated()
             var order = PostOrderModel(
                 com.example.shopify.Models.postOrderModel.Order("Cash",
                     //  BillingAddress("2st amjad ", "alex", "Egypt"),
@@ -83,21 +79,30 @@ lateinit var paymentViewModelFactory: PaymentViewModelFactory
         }
 
     }
+
+    override fun onPause() {
+        super.onPause()
+        job.cancel()
+    }
     fun createOrder(order : PostOrderModel){
         paymentViewModel.createOrder(order)
     }
     fun observeOrderCreated(){
-        lifecycleScope.launch(Dispatchers.IO) {
+     job =  lifecycleScope.launch(Dispatchers.IO) {
             paymentViewModel.accessOrder.collect{
                     result ->
                 when (result) {
                     is ApiState.Success<*> -> {
 
-                        var order = result.date as PostOrderModel?
+                        var order = result.date as RetriveOrder?
                         withContext(Dispatchers.Main){
 
 
                          if (order!=null){
+                             val bundle = Bundle().apply {
+                                 putSerializable("order", order.order)
+                             }
+                             Navigation.findNavController(requireView()).navigate(R.id.action_paymentFragment_to_orderDetailsFragment,bundle)
 
                              Toast.makeText(requireContext(),"order set succssfully",Toast.LENGTH_LONG).show()
                          }else{
@@ -117,7 +122,9 @@ lateinit var paymentViewModelFactory: PaymentViewModelFactory
                 }
 
             }
+
         }
+
 
     }
 

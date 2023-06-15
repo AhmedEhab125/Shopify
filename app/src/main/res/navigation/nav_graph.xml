@@ -154,7 +154,12 @@
         android:id="@+id/paymentFragment"
         android:name="com.example.shopify.payment.view.PaymentFragment"
         android:label="fragment_payment"
-        tools:layout="@layout/fragment_payment" />
+        tools:layout="@layout/fragment_payment" >
+        <action
+            android:id="@+id/action_paymentFragment_to_orderDetailsFragment"
+            app:destination="@id/orderDetailsFragment"
+            app:popUpToInclusive="false" />
+    </fragment>
     <fragment
         android:id="@+id/orderListFragment"
         android:name="com.example.shopify.orderHistory.view.OrderListFragment"
