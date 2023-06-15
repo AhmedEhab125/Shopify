@@ -48,6 +48,7 @@ class CartFragment : Fragment(), Communicator {
         cartAdapter = CartAdapter(listOf(), this)
         cartFactory = CartViewModelFactory(CartRepo(RemoteSource(ShopifyAPi.retrofitService)))
         draftId = LocalDataSource.getInstance().readFromShared(requireContext())?.cartdraftOrderId
+
         return cartBinding.root
     }
 
@@ -118,12 +119,12 @@ class CartFragment : Fragment(), Communicator {
         var quantity = cartItemsList[position].quantity!!
         if (quantity > 1) {
             quantity -= amount
+            cartItemsList[position].quantity = quantity
+            calcTotalPrice()
+            cartAdapter.updateCartList(cartItemsList)
         } else {
             deleteDialog(position)
         }
-        cartItemsList[position].quantity = quantity
-        calcTotalPrice()
-        cartAdapter.updateCartList(cartItemsList)
     }
 
     private fun calcTotalPrice() {
@@ -138,7 +139,7 @@ class CartFragment : Fragment(), Communicator {
         super.onPause()
         if(flag){
         if(cartItemsList.size == 0 ){
-            var draftOrder2 = LineItem(null, null, "Custome Item", "20.0", null, null, 1,
+            var draftOrder2 = LineItem(null, null, "Custome Item", "00.0", null, null, 1,
                 null, "Custom Item", null, null, null
             )
             cartItemsList.add(0,draftOrder2)

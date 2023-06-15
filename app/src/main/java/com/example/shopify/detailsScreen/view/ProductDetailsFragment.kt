@@ -3,7 +3,6 @@ package com.example.shopify.detailsScreen.view
 import android.app.Dialog
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +10,7 @@ import android.view.Window
 import android.widget.Button
 import android.widget.Toast
 import androidx.constraintlayout.widget.Constraints
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
@@ -32,55 +32,60 @@ import com.example.shopify.nework.ShopifyAPi
 import com.example.shopify.repo.RemoteSource
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-
+import kotlinx.coroutines.runBlocking
 
 class ProductDetailsFragment : Fragment() {
-    lateinit var binding: FragmentProductDeatilsBinding
-    lateinit var imgAdapter: ImagePagerAdapter
+    private lateinit var binding: FragmentProductDeatilsBinding
+    private lateinit var imgAdapter: ImagePagerAdapter
     private lateinit var productDetalisViewModel: ProductDetalisViewModel
-    private lateinit var productDetalisFactory : ProductDetalisFactory
-    lateinit var myProduct : ProductModel
-    private var productIdRecived:Long=0L
-    private lateinit var cartFactory:CartViewModelFactory
-    private lateinit var cartViewModel:CartViewModel
-    var noOfItems = 1
+    private lateinit var productDetalisFactory: ProductDetalisFactory
+    private lateinit var myProduct: ProductModel
+    private lateinit var cartFactory: CartViewModelFactory
+    private lateinit var cartViewModel: CartViewModel
+    private lateinit var orderItemsList: MutableList<LineItem>
+    private var productIdRecived: Long = 0L
+    private var draftId: Long = 0L
+    private var noOfItems = 1
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        orderItemsList= mutableListOf()
         binding = FragmentProductDeatilsBinding.inflate(layoutInflater)
-         cartFactory = CartViewModelFactory(CartRepo(RemoteSource(ShopifyAPi.retrofitService)))
-         cartViewModel = ViewModelProvider(requireActivity(), cartFactory)[CartViewModel::class.java]
+        cartFactory = CartViewModelFactory(CartRepo(RemoteSource(ShopifyAPi.retrofitService)))
+        cartViewModel = ViewModelProvider(requireActivity(), cartFactory)[CartViewModel::class.java]
+        draftId = LocalDataSource.getInstance().readFromShared(requireContext())?.cartdraftOrderId ?: 0
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        observeAtGetOrderDraft()
         productIdRecived = requireArguments().getLong("product_Id")
         /*  imgAdapter = ImagePagerAdapter(requireContext()
               , intArrayOf(R.drawable.headphone,R.drawable.user,R.drawable.cart)
           )*/
         //  binding.imgsViewPager.adapter = imgAdapter
         binding.btnContinue.setOnClickListener {
-            if(FirebaseAuth.getInstance().currentUser!=null){
-              addToCart()
-            }else{
+            if (FirebaseAuth.getInstance().currentUser != null) {
+                addToCart()
+            } else {
                 navToLoginScreen()
             }
         }
-        productDetalisFactory = ProductDetalisFactory(ConcreteProductDetalis(RemoteSource(ShopifyAPi.retrofitService)))
-        productDetalisViewModel = ViewModelProvider(requireActivity(), productDetalisFactory)[ProductDetalisViewModel::class.java]
+        productDetalisFactory =ProductDetalisFactory(ConcreteProductDetalis(RemoteSource(ShopifyAPi.retrofitService)))
+        productDetalisViewModel = ViewModelProvider(requireActivity(),productDetalisFactory)[ProductDetalisViewModel::class.java]
         productDetalisViewModel.getProductDetalis(productIdRecived)
-
         lifecycleScope.launch {
             productDetalisViewModel.productInfo.collect {
-                when(it){
+                when (it) {
                     is ApiState.Loading -> {
                         hideComponantes()
                         binding.progressBar5.visibility = View.VISIBLE
                     }
-                    is ApiState.Success<*> ->{
+                    is ApiState.Success<*> -> {
                         myProduct = it.date as ProductModel
                         binding.progressBar5.visibility = View.GONE
                         showComponantes()
@@ -109,59 +114,52 @@ class ProductDetailsFragment : Fragment() {
 
         binding.btnDecremenNoItems.setOnClickListener {
             noOfItems--
-            if (noOfItems < 1){
-                noOfItems=1
-                Toast.makeText(requireContext(),"Choose Valid Number",Toast.LENGTH_SHORT).show()
+            if (noOfItems < 1) {
+                noOfItems = 1
+                Toast.makeText(requireContext(), "Choose Valid Number", Toast.LENGTH_SHORT).show()
             }
-
             binding.noOfItemsTv.text = noOfItems.toString()
         }
-
     }
 
+    override fun onResume() {
+        super.onResume()
+        orderItemsList.clear()
+        cartViewModel.getCartItems(draftId)
+    }
     private fun addToCart() {
-        val draftId =
-            LocalDataSource.getInstance().readFromShared(requireContext())?.cartdraftOrderId
-        cartViewModel.getCartItems(draftId?:0)
-        Log.i("essammmmmm", ""+draftId)
-        lifecycleScope.launch{
-            cartViewModel.accessCartItems.collect{
-                when(it){
-                    is ApiState.Success<*>->{
-                        var list:MutableList<LineItem> = mutableListOf()
-                        list.addAll((it.date as DraftOrderPost).draft_order.line_items?: mutableListOf())
-                        Log.i("essammmmm", ""+myProduct.product?.images?.get(0)?.src)
-                        val lineItem = LineItem(
-                            null,
-                            null,
-                            null,
-                            myProduct.product?.variants?.get(0)?.price,
-                            null,
-                            null,
-                            noOfItems,
-                            "${myProduct.product?.id},${myProduct.product?.image?.src}",
-                            myProduct.product?.title,
-                            null,
-                            null,null
-                        )
-                        list.add(lineItem)
-                        val draftOrder = DraftOrderPost(DraftOrder(null,null,list,"CartList",null,draftId))
-                        cartViewModel.updateCartItem(draftId?:0,draftOrder)
-                    }
-                    is ApiState.Failure->{
-
-                    }
-                    else->{
-
-                    }
-                }
-            }
+        var res = isExist(myProduct.product?.title)
+        if(res.first){
+            orderItemsList[res.second].quantity = orderItemsList[res.second].quantity?.plus(1)
+        }else{
+            val lineItem = LineItem(
+                price= myProduct.product?.variants?.get(0)?.price,
+                quantity =  noOfItems,
+                sku = "${myProduct.product?.id},${myProduct.product?.image?.src}",
+                title = myProduct.product?.title
+            )
+            orderItemsList.add(lineItem)
         }
 
+        val draftOrder = DraftOrderPost(DraftOrder(null, null, orderItemsList,
+            "CartList", null, draftId))
+        cartViewModel.updateCartItem(draftId, draftOrder)
+        Snackbar.make(binding.tvProductDetails,"Item Is Added To Cart",Snackbar.LENGTH_LONG).show()
+        //Toast.makeText(requireContext(),"Item Is Added To Cart",Toast.LENGTH_LONG).show()
+    }
+    private fun isExist(title:String?):Pair<Boolean,Int>{
+        orderItemsList.forEach { item ->
+           if(item.title == title){
+               return Pair(true,orderItemsList.indexOf(item))
+           }
+        }
+        return Pair(false,-1)
     }
 
 
-    private fun hideComponantes(){
+
+
+    private fun hideComponantes() {
         binding.imgsViewPager.visibility = View.GONE
         binding.tvProductDetails.visibility = View.GONE
         binding.tvProductName.visibility = View.GONE
@@ -175,9 +173,7 @@ class ProductDetailsFragment : Fragment() {
         binding.noOfItemsTv.visibility = View.GONE
         binding.tvShippingState.visibility = View.GONE
     }
-
-
-    fun showComponantes(){
+    fun showComponantes() {
         binding.imgsViewPager.visibility = View.VISIBLE
         binding.tvProductDetails.visibility = View.VISIBLE
         binding.tvProductName.visibility = View.VISIBLE
@@ -191,25 +187,28 @@ class ProductDetailsFragment : Fragment() {
         binding.noOfItemsTv.visibility = View.VISIBLE
         binding.tvShippingState.visibility = View.VISIBLE
     }
-
-
-    private fun setData(){
+    private fun setData() {
         imgAdapter = ImagePagerAdapter(requireContext(), myProduct.product?.images)
         binding.imgsViewPager.adapter = imgAdapter
         binding.tvProductName.text = myProduct.product?.title
         binding.productRatingBar.rating = 3.5f
         binding.productRatingBar.isEnabled = false
-        binding.tvProductPrice.text = myProduct.product?.variants?.get(0)?.price.toString() + " " +"$$"
-        binding.tvProductDetails.text = myProduct.product?.body_html // + "jhaskjffkhfkajhfkajhfkjahfkjh kjahfkjahfkajhfkja hfkjafhakjfhkajfhkajfhkahfkjahfkahfkahfkjahfkjahfkjafja kafk"
+        binding.tvProductPrice.text =
+            myProduct.product?.variants?.get(0)?.price.toString() + " " + "$$"
+        binding.tvProductDetails.text =
+            myProduct.product?.body_html // + "jhaskjffkhfkajhfkajhfkjahfkjh kjahfkjahfkajhfkja hfkjafhakjfhkajfhkajfhkahfkjahfkahfkahfkjahfkjahfkjafja kafk"
 
     }
-
-    private fun navToLoginScreen(){
+    private fun navToLoginScreen() {
         val dialog = Dialog(requireContext())
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setContentView(R.layout.goto_login_dialog)
         dialog.findViewById<Button>(R.id.ok).setOnClickListener {
-            val action = ProductDetailsFragmentDirections.actionProductDetailsFragmentToLoginFragment("details",productIdRecived)
+            val action =
+                ProductDetailsFragmentDirections.actionProductDetailsFragmentToLoginFragment(
+                    "details",
+                    productIdRecived
+                )
             Navigation.findNavController(requireView()).navigate(action)
             dialog.dismiss()
         }
@@ -224,6 +223,22 @@ class ProductDetailsFragment : Fragment() {
         )
         dialog.setCanceledOnTouchOutside(true)
         dialog.show()
+    }
+    private fun observeAtGetOrderDraft(){
+        lifecycleScope.launch {
+            cartViewModel.accessCartItems.collect {
+                when (it) {
+                    is ApiState.Loading->binding.progressBar5.visibility = View.VISIBLE
+                    is ApiState.Success<*> -> {
+                        orderItemsList.addAll( (it.date as DraftOrderPost).draft_order.line_items ?: mutableListOf())
+                    }
+                    is ApiState.Failure -> {
+                        Log.i("Failure", "error in get order list in details screen ${it.error.message}")
+                    }
+
+                }
+            }
+        }
     }
 
 }
