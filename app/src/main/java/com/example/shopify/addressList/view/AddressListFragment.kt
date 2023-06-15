@@ -8,33 +8,32 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.shopify.Models.addressesmodel.AddressesModel
-import com.example.shopify.Models.products.CollectProductsModel
-import com.example.shopify.Models.registrashonModel.Addresse
+import com.example.shopify.Models.orderList.*
+import com.example.shopify.Models.postOrderModel.Customer
+import com.example.shopify.Models.postOrderModel.LineItem
+import com.example.shopify.Models.postOrderModel.PostOrderModel
+import com.example.shopify.Models.postOrderModel.ShippingAddress
 import com.example.shopify.R
 import com.example.shopify.addressList.model.AddressesRepo
 import com.example.shopify.addressList.viewModel.AddressesViewModel
 import com.example.shopify.addressList.viewModel.AddressesViewModelFactory
-import com.example.shopify.category.model.CategoryRepo
-import com.example.shopify.category.view.CategoryAdapter
-import com.example.shopify.category.viewModel.CategoryViewModel
-import com.example.shopify.category.viewModel.CategoryViewModelFactory
 import com.example.shopify.database.LocalDataSource
 import com.example.shopify.databinding.FragmentAddressListBinding
 import com.example.shopify.nework.ApiState
 import com.example.shopify.nework.ShopifyAPi
 import com.example.shopify.repo.RemoteSource
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 
 class AddressListFragment : Fragment() {
 
-    lateinit var binding : FragmentAddressListBinding
+    lateinit var binding: FragmentAddressListBinding
     lateinit var addressesViewModel: AddressesViewModel
     lateinit var addressesViewModelFactory: AddressesViewModelFactory
-    lateinit var myAdapter : AddressListAdapter
+    lateinit var myAdapter: AddressListAdapter
 
 
     override fun onCreateView(
@@ -56,24 +55,34 @@ class AddressListFragment : Fragment() {
         ).get(AddressesViewModel::class.java)
         setRecycleView()
         setAddressList()
-        LocalDataSource.getInstance().readFromShared(requireContext())?.userId?.let { addressesViewModel.getAllAddresses(customerId = it) }
+        LocalDataSource.getInstance().readFromShared(requireContext())?.userId?.let {
+            addressesViewModel.getAllAddresses(
+                customerId = it
+            )
+        }
 
         binding.btnAddAddresses.setOnClickListener {
             goToAddAddressScreen()
         }
 
-    }
-    fun goToAddAddressScreen(){
 
-        Navigation.findNavController(requireView()).navigate(R.id.action_addressListFragment_to_addressFragment)
     }
-    fun setRecycleView(){
+
+
+    fun goToAddAddressScreen() {
+
+        Navigation.findNavController(requireView())
+            .navigate(R.id.action_addressListFragment_to_addressFragment)
+    }
+
+    fun setRecycleView() {
         myAdapter = AddressListAdapter(listOf())
         binding.rvAddresses.apply {
             adapter = myAdapter
             layoutManager = LinearLayoutManager(requireContext())
         }
     }
+
     fun setAddressList() {
         lifecycleScope.launch {
             addressesViewModel.accessAllAddressesList.collect { result ->
@@ -85,10 +94,10 @@ class AddressListFragment : Fragment() {
 
                             myAdapter.setAddressesList(it.addresses)
                         }
-                        binding.progressBar4.visibility=View.GONE
+                        binding.progressBar4.visibility = View.GONE
                     }
                     is ApiState.Failure -> {
-                       binding.progressBar4.visibility=View.GONE
+                        binding.progressBar4.visibility = View.GONE
 
                     }
                     is ApiState.Loading -> {

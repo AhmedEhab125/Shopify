@@ -22,6 +22,9 @@
         <action
             android:id="@+id/action_cartFragment_to_addressListFragment"
             app:destination="@id/addressListFragment" />
+        <action
+            android:id="@+id/from_payment_to_checkout"
+            app:destination="@id/paymentFragment" />
     </fragment>
     <fragment
         android:id="@+id/favouriteFragment"
@@ -149,7 +152,7 @@
     </fragment>
     <fragment
         android:id="@+id/paymentFragment"
-        android:name="com.example.shopify.payment.PaymentFragment"
+        android:name="com.example.shopify.payment.view.PaymentFragment"
         android:label="fragment_payment"
         tools:layout="@layout/fragment_payment" />
     <fragment

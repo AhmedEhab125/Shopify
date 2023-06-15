@@ -7,6 +7,7 @@ import com.example.shopify.Models.addressesmodel.AddressesModel
 import com.example.shopify.Models.brands.BrandModel
 import com.example.shopify.Models.draftOrderCreation.DraftOrderPost
 import com.example.shopify.Models.orderList.RetriveOrderModel
+import com.example.shopify.Models.postOrderModel.PostOrderModel
 import com.example.shopify.Models.productDetails.ProductModel
 import com.example.shopify.Models.products.CollectProductsModel
 import com.example.shopify.Models.registrashonModel.Addresse
@@ -17,7 +18,7 @@ import kotlinx.coroutines.flow.flowOf
 
 class RemoteSource(var network: ShopifyApiService) : IBrands, ProductDetalisInterface,
     CollectionProductsInterface, IAllProducts, RegisterUserInterFace, IAddresses,
-    IAddCustomerAddress ,IOrderList,ISelectedProducts,ICart{
+    IAddCustomerAddress ,IOrderList,ISelectedProducts,ICart,IPostOrder{
     override suspend fun getBrands(): Flow<BrandModel?> {
         return flowOf(network.getBrands().body())
     }
@@ -64,5 +65,9 @@ class RemoteSource(var network: ShopifyApiService) : IBrands, ProductDetalisInte
 
     override suspend fun upDateCartOrderDraft(draftID:Long,draftOrder: DraftOrderPost) {
         network.updateCartDraftOrder(draftID,draftOrder)
+    }
+
+    override suspend fun createOrder(order: PostOrderModel): Flow<PostOrderModel?> {
+        return  flowOf(network.createOrder(order).body())
     }
 }

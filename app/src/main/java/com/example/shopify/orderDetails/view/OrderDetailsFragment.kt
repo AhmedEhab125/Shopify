@@ -68,7 +68,8 @@ class OrderDetailsFragment : Fragment() {
             binding.tvOrderEmail.text = "${order.customer?.first_name} ${order.customer?.last_name}"
             binding.tvOrderAddress.text = address
             binding.tvOrderPhome.text = order.customer?.phone ?: ""
-            binding.tvOrderPrice.text = order.current_total_price
+            binding.tvOrderPrice.text = "${order.current_total_price}"
+            binding.tvPaymentMethod.text = order.tags
 
             lifecycleScope.launch {
                 orderDetailsViewModel.accessProductList.collect() { result ->
