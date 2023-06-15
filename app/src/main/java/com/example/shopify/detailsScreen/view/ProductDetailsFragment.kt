@@ -122,7 +122,7 @@ class ProductDetailsFragment : Fragment() {
     private fun addToCart() {
         val draftId =
             LocalDataSource.getInstance().readFromShared(requireContext())?.cartdraftOrderId
-        cartViewModel.getCartItems(draftId!!)
+        cartViewModel.getCartItems(draftId?:0)
         Log.i("essammmmmm", ""+draftId)
         lifecycleScope.launch{
             cartViewModel.accessCartItems.collect{
@@ -146,7 +146,7 @@ class ProductDetailsFragment : Fragment() {
                         )
                         list.add(lineItem)
                         val draftOrder = DraftOrderPost(DraftOrder(null,null,list,"CartList",null,draftId))
-                        cartViewModel.updateCartItem(draftId,draftOrder)
+                        cartViewModel.updateCartItem(draftId?:0,draftOrder)
                     }
                     is ApiState.Failure->{
 
