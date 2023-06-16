@@ -61,7 +61,7 @@ interface ShopifyApiService {
 
     @Headers("X-Shopify-Access-Token: ${Constants.accesstoken}")
     @PUT("admin/api/2023-04/draft_orders/{draftOrderId}.json")
-    suspend fun updateCartDraftOrder(@Path(value = "draftOrderId") draftId:Long,@Body draftOrder:DraftOrderPost)
+    suspend fun updateCartDraftOrder(@Path(value = "draftOrderId") draftId:Long,@Body draftOrder:DraftOrderPost): Response<DraftOrderPost>
     @Headers("X-Shopify-Access-Token: ${Constants.accesstoken}")
     @POST("admin/api/2023-04/orders.json")
     suspend fun createOrder(@Body order:PostOrderModel) : Response<RetriveOrder>

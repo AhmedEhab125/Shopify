@@ -69,7 +69,12 @@ class RemoteSource(var network: ShopifyApiService) : IBrands, ProductDetalisInte
     }
 
     override suspend fun upDateCartOrderDraft(draftID:Long,draftOrder: DraftOrderPost) {
-        network.updateCartDraftOrder(draftID,draftOrder)
+        var s =network.updateCartDraftOrder(draftID,draftOrder)
+       if(s.isSuccessful) {
+           Log.i("EssamFailureSuccess", ""+s.body())
+       }else{
+           Log.i("EssamFailure", ""+s.errorBody())
+       }
     }
 
     override suspend fun createOrder(order: PostOrderModel): Flow<RetriveOrder?> {
