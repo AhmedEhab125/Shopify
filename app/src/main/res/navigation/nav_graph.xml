@@ -156,6 +156,10 @@
         <action
             android:id="@+id/action_addressListFragment_to_paymentFragment"
             app:destination="@id/paymentFragment" />
+        <argument
+            android:name="comesFrom"
+            app:argType="string"
+            android:defaultValue='"setting"' />
     </fragment>
     <fragment
         android:id="@+id/paymentFragment"

@@ -7,13 +7,16 @@ import android.view.ViewGroup
 import android.view.Window
 import android.widget.Button
 import androidx.constraintlayout.widget.Constraints
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
+import com.example.shopify.Models.postOrderModel.ShippingAddress
 import com.example.shopify.Models.registrashonModel.Addresse
 import com.example.shopify.R
 import com.example.shopify.databinding.AdressessItemBinding
+import com.example.shopify.utiltes.Constants
 import com.example.shopify.utiltes.LoggedUserData
 
-class AddressListAdapter(var list: MutableList<Addresse>, var iView: RemoveCustomerAddress) :
+class AddressListAdapter(var list: MutableList<Addresse>, var iView: RemoveCustomerAddress,var comesFrom : String) :
     RecyclerView.Adapter<AddressListAdapter.ViewHolder>() {
     private lateinit var context: Context
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -43,6 +46,17 @@ class AddressListAdapter(var list: MutableList<Addresse>, var iView: RemoveCusto
             else
                 cantDialog(holder.binding.root.context)
 
+        }
+        holder.binding.cvAddress.setOnClickListener {
+            if (comesFrom.equals("cart")){
+                Constants.selectedAddress  = ShippingAddress(address1 = list[position].address1!!
+                    , city = list[position].city!!
+                    , country = list[position].country!!
+                    , first_name = list[position]?.first_name ?:"ahmed"
+                    , phone = list[position].phone ?:"010"
+                    , last_name = "ehab")
+                Navigation.findNavController(it).navigate(R.id.action_addressListFragment_to_paymentFragment)
+            }
         }
 
 
