@@ -15,6 +15,7 @@ import com.example.shopify.Models.postOrderModel.Customer
 import com.example.shopify.Models.postOrderModel.LineItem
 import com.example.shopify.Models.postOrderModel.PostOrderModel
 import com.example.shopify.Models.postOrderModel.ShippingAddress
+import com.example.shopify.Models.registrashonModel.Addresse
 import com.example.shopify.R
 import com.example.shopify.addressList.model.AddressesRepo
 import com.example.shopify.addressList.viewModel.AddressesViewModel
@@ -28,7 +29,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 
-class AddressListFragment : Fragment() {
+class AddressListFragment : Fragment(),RemoveCustomerAddress {
 
     lateinit var binding: FragmentAddressListBinding
     lateinit var addressesViewModel: AddressesViewModel
@@ -76,7 +77,7 @@ class AddressListFragment : Fragment() {
     }
 
     fun setRecycleView() {
-        myAdapter = AddressListAdapter(listOf())
+        myAdapter = AddressListAdapter(mutableListOf(),this)
         binding.rvAddresses.apply {
             adapter = myAdapter
             layoutManager = LinearLayoutManager(requireContext())
@@ -92,7 +93,7 @@ class AddressListFragment : Fragment() {
                         var products = result.date as AddressesModel?
                         products?.let {
 
-                            myAdapter.setAddressesList(it.addresses)
+                            myAdapter.setAddressesList(it.addresses as MutableList<Addresse>)
                         }
                         binding.progressBar4.visibility = View.GONE
                     }
@@ -107,6 +108,13 @@ class AddressListFragment : Fragment() {
                 }
 
             }
+        }
+
+    }
+
+    override fun remove(addressId: Long) {
+        LocalDataSource.getInstance().readFromShared(requireContext())?.userId?.let {
+            addressesViewModel.removeAddress(it,addressId)
         }
 
     }

@@ -30,16 +30,16 @@ import com.example.shopify.repo.RemoteSource
 import kotlinx.coroutines.*
 
 class PaymentFragment : Fragment() {
-lateinit var binding: FragmentPaymentBinding
-lateinit var paymentViewModel: PaymentViewModel
-lateinit var paymentViewModelFactory: PaymentViewModelFactory
-lateinit var job :Job
+    lateinit var binding: FragmentPaymentBinding
+    lateinit var paymentViewModel: PaymentViewModel
+    lateinit var paymentViewModelFactory: PaymentViewModelFactory
+    lateinit var job: Job
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding =FragmentPaymentBinding.inflate(inflater)
+        binding = FragmentPaymentBinding.inflate(inflater)
         // Inflate the layout for this fragment
         return binding.root
     }
@@ -59,7 +59,8 @@ lateinit var job :Job
         binding.btnCheckout.setOnClickListener {
             observeOrderCreated()
             var order = PostOrderModel(
-                com.example.shopify.Models.postOrderModel.Order("Cash",
+                com.example.shopify.Models.postOrderModel.Order(
+                    "Cash",
                     //  BillingAddress("2st amjad ", "alex", "Egypt"),
                     "EGP",
                     "150",
@@ -68,11 +69,13 @@ lateinit var job :Job
                         LocalDataSource.getInstance().readFromShared(requireContext())?.userId
                             ?: 1L,
                         ""
-                    ), listOf(
-                        LineItem("",8350701584706,5,"",45237616247106),
-                        LineItem("",8350702338370,6,"",45237617230146)
-                    )
-                    , ShippingAddress("2st amjad ", "alex", "Egypt","ahmed","01021401193","ehab"),"5"
+                    ),
+                    listOf(
+                        LineItem( 8350701584706, 1, 45237616247106),
+                        LineItem( 8350702338370, 16,  45237617230146)
+                    ),
+                    ShippingAddress("2st amjad ", "alex", "Egypt", "ahmed", "01021401193", "ehab"),
+                    "5"
                 )
             )
             createOrder(order)
@@ -84,35 +87,47 @@ lateinit var job :Job
         super.onPause()
         job.cancel()
     }
-    fun createOrder(order : PostOrderModel){
+
+    fun createOrder(order: PostOrderModel) {
         paymentViewModel.createOrder(order)
     }
-    fun observeOrderCreated(){
-     job =  lifecycleScope.launch(Dispatchers.IO) {
-            paymentViewModel.accessOrder.collect{
-                    result ->
+
+    fun observeOrderCreated() {
+        job = lifecycleScope.launch(Dispatchers.IO) {
+            paymentViewModel.accessOrder.collect { result ->
                 when (result) {
                     is ApiState.Success<*> -> {
 
                         var order = result.date as RetriveOrder?
-                        withContext(Dispatchers.Main){
+                        withContext(Dispatchers.Main) {
 
 
-                         if (order!=null){
-                             val bundle = Bundle().apply {
-                                 putSerializable("order", order.order)
-                             }
-                             Navigation.findNavController(requireView()).navigate(R.id.action_paymentFragment_to_orderDetailsFragment,bundle)
+                            if (order != null) {
+                                val bundle = Bundle().apply {
+                                    putSerializable("order", order.order)
+                                }
+                                Navigation.findNavController(requireView()).navigate(
+                                    R.id.action_paymentFragment_to_orderDetailsFragment,
+                                    bundle
+                                )
 
-                             Toast.makeText(requireContext(),"order set succssfully",Toast.LENGTH_LONG).show()
-                         }else{
-                             Toast.makeText(requireContext(),"order not set ",Toast.LENGTH_LONG).show()
+                                Toast.makeText(
+                                    requireContext(),
+                                    "order set succssfully",
+                                    Toast.LENGTH_LONG
+                                ).show()
+                            } else {
+                                Toast.makeText(
+                                    requireContext(),
+                                    "order not set ",
+                                    Toast.LENGTH_LONG
+                                ).show()
 
-                         }
-                    }
+                            }
+                        }
                     }
                     is ApiState.Failure -> {
-                        Toast.makeText(requireContext(),"order not set ",Toast.LENGTH_LONG).show()
+                        Toast.makeText(requireContext(), "order not set ", Toast.LENGTH_LONG).show()
 
                     }
                     is ApiState.Loading -> {

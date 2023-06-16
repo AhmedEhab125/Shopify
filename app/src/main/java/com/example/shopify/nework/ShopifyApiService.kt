@@ -65,4 +65,8 @@ interface ShopifyApiService {
     @Headers("X-Shopify-Access-Token: ${Constants.accesstoken}")
     @POST("admin/api/2023-04/orders.json")
     suspend fun createOrder(@Body order:PostOrderModel) : Response<RetriveOrder>
+    @Headers("X-Shopify-Access-Token: ${Constants.accesstoken}")
+    @DELETE("admin/api/2023-04/customers/{customerId}/addresses/{addressId}.json")
+    suspend fun removeCustomerAddresse(@Path(value = "customerId") customerId:Long ,@Path(value = "addressId") addressId:Long )
+
 }
