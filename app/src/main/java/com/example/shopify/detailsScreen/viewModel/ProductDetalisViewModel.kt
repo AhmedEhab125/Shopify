@@ -21,7 +21,6 @@ class ProductDetalisViewModel (var remoteSource: ProductDetalisInterface) : View
                 _productInfo.value = ApiState.Failure(error)
             }.collect { myProduct ->
                 _productInfo.value = ApiState.Success(myProduct)
-                Log.i("Product",myProduct?.product?.product_type?:"Milad")
             }
         }
 

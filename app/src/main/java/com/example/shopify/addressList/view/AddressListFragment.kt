@@ -77,7 +77,9 @@ class AddressListFragment : Fragment(),RemoveCustomerAddress {
     }
 
     fun setRecycleView() {
-        myAdapter = AddressListAdapter(mutableListOf(),this)
+        var data = requireArguments().getString("comesFrom")
+
+        myAdapter = AddressListAdapter(mutableListOf(),this,data!!)
         binding.rvAddresses.apply {
             adapter = myAdapter
             layoutManager = LinearLayoutManager(requireContext())

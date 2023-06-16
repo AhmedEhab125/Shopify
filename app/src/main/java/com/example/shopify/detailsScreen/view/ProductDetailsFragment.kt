@@ -27,13 +27,19 @@ import com.example.shopify.databinding.FragmentProductDeatilsBinding
 import com.example.shopify.detailsScreen.model.ConcreteProductDetalis
 import com.example.shopify.detailsScreen.viewModel.ProductDetalisFactory
 import com.example.shopify.detailsScreen.viewModel.ProductDetalisViewModel
+import com.example.shopify.favourite.favViewModel.FavoriteViewModel
+import com.example.shopify.favourite.favViewModel.FavoriteViewModelFactory
+import com.example.shopify.favourite.model.ConcreteFavClass
+import com.example.shopify.login.LoginFragment
 import com.example.shopify.nework.ApiState
 import com.example.shopify.nework.ShopifyAPi
 import com.example.shopify.repo.RemoteSource
 import com.example.shopify.utiltes.LoggedUserData
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
@@ -45,9 +51,14 @@ class ProductDetailsFragment : Fragment() {
     private lateinit var myProduct: ProductModel
     private lateinit var cartFactory: CartViewModelFactory
     private lateinit var cartViewModel: CartViewModel
+    private lateinit var favViewModel : FavoriteViewModel
+    private lateinit var favFactory : FavoriteViewModelFactory
     private var productIdRecived: Long = 0L
     private var draftId: Long = 0L
     private var noOfItems = 1
+    private var wishListId : Long = 0
+    private lateinit var jop : Job
+    private var isFav = false
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -55,22 +66,28 @@ class ProductDetailsFragment : Fragment() {
         binding = FragmentProductDeatilsBinding.inflate(layoutInflater)
         cartFactory = CartViewModelFactory(CartRepo(RemoteSource(ShopifyAPi.retrofitService)))
         cartViewModel = ViewModelProvider(requireActivity(), cartFactory)[CartViewModel::class.java]
-        draftId = LocalDataSource.getInstance().readFromShared(requireContext())?.cartdraftOrderId ?: 0
+        favFactory = FavoriteViewModelFactory(ConcreteFavClass(RemoteSource(ShopifyAPi.retrofitService)))
+        favViewModel =  ViewModelProvider(requireActivity(), favFactory)[FavoriteViewModel::class.java]
+        draftId = LocalDataSource.getInstance().readFromShared(requireContext())?.cartdraftOrderId ?:0
+        wishListId = LocalDataSource.getInstance().readFromShared(requireContext())?.whiDraftOedredId ?:0
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         if(LoggedUserData.orderItemsList.size ==0){
             cartViewModel.getCartItems(draftId)
             observeAtGetOrderDraft()
         }
+        if (LoggedUserData.favOrderDraft.size == 0){
+            favViewModel.getFavItems(wishListId)
+            observeAtFavItems()
+        }
+
 
         productIdRecived = requireArguments().getLong("product_Id")
-        /*  imgAdapter = ImagePagerAdapter(requireContext()
-              , intArrayOf(R.drawable.headphone,R.drawable.user,R.drawable.cart)
-          )*/
-        //  binding.imgsViewPager.adapter = imgAdapter
+
         binding.btnContinue.setOnClickListener {
             if (FirebaseAuth.getInstance().currentUser != null) {
                 addToCart()
@@ -78,10 +95,24 @@ class ProductDetailsFragment : Fragment() {
                 navToLoginScreen()
             }
         }
+
+        binding.btnAddToFav.setOnClickListener {
+            if (FirebaseAuth.getInstance().currentUser!=null){
+             if (!isFav){
+                addToFav()
+                }else{
+                    removeFromFav()
+             }
+            }else{
+                navToLoginScreen()
+            }
+        }
+
         productDetalisFactory =ProductDetalisFactory(ConcreteProductDetalis(RemoteSource(ShopifyAPi.retrofitService)))
         productDetalisViewModel = ViewModelProvider(requireActivity(),productDetalisFactory)[ProductDetalisViewModel::class.java]
         productDetalisViewModel.getProductDetalis(productIdRecived)
-        lifecycleScope.launch {
+
+       jop = lifecycleScope.launch {
             productDetalisViewModel.productInfo.collect {
                 when (it) {
                     is ApiState.Loading -> {
@@ -89,10 +120,13 @@ class ProductDetailsFragment : Fragment() {
                         binding.progressBar5.visibility = View.VISIBLE
                     }
                     is ApiState.Success<*> -> {
+                        binding.btnAddToFav.setBackgroundResource(R.drawable.favourite_btn)
                         myProduct = it.date as ProductModel
                         binding.progressBar5.visibility = View.GONE
                         showComponantes()
                         setData()
+                        Log.i("Ehabbbbb","Observeation")
+
                     }
                     else -> {
                         binding.progressBar5.visibility = View.VISIBLE
@@ -124,6 +158,48 @@ class ProductDetailsFragment : Fragment() {
             binding.noOfItemsTv.text = noOfItems.toString()
         }
     }
+
+    private fun removeFromFav() {
+        for (item in LoggedUserData.favOrderDraft){
+            if(item.title == myProduct.product?.title){
+                LoggedUserData.favOrderDraft.remove(item)
+            }
+
+        }
+        binding.btnAddToFav.setBackgroundResource(R.drawable.favourite_btn)
+        isFav = false
+        Toast.makeText(requireContext(), "Product Removed From Favorite List", Toast.LENGTH_SHORT).show()
+    }
+
+
+    override fun onPause() {
+        super.onPause()
+       jop.cancel()
+
+    }
+
+    private fun addToFav() {
+        if (isAleradyFav(myProduct.product?.title!!)) {
+            Toast.makeText(
+                requireContext(),
+                "Product is Aleardy in Favorite List",
+                Toast.LENGTH_SHORT
+            ).show()
+
+        } else {
+            binding.btnAddToFav.setBackgroundResource(R.drawable.favorite_clicked)
+            val lineItem = LineItem(
+                price = myProduct.product?.variants?.get(0)?.price,
+                quantity = 1,
+                sku = "${myProduct.product?.id},${myProduct.product?.image?.src}",
+                title = myProduct.product?.title
+            )
+            LoggedUserData.favOrderDraft.add(lineItem)
+            Toast.makeText(requireContext(), "Product Added To Favorite", Toast.LENGTH_SHORT).show()
+            isFav = true
+        }
+    }
+
 
     override fun onResume() {
         super.onResume()
@@ -191,11 +267,15 @@ class ProductDetailsFragment : Fragment() {
         binding.tvProductName.text = myProduct.product?.title
         binding.productRatingBar.rating = 3.5f
         binding.productRatingBar.isEnabled = false
-        binding.tvProductPrice.text =
-            myProduct.product?.variants?.get(0)?.price.toString() + " " + "$$"
+        binding.tvProductPrice.text = myProduct.product?.variants?.get(0)?.price.toString() + " " + "$$"
         binding.tvProductDetails.text =
             myProduct.product?.body_html // + "jhaskjffkhfkajhfkajhfkjahfkjh kjahfkjahfkajhfkja hfkjafhakjfhkajfhkajfhkahfkjahfkahfkahfkjahfkjahfkjafja kafk"
-
+        LoggedUserData.favOrderDraft.forEach { item->
+            if (item.title == myProduct.product?.title) {
+                binding.btnAddToFav.setBackgroundResource(R.drawable.favorite_clicked)
+                isFav = true
+            }
+        }
     }
     private fun navToLoginScreen() {
         val dialog = Dialog(requireContext())
@@ -228,7 +308,7 @@ class ProductDetailsFragment : Fragment() {
                 when (it) {
                     is ApiState.Loading->binding.progressBar5.visibility = View.VISIBLE
                     is ApiState.Success<*> -> {
-                        LoggedUserData.orderItemsList.addAll( (it.date as DraftOrderPost).draft_order.line_items ?: mutableListOf())
+                        LoggedUserData.orderItemsList.addAll( (it.date as? DraftOrderPost)?.draft_order?.line_items ?: mutableListOf())
                     }
                     is ApiState.Failure -> {
                         Log.i("Failure", "error in get order list in details screen ${it.error.message}")
@@ -238,5 +318,47 @@ class ProductDetailsFragment : Fragment() {
             }
         }
     }
+
+
+    private fun observeAtFavItems() {
+        lifecycleScope.launch {
+            favViewModel.favItems.collect {
+                when (it) {
+                    is ApiState.Loading -> binding.progressBar5.visibility = View.VISIBLE
+                    is ApiState.Success<*> -> {
+
+                        LoggedUserData.favOrderDraft.addAll(
+                            (it.date as? DraftOrderPost)?.draft_order?.line_items ?: mutableListOf()
+                        )
+                    }
+                    is ApiState.Failure -> {
+                        Log.i(
+                            "Failure",
+                            "error in get order list in details screen ${it.error.message}"
+                        )
+                    }
+
+                }
+            }
+
+        }
+
+
+    }
+
+
+    private fun isAleradyFav(name:String) : Boolean{
+        LoggedUserData.favOrderDraft.forEach { item->
+            if (item.title == name)
+              return true
+        }
+        return false
+    }
+
+
+
+
+
+
 
 }

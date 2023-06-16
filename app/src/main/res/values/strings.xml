@@ -67,6 +67,7 @@
     <string name="close">close</string>
     <string name="cant_delete_address">you must have at leatst one addrese</string>
     <string name="Entre_Valide_Address">Entre Valide Address</string>
+    <string name="cant_delete">Sorry  you cant Delete</string>
 
 
 </resources>

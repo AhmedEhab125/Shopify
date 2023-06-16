@@ -68,15 +68,16 @@ class CartFragment : Fragment(), Communicator {
                 cartViewModel.accessCartItems.collect {
                     when (it) {
                         is ApiState.Success<*> -> {
+                            if(it.date!=null) {
                             flag = true
                             cartBinding.cartProgressBar.visibility = View.GONE
                             draftOrderPost = it.date as DraftOrderPost
-                            if(LoggedUserData.orderItemsList.size ==0)
+                                if(LoggedUserData.orderItemsList.size ==0)
                             LoggedUserData.orderItemsList = (draftOrderPost.draft_order.line_items?: mutableListOf()) as MutableList<LineItem>
                             showHideAnimation()
                             cartAdapter.updateCartList(LoggedUserData.orderItemsList)
                             calcTotalPrice()
-
+                        }
                         }
                         is ApiState.Failure -> {
                             cartBinding.cartProgressBar.visibility = View.GONE
