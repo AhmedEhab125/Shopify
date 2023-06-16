@@ -48,6 +48,10 @@ class RemoteSource(var network: ShopifyApiService) : IBrands, ProductDetalisInte
         return flowOf(network.getCustomerAddresses(customerId).body())
     }
 
+    override suspend fun removeAddresses(customerId: Long, addressId: Long) {
+        network.removeCustomerAddresse(customerId,addressId)
+    }
+
     override suspend fun addAddress(customerId: Long, addresse: AddNewAddress): Flow<AddressesModel?> {
         return flowOf(network.addCustomerAddresse(customerId, addresse).body())
     }

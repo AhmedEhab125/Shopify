@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.shopify.Models.registrashonModel.Addresse
 import com.example.shopify.databinding.AdressessItemBinding
 
-class AddressListAdapter(var list: List<Addresse>) :
+class AddressListAdapter(var list: MutableList<Addresse>, var iView :RemoveCustomerAddress) :
     RecyclerView.Adapter<AddressListAdapter.ViewHolder>() {
     private lateinit var context: Context
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -22,7 +22,7 @@ class AddressListAdapter(var list: List<Addresse>) :
 
     }
 
-    fun setAddressesList(list: List<Addresse>) {
+    fun setAddressesList(list: MutableList<Addresse>) {
         this.list = list
         notifyDataSetChanged()
     }
@@ -30,6 +30,12 @@ class AddressListAdapter(var list: List<Addresse>) :
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.binding.tvAddress.text =
             "${list[position].address1}, ${list[position].city}, ${list[position].country}"
+        holder.binding.btnDeleteAddress.setOnClickListener {
+            iView.remove(list[position].id!!)
+           list.removeAt(position)
+            notifyDataSetChanged()
+
+        }
     }
 
     inner class ViewHolder(var binding: AdressessItemBinding) :

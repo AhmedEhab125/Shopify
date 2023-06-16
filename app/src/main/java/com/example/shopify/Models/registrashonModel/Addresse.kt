@@ -1,6 +1,7 @@
 package com.example.shopify.Models.registrashonModel
 
 data class Addresse(
+    val id : Long?,
     val address1: String?,
     val city: String?,
     val country: String?,
