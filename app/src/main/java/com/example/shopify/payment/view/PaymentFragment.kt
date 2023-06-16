@@ -27,6 +27,7 @@ import com.example.shopify.payment.model.PaymentRepo
 import com.example.shopify.payment.viewModel.PaymentViewModel
 import com.example.shopify.payment.viewModel.PaymentViewModelFactory
 import com.example.shopify.repo.RemoteSource
+import com.example.shopify.utiltes.Constants
 import kotlinx.coroutines.*
 
 class PaymentFragment : Fragment() {
@@ -61,11 +62,10 @@ class PaymentFragment : Fragment() {
             var order = PostOrderModel(
                 com.example.shopify.Models.postOrderModel.Order(
                     "Cash",
-                    //  BillingAddress("2st amjad ", "alex", "Egypt"),
                     "EGP",
                     "150",
                     Customer(
-                        "ahmed",
+                        LocalDataSource.getInstance().readFromShared(requireContext())?.firsName ?:"no name",
                         LocalDataSource.getInstance().readFromShared(requireContext())?.userId
                             ?: 1L,
                         ""
@@ -74,7 +74,8 @@ class PaymentFragment : Fragment() {
                         LineItem( 8350701584706, 1, 45237616247106),
                         LineItem( 8350702338370, 16,  45237617230146)
                     ),
-                    ShippingAddress("2st amjad ", "alex", "Egypt", "ahmed", "01021401193", "ehab"),
+                  // ShippingAddress("2st amjad ", "alex", "Egassypt", "ahmed", "012", "ehab"),
+                    Constants.selectedAddress!!,
                     "5"
                 )
             )

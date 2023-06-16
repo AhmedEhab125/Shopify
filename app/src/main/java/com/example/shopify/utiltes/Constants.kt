@@ -1,5 +1,8 @@
 package com.example.shopify.utiltes
 
+import com.example.shopify.Models.postOrderModel.PostOrderModel
+import com.example.shopify.Models.postOrderModel.ShippingAddress
+
 object Constants {
     const val apiKey = "e52752c65c1032cbdc01f3dd6af2b01e"
     const val accesstoken = "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"
@@ -9,5 +12,6 @@ object Constants {
     const val dollar = "Dollar"
     const val pound = "Pound"
     const val emailRegex = "[a-zA-Z0-9._-]+@(gmail|Gmail).com"
+    var selectedAddress : ShippingAddress? = null
 
 }
