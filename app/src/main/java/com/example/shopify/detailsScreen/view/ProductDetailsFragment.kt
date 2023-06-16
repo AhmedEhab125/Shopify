@@ -142,10 +142,6 @@ class ProductDetailsFragment : Fragment() {
             )
             LoggedUserData.orderItemsList.add(lineItem)
         }
-
-        val draftOrder = DraftOrderPost(DraftOrder(null, null, LoggedUserData.orderItemsList,
-            "CartList", null, draftId))
-        //cartViewModel.updateCartItem(draftId, draftOrder)
         //Snackbar.make(binding.tvProductDetails,"Item Is Added To Cart",Snackbar.LENGTH_LONG).show()
         Toast.makeText(requireContext(),"Item Is Added To Cart",Toast.LENGTH_LONG).show()
     }

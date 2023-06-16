@@ -71,6 +71,7 @@ class CartFragment : Fragment(), Communicator {
                             flag = true
                             cartBinding.cartProgressBar.visibility = View.GONE
                             draftOrderPost = it.date as DraftOrderPost
+                            if(LoggedUserData.orderItemsList.size ==0)
                             LoggedUserData.orderItemsList = (draftOrderPost.draft_order.line_items?: mutableListOf()) as MutableList<LineItem>
                             showHideAnimation()
                             cartAdapter.updateCartList(LoggedUserData.orderItemsList)
