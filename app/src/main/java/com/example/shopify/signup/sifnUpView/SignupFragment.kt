@@ -185,6 +185,7 @@ class SignupFragment : Fragment() {
     private fun creatUser(fireBaseUser: FirebaseUser) {
         val address = listOf<Addresse>(
             Addresse(
+                null,
                 address1 = address,
                 city,
                 country,

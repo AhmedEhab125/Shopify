@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 class AddressesViewModel (var remoteSource: IAddresses) : ViewModel() {
     private var _allAddressesList = MutableStateFlow<ApiState>(ApiState.Loading)
     var  accessAllAddressesList : StateFlow<ApiState> = _allAddressesList
-    fun getAllAddresses(customerId : Long = 6955526881602) {
+    fun getAllAddresses(customerId : Long ) {
         viewModelScope.launch(Dispatchers.IO) {
             remoteSource.getAddresses(customerId).catch { error ->
                 _allAddressesList.value = ApiState.Failure(error)
@@ -24,6 +24,11 @@ class AddressesViewModel (var remoteSource: IAddresses) : ViewModel() {
         }
 
 
+    }
+    fun removeAddress(customerId : Long,addressId :Long){
+        viewModelScope.launch (Dispatchers.IO){
+            remoteSource.removeAddresses(customerId, addressId)
+        }
     }
 
 }

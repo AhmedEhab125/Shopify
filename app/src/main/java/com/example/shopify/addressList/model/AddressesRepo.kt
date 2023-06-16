@@ -10,4 +10,8 @@ class AddressesRepo(var remoteSource: IAddresses): IAddresses {
     override suspend fun getAddresses(customerId: Long): Flow<AddressesModel?> {
       return remoteSource.getAddresses(customerId)
     }
+
+    override suspend fun removeAddresses(customerId: Long, addressId: Long) {
+        remoteSource.removeAddresses(customerId, addressId)
+    }
 }

@@ -6,4 +6,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface IAddresses {
     suspend fun getAddresses(customerId :Long) : Flow<AddressesModel?>
+    suspend fun removeAddresses(customerId :Long , addressId :Long)
 }
