@@ -17,6 +17,9 @@ import com.example.shopify.cart.viewModel.CartViewModel
 import com.example.shopify.cart.viewModel.CartViewModelFactory
 import com.example.shopify.database.LocalDataSource
 import com.example.shopify.databinding.ActivityMainBinding
+import com.example.shopify.favourite.favViewModel.FavoriteViewModel
+import com.example.shopify.favourite.favViewModel.FavoriteViewModelFactory
+import com.example.shopify.favourite.model.ConcreteFavClass
 import com.example.shopify.nework.ShopifyAPi
 import com.example.shopify.repo.RemoteSource
 import com.example.shopify.utiltes.Constants
@@ -31,6 +34,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var navController: NavController
     private var draftId: Long = 0L
     //  lateinit var vpFragmentAdapter: VPFragmentAdapter
+    private lateinit var favViewModel : FavoriteViewModel
+    private lateinit var favFactory : FavoriteViewModelFactory
+    private var wishListId :Long?= 0L
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,6 +44,9 @@ class MainActivity : AppCompatActivity() {
         cartFactory = CartViewModelFactory(CartRepo(RemoteSource(ShopifyAPi.retrofitService)))
         cartViewModel = ViewModelProvider(this, cartFactory)[CartViewModel::class.java]
         draftId = LocalDataSource.getInstance().readFromShared(this)?.cartdraftOrderId ?: 0
+        favFactory = FavoriteViewModelFactory(ConcreteFavClass(RemoteSource(ShopifyAPi.retrofitService)))
+        favViewModel =  ViewModelProvider(this, favFactory)[FavoriteViewModel::class.java]
+        wishListId = LocalDataSource.getInstance().readFromShared(this)?.whiDraftOedredId ?: 0
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         configrations = getSharedPreferences("Configuration", MODE_PRIVATE)!!
@@ -51,56 +60,25 @@ class MainActivity : AppCompatActivity() {
         NavigationUI.setupWithNavController(bottomNavigationView, navController)
         setConfigartions()
 
-        /*  val iconList= listOf(
-                R.drawable.home,
-                R.drawable.menu,
-                R.drawable.cart,
-                R.drawable.heart,
-                R.drawable.user
 
-            )
-            val categorysList= listOf(
-                "home",
-                "Categories",
-                "cart",
-                "Favourite",
-                "user"
-
-            )
-
-
-            binding= ActivityMainBinding.inflate(layoutInflater)
-            setContentView(binding.root)
-            vpFragmentAdapter= VPFragmentAdapter(listOf(
-                HomeFragment(),CategoryFragment(),
-                CartFragment(), FavouriteFragment(),SettingFragment()
-            ),supportFragmentManager,this.lifecycle)
-            binding.vpScreenTitles.adapter=vpFragmentAdapter
-            TabLayoutMediator(binding.TabLayoutScreens,binding.vpScreenTitles,
-                TabLayoutMediator.TabConfigurationStrategy { tab, position ->tab .icon=getDrawable(iconList.get(position))
-              //  tab.text = categorysList[position]
-                }).attach()
-            binding.vpScreenTitles.isUserInputEnabled = false*/
 
     }
 
     override fun onPause() {
         super.onPause()
-            val draftOrder = DraftOrderPost(
+        val draftOrder = DraftOrderPost(
             DraftOrder(null, null, LoggedUserData.orderItemsList,
-            "CartList", null, draftId)
+                "CartList", null, draftId)
         )
-            cartViewModel.updateCartItem(draftId!!, draftOrder)
+        cartViewModel.updateCartItem(draftId!!, draftOrder)
+        val favDraftOrder = DraftOrderPost(
+            DraftOrder(null, null, LoggedUserData.favOrderDraft,
+                "WishList", null, wishListId)
+        )
+        favViewModel.updateFavtItem(wishListId!!,favDraftOrder)
     }
 
-    /*   override fun onBackPressed() {
-           if (binding.vpScreenTitles.getCurrentItem() !== 0) {
-               binding.vpScreenTitles.setCurrentItem( binding.vpScreenTitles.getCurrentItem() - 1, false)
-           } else {
-               finish()
 
-           }
-       }*/
     fun setConfigartions() {
         if (!configrations.contains(Constants.currency)) {
             configrations.edit().putString(Constants.currency, Constants.dollar).apply()

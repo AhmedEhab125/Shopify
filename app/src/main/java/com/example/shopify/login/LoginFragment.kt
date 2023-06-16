@@ -13,6 +13,7 @@ import com.example.shopify.R
 import com.example.shopify.database.UserFireBaseDataBase
 import com.example.shopify.databinding.FragmentLoginBinding
 import com.example.shopify.mainActivity.MainActivity
+import com.example.shopify.utiltes.LoggedUserData
 import com.google.firebase.auth.FirebaseAuth
 
 
@@ -54,6 +55,8 @@ class LoginFragment : Fragment() {
                         Log.i("login",email + "" + password)
                         UserFireBaseDataBase.getUserFromFireBase(requireContext(),auth.currentUser!!)
                         Log.i("Hoba", auth.currentUser!!.uid)
+                        LoggedUserData.favOrderDraft.clear()
+                        LoggedUserData.orderItemsList.clear()
                         when (goto){
                             "details" -> {
                                 val id = requireArguments().getLong("id")
