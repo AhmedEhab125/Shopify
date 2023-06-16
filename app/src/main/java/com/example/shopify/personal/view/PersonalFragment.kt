@@ -16,6 +16,7 @@ import com.example.shopify.database.LocalDataSource
 import com.example.shopify.databinding.FragmentPersonalBinding
 import com.example.shopify.login.LoginFragmentDirections
 import com.example.shopify.mainActivity.MainActivity
+import com.example.shopify.utiltes.LoggedUserData
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -75,6 +76,7 @@ class PersonalFragment : Fragment() {
             personalBinding.btnLogout.setOnClickListener {
                 auth.signOut()
                 LocalDataSource.getInstance().deleteCash(requireContext())
+                LoggedUserData.orderItemsList.clear()
                 Navigation.findNavController(requireView()).navigate(R.id.from_logout_to_home)
             }
         }

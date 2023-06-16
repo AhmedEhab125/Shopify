@@ -65,7 +65,6 @@ class ProductDetailsFragment : Fragment() {
             cartViewModel.getCartItems(draftId)
             observeAtGetOrderDraft()
         }
-        //orderItemsList.clear()
 
         productIdRecived = requireArguments().getLong("product_Id")
         /*  imgAdapter = ImagePagerAdapter(requireContext()
