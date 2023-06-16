@@ -2,6 +2,7 @@ package com.example.shopify.cart.view
 
 import android.app.Dialog
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,6 +28,7 @@ import com.example.shopify.mainActivity.MainActivity
 import com.example.shopify.nework.ApiState
 import com.example.shopify.nework.ShopifyAPi
 import com.example.shopify.repo.RemoteSource
+import com.example.shopify.utiltes.LoggedUserData
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
@@ -37,7 +39,7 @@ class CartFragment : Fragment(), Communicator {
     private lateinit var cartFactory: CartViewModelFactory
     private lateinit var cartViewModel: CartViewModel
     private lateinit var draftOrderPost: DraftOrderPost
-    private lateinit var cartItemsList: MutableList<LineItem>
+    //private lateinit var cartItemsList: MutableList<LineItem>
     private var flag = false
     private var draftId: Long? = 0L
     override fun onCreateView(
@@ -47,20 +49,21 @@ class CartFragment : Fragment(), Communicator {
         cartBinding = FragmentCartBinding.inflate(inflater)
         cartAdapter = CartAdapter(listOf(), this)
         cartFactory = CartViewModelFactory(CartRepo(RemoteSource(ShopifyAPi.retrofitService)))
+        cartViewModel = ViewModelProvider(requireActivity(), cartFactory)[CartViewModel::class.java]
         draftId = LocalDataSource.getInstance().readFromShared(requireContext())?.cartdraftOrderId
-
         return cartBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        cartViewModel = ViewModelProvider(requireActivity(), cartFactory)[CartViewModel::class.java]
+        if(LoggedUserData.orderItemsList.size == 0 ){
+            cartViewModel.getCartItems(draftId ?: 0)
+        }
         cartBinding.cartRV.adapter = cartAdapter
         cartBinding.cartRV.layoutManager = LinearLayoutManager(requireContext())
 
         if (FirebaseAuth.getInstance().currentUser != null) {
 
-            cartViewModel.getCartItems(draftId ?: 0)
             lifecycleScope.launch {
                 cartViewModel.accessCartItems.collect {
                     when (it) {
@@ -68,9 +71,9 @@ class CartFragment : Fragment(), Communicator {
                             flag = true
                             cartBinding.cartProgressBar.visibility = View.GONE
                             draftOrderPost = it.date as DraftOrderPost
-                            cartItemsList = (draftOrderPost.draft_order.line_items?: mutableListOf()) as MutableList<LineItem>
+                            LoggedUserData.orderItemsList = (draftOrderPost.draft_order.line_items?: mutableListOf()) as MutableList<LineItem>
                             showHideAnimation()
-                            cartAdapter.updateCartList(cartItemsList)
+                            cartAdapter.updateCartList(LoggedUserData.orderItemsList)
                             calcTotalPrice()
 
                         }
@@ -83,7 +86,10 @@ class CartFragment : Fragment(), Communicator {
                             ).show()
                         }
                         is ApiState.Loading -> {
+                            cartBinding.lottieSplash.visibility = View.GONE
+                            cartBinding.lottieMessage.visibility = View.GONE
                             cartBinding.cartProgressBar.visibility = View.VISIBLE
+
                         }
                     }
                 }
@@ -110,27 +116,27 @@ class CartFragment : Fragment(), Communicator {
     }
 
     override fun addItem(position: Int, amount: Int) {
-        var quantity = cartItemsList[position].quantity!!
+        var quantity = LoggedUserData.orderItemsList[position].quantity!!
         quantity += amount
-        cartItemsList[position].quantity = quantity
+        LoggedUserData.orderItemsList[position].quantity = quantity
         calcTotalPrice()
-        cartAdapter.updateCartList(cartItemsList)
+        cartAdapter.updateCartList(LoggedUserData.orderItemsList)
     }
 
     override fun subItem(position: Int, amount: Int) {
-        var quantity = cartItemsList[position].quantity!!
+        var quantity = LoggedUserData.orderItemsList[position].quantity!!
         if (quantity > 1) {
             quantity -= amount
-            cartItemsList[position].quantity = quantity
+            LoggedUserData.orderItemsList[position].quantity = quantity
             calcTotalPrice()
-            cartAdapter.updateCartList(cartItemsList)
+            cartAdapter.updateCartList(LoggedUserData.orderItemsList)
         } else {
             deleteDialog(position)
 
         }
     }
     fun showHideAnimation(){
-        if(cartItemsList.size ==1){
+        if(LoggedUserData.orderItemsList.size ==1){
             cartBinding.lottieSplash.visibility = View.VISIBLE
             cartBinding.lottieMessage.visibility = View.VISIBLE
             cartBinding.lottieMessage.text = "There is no items."
@@ -141,34 +147,21 @@ class CartFragment : Fragment(), Communicator {
     }
     private fun calcTotalPrice() {
         var count = 0F
-        cartItemsList.forEach { item ->
+        LoggedUserData.orderItemsList.forEach { item ->
             count += (item.price!!.toFloat()) * (item.quantity!!)
         }
         cartBinding.totalPrice.text = count.toString()
     }
 
-    override fun onPause() {
-        super.onPause()
-        if(flag){
-        if(cartItemsList.size == 0 ){
-            var draftOrder2 = LineItem(null, null, "Custome Item", "00.0", null, null, 1,
-                null, "Custom Item", null, null, null
-            )
-            cartItemsList.add(0,draftOrder2)
-        }
-            draftOrderPost.draft_order.line_items = cartItemsList
-            cartViewModel.updateCartItem(draftId!!, draftOrderPost)
-        }
-    }
 
     private fun deleteDialog(position: Int) {
         val dialog = Dialog(requireContext())
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setContentView(R.layout.delete_dialog)
         dialog.findViewById<Button>(R.id.delete).setOnClickListener {
-            cartItemsList.removeAt(position)
+            LoggedUserData.orderItemsList.removeAt(position)
             calcTotalPrice()
-            cartAdapter.updateCartList(cartItemsList)
+            cartAdapter.updateCartList(LoggedUserData.orderItemsList)
             showHideAnimation()
             dialog.dismiss()
         }

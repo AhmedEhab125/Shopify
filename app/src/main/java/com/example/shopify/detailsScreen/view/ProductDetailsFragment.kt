@@ -30,6 +30,7 @@ import com.example.shopify.detailsScreen.viewModel.ProductDetalisViewModel
 import com.example.shopify.nework.ApiState
 import com.example.shopify.nework.ShopifyAPi
 import com.example.shopify.repo.RemoteSource
+import com.example.shopify.utiltes.LoggedUserData
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.delay
@@ -44,7 +45,6 @@ class ProductDetailsFragment : Fragment() {
     private lateinit var myProduct: ProductModel
     private lateinit var cartFactory: CartViewModelFactory
     private lateinit var cartViewModel: CartViewModel
-    private lateinit var orderItemsList: MutableList<LineItem>
     private var productIdRecived: Long = 0L
     private var draftId: Long = 0L
     private var noOfItems = 1
@@ -52,7 +52,6 @@ class ProductDetailsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        orderItemsList= mutableListOf()
         binding = FragmentProductDeatilsBinding.inflate(layoutInflater)
         cartFactory = CartViewModelFactory(CartRepo(RemoteSource(ShopifyAPi.retrofitService)))
         cartViewModel = ViewModelProvider(requireActivity(), cartFactory)[CartViewModel::class.java]
@@ -62,6 +61,11 @@ class ProductDetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        if(LoggedUserData.orderItemsList.size ==0){
+            cartViewModel.getCartItems(draftId)
+            observeAtGetOrderDraft()
+        }
+        //orderItemsList.clear()
 
         productIdRecived = requireArguments().getLong("product_Id")
         /*  imgAdapter = ImagePagerAdapter(requireContext()
@@ -70,7 +74,6 @@ class ProductDetailsFragment : Fragment() {
         //  binding.imgsViewPager.adapter = imgAdapter
         binding.btnContinue.setOnClickListener {
             if (FirebaseAuth.getInstance().currentUser != null) {
-                observeAtGetOrderDraft()
                 addToCart()
             } else {
                 navToLoginScreen()
@@ -125,13 +128,12 @@ class ProductDetailsFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        orderItemsList.clear()
-        cartViewModel.getCartItems(draftId)
+
     }
     private fun addToCart() {
         var res = isExist(myProduct.product?.title)
         if(res.first){
-            orderItemsList[res.second].quantity = orderItemsList[res.second].quantity?.plus(noOfItems)
+            LoggedUserData.orderItemsList[res.second].quantity = LoggedUserData.orderItemsList[res.second].quantity?.plus(noOfItems)
         }else{
             val lineItem = LineItem(
                 price= myProduct.product?.variants?.get(0)?.price,
@@ -139,19 +141,19 @@ class ProductDetailsFragment : Fragment() {
                 sku = "${myProduct.product?.id},${myProduct.product?.image?.src}",
                 title = myProduct.product?.title
             )
-            orderItemsList.add(lineItem)
+            LoggedUserData.orderItemsList.add(lineItem)
         }
 
-        val draftOrder = DraftOrderPost(DraftOrder(null, null, orderItemsList,
+        val draftOrder = DraftOrderPost(DraftOrder(null, null, LoggedUserData.orderItemsList,
             "CartList", null, draftId))
-        cartViewModel.updateCartItem(draftId, draftOrder)
-        Snackbar.make(binding.tvProductDetails,"Item Is Added To Cart",Snackbar.LENGTH_LONG).show()
-        //Toast.makeText(requireContext(),"Item Is Added To Cart",Toast.LENGTH_LONG).show()
+        //cartViewModel.updateCartItem(draftId, draftOrder)
+        //Snackbar.make(binding.tvProductDetails,"Item Is Added To Cart",Snackbar.LENGTH_LONG).show()
+        Toast.makeText(requireContext(),"Item Is Added To Cart",Toast.LENGTH_LONG).show()
     }
     private fun isExist(title:String?):Pair<Boolean,Int>{
-        orderItemsList.forEach { item ->
+        LoggedUserData.orderItemsList.forEach { item ->
            if(item.title == title){
-               return Pair(true,orderItemsList.indexOf(item))
+               return Pair(true,LoggedUserData.orderItemsList.indexOf(item))
            }
         }
         return Pair(false,-1)
@@ -231,7 +233,7 @@ class ProductDetailsFragment : Fragment() {
                 when (it) {
                     is ApiState.Loading->binding.progressBar5.visibility = View.VISIBLE
                     is ApiState.Success<*> -> {
-                        orderItemsList.addAll( (it.date as DraftOrderPost).draft_order.line_items ?: mutableListOf())
+                        LoggedUserData.orderItemsList.addAll( (it.date as DraftOrderPost).draft_order.line_items ?: mutableListOf())
                     }
                     is ApiState.Failure -> {
                         Log.i("Failure", "error in get order list in details screen ${it.error.message}")
