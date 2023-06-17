@@ -107,7 +107,6 @@ class CategoryFragment : Fragment(),OnClickToShowDetalisOfCategory {
 
     override fun onResume() {
         super.onResume()
-
         (context as MainActivity).hideNavigationBar(true)
     }
 
@@ -206,22 +205,44 @@ class CategoryFragment : Fragment(),OnClickToShowDetalisOfCategory {
     }
 
 
-    fun filterMyProducts(text:String){
+    fun filterMyProducts(text:String) {
         var fillterdProducts = mutableListOf<Product>()
-        for (product in myProducts){
-            if (product.title?.lowercase()?.contains(text.lowercase())!!){
-                fillterdProducts.add(product)
+        if (ispressAtPutton()) {
+            for (product in filteredList) {
+                if (product.title?.lowercase()?.contains(text.lowercase())!!) {
+                    fillterdProducts.add(product)
+                }
             }
-        }
-        myAdapter.updateData(fillterdProducts)
-        if (fillterdProducts.isEmpty()){
-            Toast.makeText(requireContext(),"Sorry,No Data Founded", Toast.LENGTH_SHORT).show()
+            myAdapter.updateData(fillterdProducts)
+            if (fillterdProducts.isEmpty()) {
+                Toast.makeText(requireContext(), "Sorry,No Data Founded", Toast.LENGTH_SHORT).show()
+            }
+        } else {
+            for (product in myProducts) {
+                if (product.title?.lowercase()?.contains(text.lowercase())!!) {
+                    fillterdProducts.add(product)
+                }
+            }
+            myAdapter.updateData(fillterdProducts)
+            if (fillterdProducts.isEmpty()) {
+                Toast.makeText(requireContext(), "Sorry,No Data Founded", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
     override fun showDetalisFromCategory(prouctId: Long) {
         val action = CategoryFragmentDirections.fromCategoryToDetalis(prouctId)
         Navigation.findNavController(requireView()).navigate(action)
+    }
+
+
+    fun ispressAtPutton() : Boolean{
+        if (binding.radioKid.isChecked || binding.radioAccessories.isChecked || binding.radioMen.isChecked || binding.radioShirts.isChecked
+            || binding.radioShoes.isChecked || binding.radioSale.isChecked || binding.radioWomen.isChecked) {
+                return true
+            }
+            return false
+
     }
 
 
