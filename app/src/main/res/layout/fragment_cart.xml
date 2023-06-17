@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:alpha="1"
-    android:background="#00CC2929"
+    android:background="#e9f8ff"
     tools:context=".cart.view.CartFragment">
 
     <com.airbnb.lottie.LottieAnimationView
@@ -40,38 +40,37 @@
         android:id="@+id/totalPrice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"
         android:fontFamily="sans-serif"
-        android:text="TextView"
-        android:textColor="#000000"
+        android:text=""
+        android:textColor="@color/black"
         android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="@+id/textView2"
-        app:layout_constraintStart_toEndOf="@+id/textView2"
-        app:layout_constraintTop_toTopOf="@+id/textView2" />
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/textView2"
+        app:layout_constraintStart_toStartOf="@+id/textView2"
+        app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="25dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="8dp"
         android:text="@string/total"
         android:textColor="#000000"
         android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/totalPrice"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cartRV" />
 
     <Button
         android:id="@+id/checkoutBtn"
         android:layout_width="wrap_content"
         android:layout_height="60dp"
-        android:layout_marginBottom="5dp"
+        android:layout_marginBottom="8dp"
         android:backgroundTint="@color/blue_app_color"
         android:text="@string/cartButton"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:textSize="14sp"
         android:textStyle="bold"
         app:cornerRadius="10dp"
@@ -107,7 +106,7 @@
         android:id="@+id/lottieMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TextView"
+        android:text=""
         android:textColor="#090707"
         android:textSize="20sp"
         app:layout_constraintEnd_toStartOf="@+id/guideline3"

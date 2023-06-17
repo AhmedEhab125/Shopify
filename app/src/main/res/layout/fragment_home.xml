@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#e9f8ff"
     tools:context=".home.view.HomeFragment">
 
     <androidx.constraintlayout.widget.Guideline
@@ -43,7 +44,9 @@
         android:id="@+id/dicountsSlider"
         android:layout_width="match_parent"
         android:layout_height="180dp"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="2dp"
+        android:layout_marginEnd="10dp"
         app:layout_constraintEnd_toStartOf="@+id/guideline2"
         app:layout_constraintHorizontal_bias="0.4"
         app:layout_constraintStart_toStartOf="@+id/guideline"
@@ -70,7 +73,7 @@
         android:layout_marginTop="10dp"
         android:text="@string/brand"
         android:textColor="#000000"
-        android:textSize="18sp"
+        android:textSize="22sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
