@@ -213,7 +213,7 @@ class ProductDetailsFragment : Fragment() {
             val lineItem = LineItem(
                 price= myProduct.product?.variants?.get(0)?.price,
                 quantity =  noOfItems,
-                sku = "${myProduct.product?.id},${myProduct.product?.image?.src}",
+                sku = "${myProduct.product?.id},${myProduct.product?.variants?.get(0)?.id},${myProduct.product?.image?.src}",
                 title = myProduct.product?.title
             )
             LoggedUserData.orderItemsList.add(lineItem)

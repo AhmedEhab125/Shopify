@@ -1,5 +1,6 @@
 package com.example.shopify.cart.view
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,9 +31,10 @@ class CartAdapter(var cartList: List<LineItem>,val cartDelegate:Communicator) :
     override fun onBindViewHolder(holder: CartViewHolder, position: Int) {
           var cartItem = cartList[position+1]
               var id_imageUrl = (cartItem.sku?:",").split(",")
-              if(id_imageUrl.size == 2){
+              if(id_imageUrl.size == 3){
                   var id = id_imageUrl[0]
-                  var imageUrl = id_imageUrl[1]
+                  var imageUrl = id_imageUrl[2]
+                  Log.i("essamImage", ""+imageUrl)
                   Glide.with(holder.binding.root).load(imageUrl).into(holder.binding.productImg)
               }
 

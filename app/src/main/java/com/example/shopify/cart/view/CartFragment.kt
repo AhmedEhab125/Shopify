@@ -69,15 +69,15 @@ class CartFragment : Fragment(), Communicator {
                     when (it) {
                         is ApiState.Success<*> -> {
                             if(it.date!=null) {
-                            flag = true
-                            cartBinding.cartProgressBar.visibility = View.GONE
-                            draftOrderPost = it.date as DraftOrderPost
+                                flag = true
+                                cartBinding.cartProgressBar.visibility = View.GONE
+                                draftOrderPost = it.date as DraftOrderPost
                                 if(LoggedUserData.orderItemsList.size ==0)
-                            LoggedUserData.orderItemsList = (draftOrderPost.draft_order.line_items?: mutableListOf()) as MutableList<LineItem>
-                            showHideAnimation()
-                            cartAdapter.updateCartList(LoggedUserData.orderItemsList)
-                            calcTotalPrice()
-                        }
+                                    LoggedUserData.orderItemsList = (draftOrderPost.draft_order.line_items?: mutableListOf()) as MutableList<LineItem>
+                                showHideAnimation()
+                                cartAdapter.updateCartList(LoggedUserData.orderItemsList)
+                                calcTotalPrice()
+                            }
                         }
                         is ApiState.Failure -> {
                             cartBinding.cartProgressBar.visibility = View.GONE
@@ -106,7 +106,8 @@ class CartFragment : Fragment(), Communicator {
             cartBinding.checkoutBtn.visibility = View.GONE
         }
         cartBinding.checkoutBtn.setOnClickListener {
-            //    Navigation.findNavController(requireView()).navigate(R.id.from_cart_to_login)
+            val action = CartFragmentDirections.actionCartFragmentToAddressListFragment("cart")
+                Navigation.findNavController(requireView()).navigate(action)
         }
 
 
