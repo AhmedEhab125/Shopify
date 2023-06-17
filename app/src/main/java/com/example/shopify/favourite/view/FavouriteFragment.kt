@@ -66,25 +66,30 @@ class FavouriteFragment : Fragment(),OnDelete {
               favViewModel.favItems.collect {
                   when (it) {
                       is ApiState.Loading -> {
+                          favouriteBinding.favLottieSplash.visibility = View.GONE
+                          favouriteBinding.favLottieMessage.visibility = View.GONE
                           favouriteBinding.favprogressBar.visibility = View.VISIBLE
                       }
                       is ApiState.Success<*> -> {
-                          favouriteBinding.favprogressBar.visibility = View.GONE
                           if (it.date != null) {
+                              favouriteBinding.favprogressBar.visibility = View.GONE
                               favDraftOrderPost = it.date as DraftOrderPost
                               if (LoggedUserData.favOrderDraft.size == 0) {
                                   LoggedUserData.favOrderDraft =
                                       (favDraftOrderPost.draft_order.line_items
                                           ?: mutableListOf()) as MutableList<LineItem>
                               }
+                              showHiddenAnimation()
+                              favAdapter.updateFavList(LoggedUserData.favOrderDraft)
                           }
+
 
                           /*  if(LoggedUserData.favOrderDraft.size == 1){
                            Log.i("No Data","There Is No Data")
                        }else {
                            favAdapter.updateFavList(LoggedUserData.favOrderDraft)
                        }*/
-                          favAdapter.updateFavList(LoggedUserData.favOrderDraft)
+
                       }
                       else -> {
                           favouriteBinding.favprogressBar.visibility = View.GONE
@@ -99,7 +104,10 @@ class FavouriteFragment : Fragment(),OnDelete {
               }
           }
       }else{
-          Log.i("Abo Elmazamiz","hna feh al lottie")
+          favouriteBinding.favprogressBar.visibility = View.GONE
+          favouriteBinding.favLottieSplash.visibility = View.VISIBLE
+          favouriteBinding.favLottieMessage.visibility = View.VISIBLE
+          favouriteBinding.favLottieMessage.text = "Please Login To View Your Favorite items"
       }
 
     }
@@ -110,8 +118,8 @@ class FavouriteFragment : Fragment(),OnDelete {
     }
 
     override fun deleteFromFav(index: Int) {
-
         deleteDialog(index)
+
     }
 
     private fun deleteDialog(position: Int) {
@@ -119,11 +127,9 @@ class FavouriteFragment : Fragment(),OnDelete {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setContentView(R.layout.delete_dialog)
         dialog.findViewById<Button>(R.id.delete).setOnClickListener {
-
             LoggedUserData.favOrderDraft.removeAt(position)
             favAdapter.updateFavList(LoggedUserData.favOrderDraft)
-
-
+            showHiddenAnimation()
             dialog.dismiss()
         }
         dialog.findViewById<Button>(R.id.cancel).setOnClickListener {
@@ -137,6 +143,19 @@ class FavouriteFragment : Fragment(),OnDelete {
         )
         dialog.setCanceledOnTouchOutside(true)
         dialog.show()
+    }
+
+
+
+    fun showHiddenAnimation(){
+        if(LoggedUserData.favOrderDraft.size ==1){
+            favouriteBinding.favLottieSplash.visibility = View.VISIBLE
+             favouriteBinding.favLottieMessage.visibility = View.VISIBLE
+            favouriteBinding.favLottieMessage.text = "Sorry,There is No Items."
+        }else{
+            favouriteBinding.favLottieSplash.visibility = View.GONE
+            favouriteBinding.favLottieMessage.visibility = View.GONE
+        }
     }
 
 

@@ -107,7 +107,7 @@ class CartFragment : Fragment(), Communicator {
         }
         cartBinding.checkoutBtn.setOnClickListener {
             val action = CartFragmentDirections.actionCartFragmentToAddressListFragment("cart")
-                Navigation.findNavController(requireView()).navigate(action)
+            Navigation.findNavController(requireView()).navigate(action)
         }
 
 

@@ -85,6 +85,7 @@ class ProductDetailsFragment : Fragment() {
             observeAtFavItems()
         }
 
+        Log.i("ISFave",""+isFav)
 
         productIdRecived = requireArguments().getLong("product_Id")
 
@@ -113,7 +114,7 @@ class ProductDetailsFragment : Fragment() {
         productDetalisViewModel.getProductDetalis(productIdRecived)
 
        jop = lifecycleScope.launch {
-            productDetalisViewModel.productInfo.collect {
+            productDetalisViewModel.productInfo.collectLatest {
                 when (it) {
                     is ApiState.Loading -> {
                         hideComponantes()
@@ -126,7 +127,7 @@ class ProductDetailsFragment : Fragment() {
                         showComponantes()
                         setData()
                         Log.i("Ehabbbbb","Observeation")
-
+                        Log.i("ISFaveAdd",""+isFav)
                     }
                     else -> {
                         binding.progressBar5.visibility = View.VISIBLE
@@ -163,18 +164,20 @@ class ProductDetailsFragment : Fragment() {
         for (item in LoggedUserData.favOrderDraft){
             if(item.title == myProduct.product?.title){
                 LoggedUserData.favOrderDraft.remove(item)
+
             }
 
         }
         binding.btnAddToFav.setBackgroundResource(R.drawable.favourite_btn)
         isFav = false
         Toast.makeText(requireContext(), "Product Removed From Favorite List", Toast.LENGTH_SHORT).show()
+        Log.i("ISFaveRemove",""+isFav)
     }
 
 
     override fun onPause() {
         super.onPause()
-       jop.cancel()
+        jop.cancel()
 
     }
 
@@ -203,6 +206,7 @@ class ProductDetailsFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+
 
     }
     private fun addToCart() {
