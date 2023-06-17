@@ -203,6 +203,7 @@ class ProductDetailsFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+
     }
     private fun addToCart() {
         var res = isExist(myProduct.product?.title)
@@ -212,15 +213,11 @@ class ProductDetailsFragment : Fragment() {
             val lineItem = LineItem(
                 price= myProduct.product?.variants?.get(0)?.price,
                 quantity =  noOfItems,
-                sku = "${myProduct.product?.id},${myProduct.product?.image?.src}",
+                sku = "${myProduct.product?.id},${myProduct.product?.variants?.get(0)?.id},${myProduct.product?.image?.src}",
                 title = myProduct.product?.title
             )
             LoggedUserData.orderItemsList.add(lineItem)
         }
-
-        val draftOrder = DraftOrderPost(DraftOrder(null, null, LoggedUserData.orderItemsList,
-            "CartList", null, draftId))
-        //cartViewModel.updateCartItem(draftId, draftOrder)
         //Snackbar.make(binding.tvProductDetails,"Item Is Added To Cart",Snackbar.LENGTH_LONG).show()
         Toast.makeText(requireContext(),"Item Is Added To Cart",Toast.LENGTH_LONG).show()
     }

@@ -1,19 +1,13 @@
 package com.example.shopify.personal.view
 
-import android.content.SharedPreferences
-import android.opengl.Visibility
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.shopify.Models.FireBaseModel.MyFireBaseUser
 import com.example.shopify.Models.draftOrderCreation.DraftOrder
 import com.example.shopify.Models.draftOrderCreation.DraftOrderPost
 import com.example.shopify.R
@@ -25,16 +19,11 @@ import com.example.shopify.databinding.FragmentPersonalBinding
 import com.example.shopify.favourite.favViewModel.FavoriteViewModel
 import com.example.shopify.favourite.favViewModel.FavoriteViewModelFactory
 import com.example.shopify.favourite.model.ConcreteFavClass
-import com.example.shopify.login.LoginFragmentDirections
 import com.example.shopify.mainActivity.MainActivity
 import com.example.shopify.nework.ShopifyAPi
 import com.example.shopify.repo.RemoteSource
 import com.example.shopify.utiltes.LoggedUserData
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
 
 
 class PersonalFragment : Fragment() {
@@ -56,7 +45,7 @@ class PersonalFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         personalBinding = FragmentPersonalBinding.inflate(inflater)
         ordersAdapter = OrdersAdapter(listOf())
         wishListAdapter = WishListAdapter(listOf())
@@ -126,11 +115,6 @@ class PersonalFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         (context as MainActivity).hideNavigationBar(true)
-    }
-
-    override fun onPause() {
-        super.onPause()
-
     }
 
 

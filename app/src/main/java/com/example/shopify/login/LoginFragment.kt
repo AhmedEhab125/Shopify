@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import com.example.shopify.R
 import com.example.shopify.database.UserFireBaseDataBase
@@ -15,6 +16,9 @@ import com.example.shopify.databinding.FragmentLoginBinding
 import com.example.shopify.mainActivity.MainActivity
 import com.example.shopify.utiltes.LoggedUserData
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
 class LoginFragment : Fragment() {
@@ -51,25 +55,31 @@ class LoginFragment : Fragment() {
                 binding.loginProgressBar.visibility = View.VISIBLE
                 auth.signInWithEmailAndPassword(email,password).addOnCompleteListener {
                     if (it.isSuccessful){
-                        Toast.makeText(requireContext(),"Log in Sussessfuly",Toast.LENGTH_SHORT).show()
+
                         Log.i("login",email + "" + password)
                         UserFireBaseDataBase.getUserFromFireBase(requireContext(),auth.currentUser!!)
                         Log.i("Hoba", auth.currentUser!!.uid)
                         LoggedUserData.favOrderDraft.clear()
                         LoggedUserData.orderItemsList.clear()
-                        when (goto){
-                            "details" -> {
-                                val id = requireArguments().getLong("id")
-                                val action = LoginFragmentDirections.actionLoginFragmentToProductDetailsFragment(id)
-                                Navigation.findNavController(requireView()).navigate(action)
+                        lifecycleScope.launch(Dispatchers.Main){
+                            delay(500)
+                            Toast.makeText(requireContext(),"Log in Sussessfuly",Toast.LENGTH_SHORT).show()
+                            binding.loginProgressBar.visibility = View.GONE
+                            when (goto){
+                                "details" -> {
+                                    val id = requireArguments().getLong("id")
+                                    val action = LoginFragmentDirections.actionLoginFragmentToProductDetailsFragment(id)
+                                    Navigation.findNavController(requireView()).navigate(action)
+                                }
+                                "personal"-> Navigation.findNavController(requireView()).navigate(R.id.action_loginFragment_to_homeFragment)
                             }
-                            "personal"-> Navigation.findNavController(requireView()).navigate(R.id.action_loginFragment_to_homeFragment)
                         }
+
                     }else{
                         Toast.makeText(requireContext(),it.exception.toString(),Toast.LENGTH_SHORT).show()
                         Log.i("erorr",it.exception.toString())
                     }
-                    binding.loginProgressBar.visibility = View.GONE
+
                 }
             }
 
