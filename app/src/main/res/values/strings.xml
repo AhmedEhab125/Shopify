@@ -65,7 +65,7 @@
     <string name="deleteMessageBody">You want delete this item from cart</string>
     <string name="delete_address">You want delete address </string>
     <string name="close">close</string>
-    <string name="cant_delete_address">you must have at leatst one addrese</string>
+    <string name="cant_delete_address">you must have default addresses</string>
     <string name="Entre_Valide_Address">Entre Valide Address</string>
     <string name="cant_delete">Sorry  you cant Delete</string>
 
