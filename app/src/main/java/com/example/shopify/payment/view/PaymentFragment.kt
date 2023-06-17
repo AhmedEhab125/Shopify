@@ -1,40 +1,40 @@
 package com.example.shopify.payment.view
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import com.example.shopify.Models.RetriveOreder.RetriveOrder
-import com.example.shopify.Models.addressesmodel.AddressesModel
 import com.example.shopify.Models.postOrderModel.Customer
 import com.example.shopify.Models.postOrderModel.LineItem
 import com.example.shopify.Models.postOrderModel.PostOrderModel
-import com.example.shopify.Models.postOrderModel.ShippingAddress
 import com.example.shopify.R
 import com.example.shopify.database.LocalDataSource
 import com.example.shopify.databinding.FragmentPaymentBinding
 import com.example.shopify.nework.ApiState
 import com.example.shopify.nework.ShopifyAPi
-import com.example.shopify.orderDetails.model.OrderDetailsRepo
-import com.example.shopify.orderDetails.viewModel.OrderDetailsViewModel
-import com.example.shopify.orderDetails.viewModel.OrderDetailsViewModelFactory
 import com.example.shopify.payment.model.PaymentRepo
 import com.example.shopify.payment.viewModel.PaymentViewModel
 import com.example.shopify.payment.viewModel.PaymentViewModelFactory
 import com.example.shopify.repo.RemoteSource
 import com.example.shopify.utiltes.Constants
-import kotlinx.coroutines.*
+import com.example.shopify.utiltes.LoggedUserData
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class PaymentFragment : Fragment() {
     lateinit var binding: FragmentPaymentBinding
     lateinit var paymentViewModel: PaymentViewModel
     lateinit var paymentViewModelFactory: PaymentViewModelFactory
     lateinit var job: Job
+    lateinit var itemList: MutableList<LineItem>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -52,10 +52,30 @@ class PaymentFragment : Fragment() {
                 RemoteSource(ShopifyAPi.retrofitService)
             )
         )
+        job = Job()
         paymentViewModel = ViewModelProvider(
             requireActivity(),
             paymentViewModelFactory
         ).get(PaymentViewModel::class.java)
+        itemList = mutableListOf()
+
+
+
+
+        LoggedUserData.orderItemsList.forEach { item ->
+            var productId = item.sku?.split(",")?.first()?.toLong()
+            var variantId = item.sku?.split(",")?.get(1)?.toLong()
+           println(item.sku)
+            var data = productId?.let { pro_id->
+              if (variantId != null) {
+                  item.quantity?.let { variant_id ->
+
+                      itemList.add( LineItem(pro_id, variant_id, variantId) )
+                  }
+                }
+            }
+
+        }
 
         binding.btnCheckout.setOnClickListener {
             observeOrderCreated()
@@ -65,18 +85,18 @@ class PaymentFragment : Fragment() {
                     "EGP",
                     "150",
                     Customer(
-                        LocalDataSource.getInstance().readFromShared(requireContext())?.firsName ?:"no name",
+                        LocalDataSource.getInstance().readFromShared(requireContext())?.firsName
+                            ?: "no name",
                         LocalDataSource.getInstance().readFromShared(requireContext())?.userId
                             ?: 1L,
                         ""
                     ),
-                    listOf(
-                        LineItem( 8350701584706, 1, 45237616247106),
-                        LineItem( 8350702338370, 16,  45237617230146)
-                    ),
-                  // ShippingAddress("2st amjad ", "alex", "Egassypt", "ahmed", "012", "ehab"),
+
+                       itemList
+                    ,
+                    // ShippingAddress("2st amjad ", "alex", "Egassypt", "ahmed", "012", "ehab"),
                     Constants.selectedAddress!!,
-                    "5"
+                    "0"
                 )
             )
             createOrder(order)
