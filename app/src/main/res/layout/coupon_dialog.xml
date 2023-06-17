@@ -66,6 +66,8 @@
             android:layout_height="wrap_content"
             android:backgroundTint="@color/blue_app_color"
             android:text="@string/copy"
+            app:cornerRadius="20dp"
+            android:width="70dp"
             app:layout_constraintBottom_toBottomOf="@+id/couponCode"
             app:layout_constraintEnd_toEndOf="@+id/textView27"
             app:layout_constraintStart_toEndOf="@+id/couponCode"

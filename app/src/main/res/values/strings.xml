@@ -47,9 +47,9 @@
     <string name="signUpCountry">Country</string>
     <string name="signUpCity">City</string>
     <string name="signUpPhone">Phone</string>
-    <string name="add_address">add address</string>
-    <string name="currency">currency</string>
-    <string name="pound">pound</string>
+    <string name="add_address">Add Address</string>
+    <string name="currency">Currency</string>
+    <string name="pound">Pound</string>
     <string name="loginDialogTitle">You Are Not Login</string>
     <string name="loginDialogMessage">To be able to add items to the cart, you need to be logged in.</string>
     <string name="loginDialogCancel">Cancel</string>

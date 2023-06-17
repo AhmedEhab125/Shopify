@@ -5,33 +5,71 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="10dp"
-    app:cardCornerRadius="20dp"
+    app:cardCornerRadius="30dp"
     app:cardElevation="20dp">
 
-    <RadioGroup
-        android:id="@+id/currencyRadioGroup"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
         <TextView
             android:id="@+id/tv_selecetCruncy"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:gravity="center"
             android:text="@string/currency"
             android:textColor="#000000"
-            android:textSize="20sp" />
+            android:textSize="22sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <RadioButton
-            android:id="@+id/poundRadioButton"
-            android:layout_width="match_parent"
+        <RadioGroup
+            android:id="@+id/currencyRadioGroup"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/pound" />
+            android:layout_marginTop="16dp"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_selecetCruncy">
 
-        <RadioButton
-            android:id="@+id/dollarRadioButton"
-            android:layout_width="match_parent"
+
+            <RadioButton
+                android:id="@+id/poundRadioButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="6dp"
+                android:buttonTint="@color/blue_app_color"
+                android:text="@string/pound"
+                android:textSize="18sp" />
+
+            <RadioButton
+                android:id="@+id/dollarRadioButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="6dp"
+                android:buttonTint="@color/blue_app_color"
+                android:text="Dollar"
+                android:textSize="18sp" />
+        </RadioGroup>
+
+        <Button
+            android:id="@+id/currency_btn"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Dollar" />
-    </RadioGroup>
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:width="130dp"
+            android:text="Submit"
+            app:cornerRadius="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/currencyRadioGroup"
+            app:layout_constraintStart_toStartOf="@+id/currencyRadioGroup"
+            app:layout_constraintTop_toBottomOf="@+id/currencyRadioGroup" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.cardview.widget.CardView>

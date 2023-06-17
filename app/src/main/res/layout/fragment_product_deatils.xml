@@ -32,14 +32,15 @@
 
                 <TextView
                     android:id="@+id/tv_shippingState"
-                    android:layout_width="150dp"
+                    android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="32dp"
                     android:layout_marginBottom="32dp"
                     android:background="@drawable/button_style"
                     android:gravity="center"
-                    android:text="Free Shipping"
+                    android:text="Shpify"
+                    android:textColor="@color/white"
                     android:textSize="16sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -75,7 +76,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:paddingHorizontal="16dp"
-                android:progressTint="@color/blue_app_color" />
+               android:progressTint="@color/blue_app_color"/>
 
             <TextView
                 android:id="@+id/tv_product_price"
@@ -83,7 +84,7 @@
                 android:layout_height="wrap_content"
                 android:paddingHorizontal="16dp"
                 android:text="4000 $$"
-                android:textColor="@color/black"
+                android:textColor="@color/blue_app_color"
                 android:textSize="24sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -144,6 +145,7 @@
                 android:layout_marginEnd="32dp"
                 android:background="@drawable/minus"
                 android:text="ToggleButton"
+                android:backgroundTint="@color/blue_app_color"
                 android:textOff=""
                 android:textOn=""
                 app:layout_constraintBottom_toBottomOf="@+id/btnContinue"
@@ -160,6 +162,7 @@
                 android:backgroundTint="@color/blue_app_color"
                 android:text="Add To Cart"
                 android:textAllCaps="false"
+                app:cornerRadius="20dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"></Button>
