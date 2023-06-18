@@ -7,6 +7,22 @@
     android:background="#e9f8ff"
     tools:context=".orderHistory.view.OrderListFragment" >
 
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/no_order_lotte"
+        android:layout_width="0dp"
+        android:layout_height="450dp"
+        android:layout_centerInParent="true"
+        android:layout_marginHorizontal="10dp"
+        android:elevation="10dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/no_orders" />
+
     <ProgressBar
         android:id="@+id/orderListProgressBar"
         style="?android:attr/progressBarStyle"

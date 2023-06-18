@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.shopify.nework.ApiState
 import com.example.shopify.repo.IBrands
 import com.example.shopify.repo.ProductDetalisInterface
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -15,8 +16,11 @@ import kotlinx.coroutines.launch
 class ProductDetalisViewModel (var remoteSource: ProductDetalisInterface) : ViewModel() {
     private var _productInfo = MutableStateFlow<ApiState>(ApiState.Loading)
     var  productInfo : StateFlow<ApiState> = _productInfo
+    val coroutineExceptionHandler = CoroutineExceptionHandler { _, throwable ->
+        throwable.printStackTrace()
+    }
     fun getProductDetalis(id:Long) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO+coroutineExceptionHandler) {
             remoteSource.getProductDetalis(id).catch { error ->
                 _productInfo.value = ApiState.Failure(error)
             }.collect { myProduct ->

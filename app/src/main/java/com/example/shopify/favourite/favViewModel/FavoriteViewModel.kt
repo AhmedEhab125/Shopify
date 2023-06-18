@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.shopify.Models.draftOrderCreation.DraftOrderPost
 import com.example.shopify.nework.ApiState
 import com.example.shopify.repo.ICart
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -15,9 +16,11 @@ import kotlinx.coroutines.launch
 class FavoriteViewModel ( var remoteSource: ICart) : ViewModel() {
     private var _favItems = MutableStateFlow<ApiState>(ApiState.Loading)
     var  favItems : StateFlow<ApiState> = _favItems
-
+    val coroutineExceptionHandler = CoroutineExceptionHandler { _, throwable ->
+        throwable.printStackTrace()
+    }
     fun getFavItems(draftId:Long) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO+coroutineExceptionHandler) {
             remoteSource.getCartItems(draftId).catch { error ->
                 _favItems.value = ApiState.Failure(error)
             }.collect { brands ->
@@ -26,7 +29,7 @@ class FavoriteViewModel ( var remoteSource: ICart) : ViewModel() {
         }
     }
     fun updateFavtItem(draftId:Long,draftOrderPost: DraftOrderPost){
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO+coroutineExceptionHandler) {
             remoteSource.upDateCartOrderDraft(draftId,draftOrderPost)
         }
     }

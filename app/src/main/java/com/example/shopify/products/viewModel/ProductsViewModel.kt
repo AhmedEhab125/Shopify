@@ -6,6 +6,7 @@ import com.example.shopify.Models.products.CollectProductsModel
 import com.example.shopify.nework.ApiState
 import com.example.shopify.repo.CollectionProductsInterface
 import com.example.shopify.repo.IBrands
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -15,8 +16,11 @@ import kotlinx.coroutines.launch
 class ProductsViewModel(private var remoteSource: CollectionProductsInterface) : ViewModel() {
     private var _collectionProducts = MutableStateFlow<ApiState>(ApiState.Loading)
     var  collectionProducts : StateFlow<ApiState> = _collectionProducts
+    val coroutineExceptionHandler = CoroutineExceptionHandler { _, throwable ->
+        throwable.printStackTrace()
+    }
     fun getCollectionProducts(id:Long) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO+coroutineExceptionHandler) {
             remoteSource.getCollectionProducts(id).catch { error ->
                 _collectionProducts.value = ApiState.Failure(error)
             }.collect { brands ->

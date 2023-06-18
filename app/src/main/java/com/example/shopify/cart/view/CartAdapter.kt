@@ -40,8 +40,8 @@ class CartAdapter(var cartList: List<LineItem>,val cartDelegate:Communicator) :
               }
 
           holder.binding.productName.text = cartItem.title
-          holder.binding.productPrice.text =" ${cartItem.price?.toDouble()
-              ?.times(Constants.currencyValue)} ${Constants.currencyType} "
+          holder.binding.productPrice.text =" ${(cartItem.price?.toDouble()
+              ?.times(Constants.currencyValue))?.toInt()} ${Constants.currencyType} "
           holder.binding.countLabel.text = cartItem.quantity.toString()
           holder.binding.productInc.setOnClickListener{
               cartDelegate.addItem(position+1,1)

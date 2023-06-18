@@ -69,8 +69,10 @@ class OrderDetailsFragment : Fragment() {
             binding.tvOrderEmail.text = "${order.customer?.first_name} ${order.customer?.last_name}"
             binding.tvOrderAddress.text = address
             binding.tvOrderPhome.text = order.customer?.phone ?: ""
-            binding.tvOrderPrice.text = "${order.current_total_price?.toDouble()
-                ?.times(Constants.currencyValue)}  ${Constants.currencyType}"
+            binding.tvOrderPrice.text = "${
+                (order.current_total_price?.toDouble()
+                    ?.times(Constants.currencyValue))?.toInt()?.plus(200)
+            }  ${Constants.currencyType}"
             binding.tvPaymentMethod.text = order.tags
 
             lifecycleScope.launch {
