@@ -18,5 +18,6 @@ data class Product(
     val title: String?,
     val updated_at: String?,
     val variants: List<Variant>?,
-    val vendor: String?
+    val vendor: String?,
+    var isFav:Boolean = false
 )
