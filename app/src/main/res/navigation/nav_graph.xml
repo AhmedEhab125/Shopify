@@ -85,9 +85,6 @@
         <argument
             android:name="id"
             app:argType="long" />
-        <action
-            android:id="@+id/fromLoginToCategory"
-            app:destination="@id/categoryFragment" />
     </fragment>
     <fragment
         android:id="@+id/signupFragment"
