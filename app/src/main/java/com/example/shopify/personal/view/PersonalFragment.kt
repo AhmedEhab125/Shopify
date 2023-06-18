@@ -127,6 +127,7 @@ class PersonalFragment : Fragment() {
                         "WishList", null, wishListId)
                 )
                 favViewModel.updateFavtItem(wishListId!!,favDraftOrder)
+
                 auth.signOut()
                 LocalDataSource.getInstance().deleteCash(requireContext())
                 Navigation.findNavController(requireView()).navigate(R.id.from_logout_to_home)

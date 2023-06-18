@@ -99,4 +99,9 @@ class MainActivity : AppCompatActivity() {
             binding.bottomNavigationView.visibility = View.GONE
         }
     }
+
+    override fun onResume() {
+        super.onResume()
+
+    }
 }
