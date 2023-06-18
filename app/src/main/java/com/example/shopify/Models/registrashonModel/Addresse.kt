@@ -9,5 +9,6 @@ data class Addresse(
     val last_name: String?,
     val phone: String?,
     val province: String?,
-    val zip: String?
+    val zip: String?,
+    var default : Boolean? = null
 )
