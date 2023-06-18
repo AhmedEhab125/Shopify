@@ -10,6 +10,7 @@ import com.example.shopify.Models.draftOrderCreation.LineItem
 import com.example.shopify.R
 import com.example.shopify.cart.model.Communicator
 import com.example.shopify.databinding.CartCardBinding
+import com.example.shopify.utiltes.Constants
 
 class CartAdapter(var cartList: List<LineItem>,val cartDelegate:Communicator) :
     RecyclerView.Adapter<CartAdapter.CartViewHolder>() {
@@ -39,7 +40,8 @@ class CartAdapter(var cartList: List<LineItem>,val cartDelegate:Communicator) :
               }
 
           holder.binding.productName.text = cartItem.title
-          holder.binding.productPrice.text = cartItem.price
+          holder.binding.productPrice.text =" ${cartItem.price?.toDouble()
+              ?.times(Constants.currencyValue)} ${Constants.currencyType} "
           holder.binding.countLabel.text = cartItem.quantity.toString()
           holder.binding.productInc.setOnClickListener{
               cartDelegate.addItem(position+1,1)

@@ -82,6 +82,12 @@ class MainActivity : AppCompatActivity() {
     fun setConfigartions() {
         if (!configrations.contains(Constants.currency)) {
             configrations.edit().putString(Constants.currency, Constants.dollar).apply()
+        }else{
+            if (configrations.getString(Constants.currency,"").equals(Constants.pound)){
+                Constants.currencyValue = 30
+                Constants.currencyType = "EGP"
+            }
+
         }
     }
 

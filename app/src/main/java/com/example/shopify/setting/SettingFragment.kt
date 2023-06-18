@@ -87,7 +87,7 @@ class SettingFragment : Fragment() {
             Constraints.LayoutParams.WRAP_CONTENT
         )
         //window?.setBackgroundDrawableResource(R.color.transparent);
-        dialog.setCanceledOnTouchOutside(true)
+        dialog.setCanceledOnTouchOutside(false)
         dialog.show()
 
 
@@ -126,12 +126,17 @@ class SettingFragment : Fragment() {
          dialog.findViewById<RadioButton>(R.id.poundRadioButton).setOnClickListener {
             configrations.edit().putString(Constants.currency,Constants.pound).apply()
             binding.tvCurrncy.text = configrations.getString(Constants.currency,Constants.pound)
-            dialog.dismiss()
-        }
+             Constants.currencyValue=30
+             Constants.currencyType = "EGP"
+         }
         dialog.findViewById<RadioButton>(R.id.dollarRadioButton).setOnClickListener {
             configrations.edit().putString(Constants.currency,Constants.dollar).apply()
 
             binding.tvCurrncy.text = configrations.getString(Constants.currency,Constants.dollar)
+            Constants.currencyValue=1
+            Constants.currencyType = "$"
+        }
+        dialog.findViewById<Button>(R.id.currency_btn).setOnClickListener {
             dialog.dismiss()
         }
 

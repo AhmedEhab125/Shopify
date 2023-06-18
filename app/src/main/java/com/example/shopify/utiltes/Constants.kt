@@ -11,6 +11,8 @@ object Constants {
     const val currency = "currency"
     const val dollar = "Dollar"
     const val pound = "Pound"
+    var currencyType = "$"
+     var currencyValue = 1
     const val emailRegex = "[a-zA-Z0-9._-]+@(gmail|Gmail).com"
     var selectedAddress : ShippingAddress? = null
 
