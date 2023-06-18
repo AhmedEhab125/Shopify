@@ -34,6 +34,7 @@ import com.example.shopify.login.LoginFragment
 import com.example.shopify.nework.ApiState
 import com.example.shopify.nework.ShopifyAPi
 import com.example.shopify.repo.RemoteSource
+import com.example.shopify.utiltes.Constants
 import com.example.shopify.utiltes.LoggedUserData
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
@@ -58,7 +59,7 @@ class ProductDetailsFragment : Fragment() {
     private var noOfItems = 1
     private var wishListId : Long = 0
     private lateinit var jop : Job
-    private var isFav = false
+  //  private var isFav = false
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -85,7 +86,7 @@ class ProductDetailsFragment : Fragment() {
             observeAtFavItems()
         }
 
-        Log.i("ISFave",""+isFav)
+
 
         productIdRecived = requireArguments().getLong("product_Id")
 
@@ -95,11 +96,12 @@ class ProductDetailsFragment : Fragment() {
             } else {
                 navToLoginScreen()
             }
+
         }
 
         binding.btnAddToFav.setOnClickListener {
             if (FirebaseAuth.getInstance().currentUser!=null){
-             if (!isFav){
+             if (!myProduct.product?.isFav!!){
                 addToFav()
                 }else{
                     removeFromFav()
@@ -127,7 +129,7 @@ class ProductDetailsFragment : Fragment() {
                         showComponantes()
                         setData()
                         Log.i("Ehabbbbb","Observeation")
-                        Log.i("ISFaveAdd",""+isFav)
+
                     }
                     else -> {
                         binding.progressBar5.visibility = View.VISIBLE
@@ -161,17 +163,17 @@ class ProductDetailsFragment : Fragment() {
     }
 
     private fun removeFromFav() {
-        for (item in LoggedUserData.favOrderDraft){
-            if(item.title == myProduct.product?.title){
-                LoggedUserData.favOrderDraft.remove(item)
-
+        val iterator = LoggedUserData.favOrderDraft.iterator()
+        while (iterator.hasNext()) {
+            val item = iterator.next()
+            if (item.title == myProduct.product?.title) {
+                iterator.remove()
             }
-
         }
         binding.btnAddToFav.setBackgroundResource(R.drawable.favourite_btn)
-        isFav = false
+        myProduct.product?.isFav = false
         Toast.makeText(requireContext(), "Product Removed From Favorite List", Toast.LENGTH_SHORT).show()
-        Log.i("ISFaveRemove",""+isFav)
+
     }
 
 
@@ -199,14 +201,13 @@ class ProductDetailsFragment : Fragment() {
             )
             LoggedUserData.favOrderDraft.add(lineItem)
             Toast.makeText(requireContext(), "Product Added To Favorite", Toast.LENGTH_SHORT).show()
-            isFav = true
+            myProduct.product?.isFav = true
         }
     }
 
 
     override fun onResume() {
         super.onResume()
-
 
     }
     private fun addToCart() {
@@ -271,13 +272,15 @@ class ProductDetailsFragment : Fragment() {
         binding.tvProductName.text = myProduct.product?.title
         binding.productRatingBar.rating = 3.5f
         binding.productRatingBar.isEnabled = false
-        binding.tvProductPrice.text = myProduct.product?.variants?.get(0)?.price.toString() + " " + "$$"
+        binding.tvProductPrice.text = "${(myProduct.product?.variants?.get(0)?.price?.toDouble()
+            ?.times(Constants.currencyValue))} ${Constants.currencyType}"
+
         binding.tvProductDetails.text =
             myProduct.product?.body_html // + "jhaskjffkhfkajhfkajhfkjahfkjh kjahfkjahfkajhfkja hfkjafhakjfhkajfhkajfhkahfkjahfkahfkahfkjahfkjahfkjafja kafk"
         LoggedUserData.favOrderDraft.forEach { item->
             if (item.title == myProduct.product?.title) {
                 binding.btnAddToFav.setBackgroundResource(R.drawable.favorite_clicked)
-                isFav = true
+                myProduct.product?.isFav = true
             }
         }
     }
@@ -334,6 +337,13 @@ class ProductDetailsFragment : Fragment() {
                         LoggedUserData.favOrderDraft.addAll(
                             (it.date as? DraftOrderPost)?.draft_order?.line_items ?: mutableListOf()
                         )
+                       // hena btdrb ya milad ab2 a3mel check 3aliha
+                        LoggedUserData.favOrderDraft.forEach { item->
+                            if (item.title == myProduct.product?.title) {
+                                binding.btnAddToFav.setBackgroundResource(R.drawable.favorite_clicked)
+                                myProduct.product?.isFav = true
+                            }
+                        }
                     }
                     is ApiState.Failure -> {
                         Log.i(

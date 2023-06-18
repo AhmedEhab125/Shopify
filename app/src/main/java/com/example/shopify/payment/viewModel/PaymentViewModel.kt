@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 
 class PaymentViewModel (var remoteSource: IPostOrder) : ViewModel() {
-    var _order = MutableStateFlow<ApiState>(ApiState.Loading)
+     var _order = MutableStateFlow<ApiState>(ApiState.Loading)
     var  accessOrder : StateFlow<ApiState> = _order
     fun createOrder(order : PostOrderModel ) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -21,6 +21,7 @@ class PaymentViewModel (var remoteSource: IPostOrder) : ViewModel() {
                 _order.value = ApiState.Failure(error)
             }.collect { addresses ->
                 _order.value = ApiState.Success(addresses)
+
             }
         }
 

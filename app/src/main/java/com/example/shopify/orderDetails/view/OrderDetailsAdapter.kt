@@ -8,6 +8,7 @@ import com.bumptech.glide.Glide
 import com.example.shopify.Models.orderList.LineItem
 import com.example.shopify.Models.productDetails.Product
 import com.example.shopify.databinding.OrderProductItemBinding
+import com.example.shopify.utiltes.Constants
 
 class OrderDetailsAdapter(
     var orderProductList: List<LineItem>,
@@ -36,11 +37,21 @@ class OrderDetailsAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.binding.tvOrderProuductQuantity.text = "${orderProductList[position].quantity}"
         holder.binding.tvOrderProductName.text = orderProductList[position].name
-        holder.binding.tvOrderProductPrice.text = "Price : ${orderProductList[position].price}"
+        holder.binding.tvOrderProductPrice.text = "Price : ${
+            orderProductList[position].price?.toDouble()
+                ?.times(Constants.currencyValue)
+        }  ${Constants.currencyType}"
         println(productListFromApi)
-        if (orderProductList.size == productListFromApi.size)
-            Glide.with(holder.binding.root).load(productListFromApi[position].image?.src)
-                .into(holder.binding.ivOrderProduct)
+
+        productListFromApi.forEach {
+            if (orderProductList[position].product_id == it.id) {
+                Glide.with(holder.binding.root).load(it.image?.src)
+                    .into(holder.binding.ivOrderProduct)
+
+            }
+
+
+        }
     }
 
     inner class ViewHolder(var binding: OrderProductItemBinding) :

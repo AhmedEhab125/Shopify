@@ -3,6 +3,7 @@ package com.example.shopify.category.view
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -12,17 +13,25 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.shopify.Models.draftOrderCreation.DraftOrderPost
 import com.example.shopify.Models.productDetails.Product
 import com.example.shopify.Models.products.CollectProductsModel
 import com.example.shopify.R
 import com.example.shopify.category.model.CategoryRepo
 import com.example.shopify.category.viewModel.CategoryViewModel
 import com.example.shopify.category.viewModel.CategoryViewModelFactory
+import com.example.shopify.database.LocalDataSource
 import com.example.shopify.databinding.FragmentCategoryBinding
+import com.example.shopify.favourite.favViewModel.FavoriteViewModel
+import com.example.shopify.favourite.favViewModel.FavoriteViewModelFactory
+import com.example.shopify.favourite.model.ConcreteFavClass
 import com.example.shopify.mainActivity.MainActivity
 import com.example.shopify.nework.ApiState
 import com.example.shopify.nework.ShopifyAPi
 import com.example.shopify.repo.RemoteSource
+import com.example.shopify.utiltes.LoggedUserData
+import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 
@@ -33,6 +42,10 @@ class CategoryFragment : Fragment(),OnClickToShowDetalisOfCategory {
     lateinit var categoryViewModelFactory: CategoryViewModelFactory
     lateinit var myAdapter : CategoryAdapter
     lateinit var filteredList :List<Product>
+    private lateinit var favViewModel : FavoriteViewModel
+    private lateinit var favFactory : FavoriteViewModelFactory
+    private lateinit var favDraftOrderPost: DraftOrderPost
+    private var wishListId :Long?= 0L
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -44,6 +57,9 @@ class CategoryFragment : Fragment(),OnClickToShowDetalisOfCategory {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentCategoryBinding.inflate(inflater, container, false)
+        favFactory = FavoriteViewModelFactory(ConcreteFavClass(RemoteSource(ShopifyAPi.retrofitService)))
+        favViewModel =  ViewModelProvider(requireActivity(), favFactory)[FavoriteViewModel::class.java]
+        wishListId = LocalDataSource.getInstance().readFromShared(requireContext())?.whiDraftOedredId
         return binding.root
 
     }
@@ -56,6 +72,12 @@ class CategoryFragment : Fragment(),OnClickToShowDetalisOfCategory {
             requireActivity(),
             categoryViewModelFactory
         ).get(CategoryViewModel::class.java)
+
+       if(LoggedUserData.favOrderDraft.size == 0){
+           favViewModel.getFavItems(wishListId?:0)
+           observeOnFav()
+       }
+
 
         myProducts = listOf()
         filteredList = myProducts
@@ -94,6 +116,8 @@ class CategoryFragment : Fragment(),OnClickToShowDetalisOfCategory {
 
 
     }
+
+
     fun filterList(){
         if (!filterByType().equals("")){
         filteredList = myProducts.filter { it.product_type.equals(filterByType())  && it.tags?.contains(filterByGender()) ?: true  }
@@ -244,6 +268,38 @@ class CategoryFragment : Fragment(),OnClickToShowDetalisOfCategory {
             return false
 
     }
+
+
+    private fun observeOnFav() {
+       lifecycleScope.launch {
+           favViewModel.favItems.collect{
+               when(it){
+                   is ApiState.Loading ->{
+                     binding.progressBar3.visibility = View.VISIBLE
+                   }
+                   is  ApiState.Success<*> -> {
+                       binding.progressBar3.visibility = View.GONE
+                       LoggedUserData.favOrderDraft.addAll(
+                           (it.date as? DraftOrderPost)?.draft_order?.line_items ?: mutableListOf()
+                       )
+                   }
+                   else ->{
+                       binding.progressBar3.visibility = View.GONE
+                       Log.i("Failure", "There is Erorr")
+                       Snackbar.make(
+                           requireView(),
+                           "Failed to obtain data from api",
+                           Snackbar.LENGTH_LONG
+                       ).show()
+                   }
+                   }
+                }
+
+
+           }
+       }
+
+
 
 
 }

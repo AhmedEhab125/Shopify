@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.shopify.Models.orderList.Order
 import com.example.shopify.database.LocalDataSource
@@ -61,6 +62,7 @@ class OrderListFragment : Fragment() {
                        // smartCollections = brands?.smart_collections ?: listOf()
                       //  brandsAdapter.setBrandsList(smartCollections)
                         myAdapter.setOrderList(orders)
+                        binding.orderListProgressBar.visibility= View.GONE
                     }
                     is ApiState.Failure -> {
                       //  homeBinding.progressBar.visibility = View.GONE

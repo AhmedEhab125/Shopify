@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:text="Contact Us"
-            android:textColor="@color/black"
+            android:textColor="#1E83FF"
             android:textSize="25sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
@@ -32,9 +32,10 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="22dp"
             android:text="Emails"
-            android:textColor="@color/black"
+
             android:textSize="20sp"
             android:textStyle="bold"
+            android:textColor="@color/blue_app_color"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView11" />
@@ -81,9 +82,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:text="Phones"
-            android:textColor="@color/black"
             android:textSize="20sp"
             android:textStyle="bold"
+            android:textColor="@color/blue_app_color"
             app:layout_constraintEnd_toEndOf="@+id/textView21"
             app:layout_constraintStart_toStartOf="@+id/textView21"
             app:layout_constraintTop_toBottomOf="@+id/textView21" />

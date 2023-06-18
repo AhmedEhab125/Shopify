@@ -9,6 +9,7 @@ import com.example.shopify.Models.draftOrderCreation.LineItem
 import com.example.shopify.R
 import com.example.shopify.databinding.FavCardBinding
 import com.example.shopify.favourite.model.OnDelete
+import com.example.shopify.utiltes.Constants
 
 class FavAdapter (var favList: List<LineItem> , var listener : OnDelete):RecyclerView.Adapter<FavAdapter.FavViewHolder>() {
 
@@ -37,7 +38,8 @@ class FavAdapter (var favList: List<LineItem> , var listener : OnDelete):Recycle
             Glide.with(holder.binding.root).load(imageUrl).into(holder.binding.favImg)
         }
         holder.binding.favProductName.text = favItem.title
-        holder.binding.favProductPrice.text = favItem.price
+        holder.binding.favProductPrice.text = "${favItem.price?.toDouble()
+            ?.times(Constants.currencyValue)} ${Constants.currencyType}"
         holder.binding.deleteBtn.setOnClickListener {
             listener.deleteFromFav(position+1)
         }

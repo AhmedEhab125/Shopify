@@ -20,6 +20,7 @@ import com.example.shopify.orderHistory.model.OrderListRepo
 import com.example.shopify.orderHistory.viewModel.OrderListViewModel
 import com.example.shopify.orderHistory.viewModel.OrderListViewModelFactory
 import com.example.shopify.repo.RemoteSource
+import com.example.shopify.utiltes.Constants
 import kotlinx.coroutines.launch
 
 class OrderDetailsFragment : Fragment() {
@@ -68,7 +69,8 @@ class OrderDetailsFragment : Fragment() {
             binding.tvOrderEmail.text = "${order.customer?.first_name} ${order.customer?.last_name}"
             binding.tvOrderAddress.text = address
             binding.tvOrderPhome.text = order.customer?.phone ?: ""
-            binding.tvOrderPrice.text = "${order.current_total_price}"
+            binding.tvOrderPrice.text = "${order.current_total_price?.toDouble()
+                ?.times(Constants.currencyValue)}  ${Constants.currencyType}"
             binding.tvPaymentMethod.text = order.tags
 
             lifecycleScope.launch {
