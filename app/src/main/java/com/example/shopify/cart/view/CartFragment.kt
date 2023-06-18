@@ -28,6 +28,7 @@ import com.example.shopify.mainActivity.MainActivity
 import com.example.shopify.nework.ApiState
 import com.example.shopify.nework.ShopifyAPi
 import com.example.shopify.repo.RemoteSource
+import com.example.shopify.utiltes.Constants
 import com.example.shopify.utiltes.LoggedUserData
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
@@ -151,9 +152,9 @@ class CartFragment : Fragment(), Communicator {
     private fun calcTotalPrice() {
         var count = 0F
         LoggedUserData.orderItemsList.forEach { item ->
-            count += (item.price!!.toFloat()) * (item.quantity!!)
+            count += (item.price!!.toFloat()) * (item.quantity!!) * Constants.currencyValue
         }
-        cartBinding.totalPrice.text = count.toString()
+        cartBinding.totalPrice.text = count.toString() +" ${ Constants.currencyType}"
     }
 
 

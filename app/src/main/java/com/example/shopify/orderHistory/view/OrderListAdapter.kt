@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.shopify.Models.orderList.Order
 import com.example.shopify.R
 import com.example.shopify.databinding.OrderItemBinding
+import com.example.shopify.utiltes.Constants
 
 class OrderListAdapter(var list: List<Order>) :
     RecyclerView.Adapter<OrderListAdapter.ViewHolder>() {
@@ -31,7 +32,8 @@ class OrderListAdapter(var list: List<Order>) :
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         var date = list[position].created_at?.split("T")
-        holder.binding.tvOrderPrice.text = list[position].current_total_price
+        holder.binding.tvOrderPrice.text = (list[position].current_total_price?.toDouble()
+            ?.times(Constants.currencyValue)).toString()+  " ${Constants.currencyType}"
         holder.binding.tvOrderTime.text = date?.get(0) ?: ""
         holder.binding.cvOrders.setOnClickListener {
             val bundle = Bundle().apply {

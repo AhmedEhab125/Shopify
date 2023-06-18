@@ -8,6 +8,7 @@ import com.bumptech.glide.Glide
 import com.example.shopify.Models.draftOrderCreation.LineItem
 import com.example.shopify.R
 import com.example.shopify.databinding.FavCardBinding
+import com.example.shopify.utiltes.Constants
 
 class WishListAdapter (var wishList: List<LineItem>): RecyclerView.Adapter<WishListAdapter.WishViewHolder>() {
 
@@ -37,7 +38,8 @@ class WishListAdapter (var wishList: List<LineItem>): RecyclerView.Adapter<WishL
                 Glide.with(holder.binding.root).load(imageUrl).into(holder.binding.favImg)
             }
             holder.binding.favProductName.text = favItem.title
-            holder.binding.favProductPrice.text = favItem.price
+            holder.binding.favProductPrice.text = "${favItem.price?.toDouble()
+                ?.times(Constants.currencyValue)} ${Constants.currencyType}"
             holder.binding.deleteBtn.visibility = View.GONE
         }
 

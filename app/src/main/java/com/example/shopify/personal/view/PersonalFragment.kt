@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.example.shopify.Models.draftOrderCreation.DraftOrder
 import com.example.shopify.Models.draftOrderCreation.DraftOrderPost
 import com.example.shopify.Models.draftOrderCreation.LineItem
+import com.example.shopify.Models.orderList.Order
 import com.example.shopify.R
 import com.example.shopify.cart.model.CartRepo
 import com.example.shopify.cart.viewModel.CartViewModel
@@ -25,6 +26,9 @@ import com.example.shopify.favourite.model.ConcreteFavClass
 import com.example.shopify.mainActivity.MainActivity
 import com.example.shopify.nework.ApiState
 import com.example.shopify.nework.ShopifyAPi
+import com.example.shopify.orderHistory.model.OrderListRepo
+import com.example.shopify.orderHistory.viewModel.OrderListViewModel
+import com.example.shopify.orderHistory.viewModel.OrderListViewModelFactory
 import com.example.shopify.repo.RemoteSource
 import com.example.shopify.utiltes.LoggedUserData
 import com.google.android.material.snackbar.Snackbar
@@ -44,6 +48,8 @@ class PersonalFragment : Fragment() {
     private lateinit var favFactory : FavoriteViewModelFactory
     private var wishListId :Long?= 0L
     private lateinit var favDraftOrderPost: DraftOrderPost
+    lateinit var orderListViewModel: OrderListViewModel
+    lateinit var orderListViewModelFactory: OrderListViewModelFactory
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,6 +73,15 @@ class PersonalFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        orderListViewModelFactory =  OrderListViewModelFactory(
+            OrderListRepo(
+            RemoteSource(ShopifyAPi.retrofitService)
+        )
+        )
+        orderListViewModel = ViewModelProvider(
+            requireActivity(),
+            orderListViewModelFactory
+        ).get(OrderListViewModel::class.java)
         if (LoggedUserData.favOrderDraft.size == 0){
             favViewModel.getFavItems(wishListId?:1592654688)
         }
@@ -90,6 +105,7 @@ class PersonalFragment : Fragment() {
             personalBinding.orderRV.layoutManager = GridLayoutManager(requireContext(),2)
             personalBinding.whishListRV.adapter = wishListAdapter
             observeOnFavItems()
+            getOrders()
             personalBinding.whishListRV.layoutManager = GridLayoutManager(requireContext(),2)
             personalBinding.orderMore.setOnClickListener {
                 Navigation.findNavController(requireView()).navigate(R.id.action_personalFragment_to_orderListFragment)
@@ -170,6 +186,34 @@ class PersonalFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         (context as MainActivity).hideNavigationBar(true)
+    }
+    fun getOrders(){
+        orderListViewModel.getOrders(LocalDataSource.getInstance().readFromShared(requireContext())?.userId!!)
+        lifecycleScope.launch {
+            orderListViewModel.accessOrderList.collect { result ->
+                when (result) {
+                    is ApiState.Success<*> -> {
+                        // homeBinding.progressBar.visibility = View.GONE
+
+                        var orders = result.date as List<Order>
+                        personalBinding.personProgressBar.visibility= View.GONE
+
+                        // smartCollections = brands?.smart_collections ?: listOf()
+                        //  brandsAdapter.setBrandsList(smartCollections)
+                       ordersAdapter.setOrderList(orders)
+                    }
+                    is ApiState.Failure -> {
+                        //  homeBinding.progressBar.visibility = View.GONE
+
+                    }
+                    is ApiState.Loading -> {
+                        //   homeBinding.progressBar.visibility = View.VISIBLE
+                    }
+
+                }
+
+            }
+        }
     }
 
 
