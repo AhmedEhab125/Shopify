@@ -24,10 +24,8 @@ import com.example.shopify.payment.viewModel.PaymentViewModelFactory
 import com.example.shopify.repo.RemoteSource
 import com.example.shopify.utiltes.Constants
 import com.example.shopify.utiltes.LoggedUserData
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.collectLatest
 
 class PaymentFragment : Fragment() {
     lateinit var binding: FragmentPaymentBinding
@@ -115,7 +113,9 @@ class PaymentFragment : Fragment() {
 
     fun observeOrderCreated() {
         job = lifecycleScope.launch(Dispatchers.IO) {
-            paymentViewModel.accessOrder.collect { result ->
+
+            //delay(2000)
+            paymentViewModel._order.collectLatest { result ->
                 when (result) {
                     is ApiState.Success<*> -> {
 
@@ -137,6 +137,8 @@ class PaymentFragment : Fragment() {
                                     "order set succssfully",
                                     Toast.LENGTH_LONG
                                 ).show()
+                                paymentViewModel._order.value=ApiState.Loading
+
                             } else {
                                 Toast.makeText(
                                     requireContext(),
