@@ -7,6 +7,21 @@
     android:background="#e9f8ff"
     tools:context=".payment.view.PaymentFragment">
 
+    <TextView
+        android:id="@+id/textView14"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="10dp"
+        android:text="@string/paymrnt_method"
+        android:textColor="#000000"
+        android:textSize="22sp"
+        app:layout_constraintBottom_toTopOf="@+id/radioGroup2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <ProgressBar
         android:id="@+id/paymentProgressBar"
         style="?android:attr/progressBarStyle"
@@ -17,25 +32,38 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/trueLottie"
+        android:layout_width="61dp"
+        android:layout_height="61dp"
+        android:layout_centerInParent="true"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="15dp"
+        android:elevation="10dp"
+        app:layout_constraintBottom_toBottomOf="@+id/voutcherTF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/voutcherTF"
+        app:layout_constraintTop_toTopOf="@+id/voutcherTF"
+        app:lottie_autoPlay="true"
+        app:lottie_rawRes="@raw/check_done" />
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/voutcherTF"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="326dp"
+        android:layout_height="66dp"
 
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
         android:focusableInTouchMode="true"
-        android:hint="@string/voutcher"
 
+        android:hint="@string/voutcher"
         android:minHeight="48dp"
         app:boxCornerRadiusBottomEnd="20dp"
         app:boxCornerRadiusBottomStart="20dp"
         app:boxCornerRadiusTopEnd="20dp"
         app:boxCornerRadiusTopStart="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/radioGroup2"
         app:layout_constraintTop_toBottomOf="@+id/radioGroup2"
         app:startIconDrawable="@drawable/tag">
 
@@ -50,71 +78,52 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/lottieSplash2"
-        android:layout_width="0dp"
-        android:layout_height="150dp"
-        android:layout_centerInParent="true"
-        android:layout_marginHorizontal="10dp"
-        android:elevation="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.38"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.007"
-        app:lottie_autoPlay="true"
-        app:lottie_loop="true"
-        app:lottie_rawRes="@raw/payment"
-
-        />
-
     <RadioGroup
         android:id="@+id/radioGroup2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lottieSplash2">
-
-        <TextView
-            android:id="@+id/textView14"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="@string/paymrnt_method"
-            android:textColor="#000000"
-            android:textSize="20sp" />
+        app:layout_constraintTop_toBottomOf="@+id/textView14">
 
         <RadioButton
             android:id="@+id/onlinePaymentRB"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/onlline_payment" />
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginVertical="5dp"
+            android:drawableStart="@drawable/visa"
+            android:drawablePadding="8dp"
+            android:text="@string/onlline_payment"
+            android:textSize="16sp">
+
+        </RadioButton>
 
         <RadioButton
             android:id="@+id/cashOnDelevaryRB"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/cash_on_delevary" />
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginVertical="5dp"
+            android:drawableStart="@drawable/money"
+            android:drawablePadding="8dp"
+            android:text="@string/cash_on_delevary"
+            android:textSize="16sp" />
     </RadioGroup>
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView2"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="18dp"
         app:cardCornerRadius="20dp"
-        app:cardElevation="20dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/voutcherTF"
         app:layout_constraintTop_toBottomOf="@+id/voutcherTF">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -126,6 +135,7 @@
                 android:layout_width="0dp"
                 android:layout_height="1dp"
                 android:layout_marginStart="8dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginEnd="8dp"
                 android:background="#C3000000"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -136,19 +146,21 @@
                 android:id="@+id/textView26"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="10dp"
                 android:layout_marginTop="16dp"
+                android:layout_marginEnd="8dp"
                 android:text="@string/products_fees"
+                android:textColor="#040202"
                 android:textSize="16sp"
+                app:layout_constraintEnd_toStartOf="@+id/tv_product_fees"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/tv_product_fees"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="200000000000$$"
                 android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="@+id/textView26"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -161,18 +173,19 @@
                 android:id="@+id/textView28"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="16dp"
                 android:text="@string/delevary_fees"
+                android:textColor="#000000"
                 app:layout_constraintStart_toStartOf="@+id/textView26"
                 app:layout_constraintTop_toBottomOf="@+id/textView26" />
 
             <TextView
                 android:id="@+id/tv_delevary_fees"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="200$"
                 android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="@+id/textView28"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/tv_product_fees"
                 app:layout_constraintTop_toTopOf="@+id/textView28" />
 
@@ -195,7 +208,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="500000000000$"
                 android:textColor="#000000"
                 android:textSize="20sp"
                 app:layout_constraintBottom_toBottomOf="@+id/textView32"
@@ -206,18 +218,19 @@
                 android:id="@+id/textView35"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="16dp"
                 android:text="@string/discount"
+                android:textColor="#000000"
                 app:layout_constraintStart_toStartOf="@+id/textView28"
                 app:layout_constraintTop_toBottomOf="@+id/textView28" />
 
             <TextView
                 android:id="@+id/tv_discount"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="0"
                 android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="@+id/textView35"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/tv_delevary_fees"
                 app:layout_constraintTop_toTopOf="@+id/textView35" />
 
@@ -226,11 +239,9 @@
 
     <Button
         android:id="@+id/btn_checkout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_width="200dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="20dp"
         android:backgroundTint="@color/blue_app_color"
         android:text="@string/check_out"
         app:cornerRadius="20dp"

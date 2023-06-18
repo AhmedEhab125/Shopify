@@ -1,6 +1,8 @@
 package com.example.shopify.payment.view
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -52,7 +54,9 @@ class PaymentFragment : Fragment() {
         NetworkPayment.getCustomerId(requireContext())
         binding = FragmentPaymentBinding.inflate(inflater)
         binding.paymentProgressBar.visibility = View.GONE
-        // Inflate the layout for this fragment
+        binding.trueLottie.visibility = View.GONE
+        binding.tvDiscount.text = "0"
+        binding.tvDelevaryFees.text = "200 ${Constants.currencyType}"
         return binding.root
     }
 
@@ -67,46 +71,42 @@ class PaymentFragment : Fragment() {
         paymentViewModel = ViewModelProvider(
             requireActivity(),
             paymentViewModelFactory
-        ).get(PaymentViewModel::class.java)
+        )[PaymentViewModel::class.java]
         itemList = mutableListOf()
-
-
-
-
         LoggedUserData.orderItemsList.forEach { item ->
             var productId = item.sku?.split(",")?.first()?.toLong()
             var variantId = item.sku?.split(",")?.get(1)?.toLong()
-           println(item.sku)
-            var data = productId?.let { pro_id->
-              if (variantId != null) {
-                  item.quantity?.let { variant_id ->
 
-                      itemList.add( LineItem(pro_id, variant_id, variantId) )
-                  }
+            println(item.sku)
+            var data = productId?.let { pro_id->
+                if (variantId != null) {
+                    item.quantity?.let { variant_id ->
+
+                        itemList.add( LineItem(pro_id, variant_id, variantId) )
+                    }
                 }
             }
 
         }
-
         binding.btnCheckout.setOnClickListener {
-
-            postOrder = PostOrderModel(
-                com.example.shopify.Models.postOrderModel.Order(
-                    "Cash",
-                    "EGP",
-                    "150",
-                    Customer(
-                        LocalDataSource.getInstance().readFromShared(requireContext())?.firsName
-                            ?: "no name",
-                        LocalDataSource.getInstance().readFromShared(requireContext())?.userId
-                            ?: 1L,
-                        ""
-                    ), itemList, Constants.selectedAddress!!, "0"
-                )
-            )
             if (binding.cashOnDelevaryRB.isChecked) {
+                postOrder = PostOrderModel(
+                    com.example.shopify.Models.postOrderModel.Order("Cash", "${Constants.currencyType}", "150",
+                        Customer(LocalDataSource.getInstance().readFromShared(requireContext())?.firsName ?: "no name", LocalDataSource.getInstance().readFromShared(requireContext())?.userId ?: 1L,
+                            "")
+                        , itemList, Constants.selectedAddress!!, "${(calcTotalPrice()*.20)/Constants.currencyValue}"
+                    )
+                )
                 createOrder(postOrder)
             } else if (binding.onlinePaymentRB.isChecked) {
+                postOrder = PostOrderModel(
+                    com.example.shopify.Models.postOrderModel.Order(
+                        "Credit", "${Constants.currencyType}", "150",
+                        Customer(LocalDataSource.getInstance().readFromShared(requireContext())?.firsName ?: "no name",
+                            LocalDataSource.getInstance().readFromShared(requireContext())?.userId ?: 1L, "")
+                        , itemList, Constants.selectedAddress!!, "${(calcTotalPrice()*.20)/Constants.currencyValue}"
+                    )
+                )
                 paymentFlow()
             } else {
                 Snackbar.make(
@@ -118,7 +118,48 @@ class PaymentFragment : Fragment() {
 
 
         }
+        calcTotalPrice()
+        binding.tvTotalFees.text = "${calcTotalPrice() + 200} ${Constants.currencyType}"
+        voucherListen()
+    }
 
+    private fun calcTotalPrice():Int {
+        var count = 0F
+        LoggedUserData.orderItemsList.forEach { item ->
+            count += (item.price!!.toFloat()) * (item.quantity!!) * Constants.currencyValue
+        }
+
+        binding.tvProductFees.text = "${(count).toInt()} ${ Constants.currencyType}"
+        return (count).toInt()
+    }
+
+    private fun voucherListen(){
+        binding.voutcherTF.editText?.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                check(s.toString())
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+
+            }
+
+        })
+    }
+
+    private fun check(text:String) {
+        if(text == "RXKJ2Q"|| text == "ALC1" || text == "IMA1115"||text == "TEZL"||text == "TEPU"||text == "A21C"){
+            binding.trueLottie.visibility = View.VISIBLE
+            binding.tvDiscount.text = "${(calcTotalPrice()*.20).toInt()}"
+            binding.tvTotalFees.text = "${calcTotalPrice() - (calcTotalPrice()*.20).toInt() + 200} ${ Constants.currencyType}"
+        }else {
+            binding.trueLottie.visibility = View.GONE
+            binding.tvDiscount.text = "0"
+            binding.tvTotalFees.text = "${calcTotalPrice() + 200} ${Constants.currencyType}"
+        }
     }
 
     override fun onPause() {
@@ -126,7 +167,7 @@ class PaymentFragment : Fragment() {
         job.cancel()
     }
 
-    fun createOrder(order: PostOrderModel) {
+    private fun createOrder(order: PostOrderModel) {
         paymentViewModel.createOrder(order)
         observeOrderCreated()
     }
@@ -145,10 +186,10 @@ class PaymentFragment : Fragment() {
                                 bundle = Bundle().apply {
                                     putSerializable("order", order.order)
                                 }
-                                    Navigation.findNavController(requireView()).navigate(
-                                        R.id.action_paymentFragment_to_orderDetailsFragment,
-                                        bundle
-                                    )
+                                Navigation.findNavController(requireView()).navigate(
+                                    R.id.action_paymentFragment_to_orderDetailsFragment,
+                                    bundle
+                                )
                                 // binding.paymentProgressBar.visibility = View.GONE
                                 Toast.makeText(
                                     requireContext(),
@@ -179,9 +220,8 @@ class PaymentFragment : Fragment() {
     }
 
     private fun paymentFlow() {
-        //createOrder(postOrder)
         lifecycleScope.launch(Dispatchers.Main){
-           binding.paymentProgressBar.visibility = View.VISIBLE
+            binding.paymentProgressBar.visibility = View.VISIBLE
             delay(3000)
             binding.paymentProgressBar.visibility = View.GONE
             paymentSheet.presentWithPaymentIntent(
