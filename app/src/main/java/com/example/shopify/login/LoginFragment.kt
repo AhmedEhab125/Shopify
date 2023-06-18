@@ -72,6 +72,7 @@ class LoginFragment : Fragment() {
                                     Navigation.findNavController(requireView()).navigate(action)
                                 }
                                 "personal"-> Navigation.findNavController(requireView()).navigate(R.id.action_loginFragment_to_homeFragment)
+                                "category" ->Navigation.findNavController(requireView()).navigate(R.id.fromLoginToCategory) //fromLoginToCategory
                             }
                         }
 

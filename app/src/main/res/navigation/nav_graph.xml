@@ -39,6 +39,9 @@
         <action
             android:id="@+id/from_category_to_detalis"
             app:destination="@id/productDetailsFragment" />
+        <action
+            android:id="@+id/from_category_to_logn"
+            app:destination="@id/loginFragment" />
     </fragment>
     <fragment
         android:id="@+id/personalFragment"
@@ -82,6 +85,9 @@
         <argument
             android:name="id"
             app:argType="long" />
+        <action
+            android:id="@+id/fromLoginToCategory"
+            app:destination="@id/categoryFragment" />
     </fragment>
     <fragment
         android:id="@+id/signupFragment"

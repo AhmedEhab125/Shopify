@@ -29,6 +29,7 @@ import com.example.shopify.mainActivity.MainActivity
 import com.example.shopify.nework.ApiState
 import com.example.shopify.nework.ShopifyAPi
 import com.example.shopify.repo.RemoteSource
+import com.example.shopify.utiltes.LoggedUserData
 import kotlinx.coroutines.launch
 
 class HomeFragment : Fragment() {
@@ -78,6 +79,7 @@ class HomeFragment : Fragment() {
         setBrandData()
         homeViewModel.getBrands()
         searchForBrands()
+        LoggedUserData.favOrderDraft.clear()
     }
 
     override fun onPause() {
@@ -89,6 +91,7 @@ class HomeFragment : Fragment() {
         super.onResume()
         (context as MainActivity).hideNavigationBar(true)
         handler.postDelayed(runnable, 5000)
+
     }
 
     private fun init() {
