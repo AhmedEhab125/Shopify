@@ -78,6 +78,9 @@ class AddressListFragment : Fragment(),RemoveCustomerAddress {
 
     fun setRecycleView() {
         var data = requireArguments().getString("comesFrom")
+        if (data.equals("cart")){
+            binding.btnAddAddresses.visibility =View.GONE
+        }
 
         myAdapter = AddressListAdapter(mutableListOf(),this,data!!)
         binding.rvAddresses.apply {
