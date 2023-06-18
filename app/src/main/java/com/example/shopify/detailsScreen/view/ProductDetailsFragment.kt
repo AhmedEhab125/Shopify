@@ -96,6 +96,7 @@ class ProductDetailsFragment : Fragment() {
             } else {
                 navToLoginScreen()
             }
+
         }
 
         binding.btnAddToFav.setOnClickListener {
@@ -162,12 +163,12 @@ class ProductDetailsFragment : Fragment() {
     }
 
     private fun removeFromFav() {
-        for (item in LoggedUserData.favOrderDraft){
-            if(item.title == myProduct.product?.title){
-                LoggedUserData.favOrderDraft.remove(item)
-
+        val iterator = LoggedUserData.favOrderDraft.iterator()
+        while (iterator.hasNext()) {
+            val item = iterator.next()
+            if (item.title == myProduct.product?.title) {
+                iterator.remove()
             }
-
         }
         binding.btnAddToFav.setBackgroundResource(R.drawable.favourite_btn)
         isFav = false
