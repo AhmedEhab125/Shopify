@@ -12,6 +12,9 @@ object Constants {
     const val dollar = "Dollar"
     const val pound = "Pound"
     const val emailRegex = "[a-zA-Z0-9._-]+@(gmail|Gmail).com"
+    const val publichKey = "pk_test_51NIMqzGJQLCGAlR3hbriza413hbhKXCnicHGGjBhIVFJEu6CTUJDsu3gb60etSlob5oUBEEyUu467FseXdeS4r7o00s5l2xyCn"
+    const val paymentSecretKey = "sk_test_51NIMqzGJQLCGAlR3t6MABTFYQzydaXwDofKLrhKZjnaNPhadCi2ZfSthsVZRlz0R1jVkFh4KVQkDegBKDexc6Mva00druDPnMm"
+
     var selectedAddress : ShippingAddress? = null
 
 }

@@ -6,6 +6,16 @@
     android:layout_height="match_parent"
     tools:context=".payment.view.PaymentFragment">
 
+    <ProgressBar
+        android:id="@+id/paymentProgressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/voutcherTF"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -115,12 +125,11 @@
                 android:layout_width="0dp"
                 android:layout_height="1dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:background="#C3000000"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_vat_fees" />
+                app:layout_constraintTop_toBottomOf="@+id/textView35" />
 
             <TextView
                 android:id="@+id/textView26"
@@ -167,26 +176,6 @@
                 app:layout_constraintTop_toTopOf="@+id/textView28" />
 
             <TextView
-                android:id="@+id/textView30"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="@string/vat"
-                android:textSize="16sp"
-                app:layout_constraintStart_toStartOf="@+id/textView35"
-                app:layout_constraintTop_toBottomOf="@+id/textView35" />
-
-            <TextView
-                android:id="@+id/tv_vat_fees"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="200$"
-                android:textSize="16sp"
-                app:layout_constraintBottom_toBottomOf="@+id/textView30"
-                app:layout_constraintStart_toStartOf="@+id/tv_delevary_fees"
-                app:layout_constraintTop_toTopOf="@+id/textView30" />
-
-            <TextView
                 android:id="@+id/textView32"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -230,6 +219,7 @@
                 app:layout_constraintBottom_toBottomOf="@+id/textView35"
                 app:layout_constraintStart_toStartOf="@+id/tv_delevary_fees"
                 app:layout_constraintTop_toTopOf="@+id/textView35" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 
@@ -238,7 +228,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:backgroundTint="@color/blue_app_color"
         android:text="@string/check_out"
