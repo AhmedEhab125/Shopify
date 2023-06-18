@@ -33,7 +33,7 @@ class OrderListAdapter(var list: List<Order>) :
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         var date = list[position].created_at?.split("T")
         holder.binding.tvOrderPrice.text = (list[position].current_total_price?.toDouble()
-            ?.times(Constants.currencyValue)).toString()+  " ${Constants.currencyType}"
+            ?.times(Constants.currencyValue))?.toInt().toString()+  " ${Constants.currencyType}"
         holder.binding.tvOrderTime.text = date?.get(0) ?: ""
         holder.binding.cvOrders.setOnClickListener {
             val bundle = Bundle().apply {

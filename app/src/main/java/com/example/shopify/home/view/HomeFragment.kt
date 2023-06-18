@@ -50,6 +50,7 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        smartCollections = listOf()
         homeViewModelFactory = HomeViewModelFactory(HomeRepo(RemoteSource(ShopifyAPi.retrofitService)))
         homeViewModel = ViewModelProvider(
             requireActivity(),

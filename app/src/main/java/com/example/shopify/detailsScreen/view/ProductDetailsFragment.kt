@@ -272,8 +272,8 @@ class ProductDetailsFragment : Fragment() {
         binding.tvProductName.text = myProduct.product?.title
         binding.productRatingBar.rating = 3.5f
         binding.productRatingBar.isEnabled = false
-        binding.tvProductPrice.text = "${(myProduct.product?.variants?.get(0)?.price?.toDouble()
-            ?.times(Constants.currencyValue))} ${Constants.currencyType}"
+        binding.tvProductPrice.text = "${((myProduct.product?.variants?.get(0)?.price?.toDouble()
+            ?.times(Constants.currencyValue)))?.toInt()} ${Constants.currencyType}"
 
         binding.tvProductDetails.text =
             myProduct.product?.body_html // + "jhaskjffkhfkajhfkajhfkjahfkjh kjahfkjahfkajhfkja hfkjafhakjfhkajfhkajfhkahfkjahfkahfkahfkjahfkjahfkjafja kafk"
