@@ -5,6 +5,7 @@
     android:id="@+id/login_Cons_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#e9f8ff"
     tools:context=".login.LoginFragment">
 
     <ProgressBar
@@ -22,11 +23,11 @@
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
         android:layout_marginTop="50dp"
         android:text="Welcome back"
         android:textSize="30sp"
         android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -81,9 +82,9 @@
         app:startIconDrawable="@drawable/baseline_lock_24">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/loginPassTF"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/loginPassTF"
 
             android:hint="@string/login_pass_hint">
 
@@ -107,12 +108,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
+        android:width="200dp"
+        android:height="50dp"
         android:backgroundTint="@color/blue_app_color"
         android:text="@string/login_btn"
         android:textSize="16sp"
         android:textStyle="bold"
-        android:width="200dp"
-        android:height="50dp"
         app:cornerRadius="30dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
