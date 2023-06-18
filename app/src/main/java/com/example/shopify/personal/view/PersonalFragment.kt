@@ -50,6 +50,7 @@ class PersonalFragment : Fragment() {
     private lateinit var favDraftOrderPost: DraftOrderPost
     lateinit var orderListViewModel: OrderListViewModel
     lateinit var orderListViewModelFactory: OrderListViewModelFactory
+     var userId :Long = 0L
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,6 +69,7 @@ class PersonalFragment : Fragment() {
         cartFactory = CartViewModelFactory(CartRepo(RemoteSource(ShopifyAPi.retrofitService)))
         cartViewModel = ViewModelProvider(requireActivity(), cartFactory)[CartViewModel::class.java]
         draftId = LocalDataSource.getInstance().readFromShared(requireContext())?.cartdraftOrderId ?: 0
+        userId = LocalDataSource.getInstance().readFromShared(requireContext())?.userId ?:0L
         return personalBinding.root
     }
 
@@ -188,7 +190,7 @@ class PersonalFragment : Fragment() {
         (context as MainActivity).hideNavigationBar(true)
     }
     fun getOrders(){
-        orderListViewModel.getOrders(LocalDataSource.getInstance().readFromShared(requireContext())?.userId!!)
+        orderListViewModel.getOrders(userId)
         lifecycleScope.launch {
             orderListViewModel.accessOrderList.collect { result ->
                 when (result) {

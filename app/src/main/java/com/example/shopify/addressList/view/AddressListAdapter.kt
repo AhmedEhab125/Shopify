@@ -41,7 +41,7 @@ class AddressListAdapter(var list: MutableList<Addresse>, var iView: RemoveCusto
         holder.binding.tvAddress.text =
             "${list[position].address1}, ${list[position].city}, ${list[position].country}"
         holder.binding.btnDeleteAddress.setOnClickListener {
-            if (position ==0)
+            if (list[position].default == true)
                 cantDialog(holder.binding.root.context)
             else
                 deleteDialog(holder.binding.root.context,position)
