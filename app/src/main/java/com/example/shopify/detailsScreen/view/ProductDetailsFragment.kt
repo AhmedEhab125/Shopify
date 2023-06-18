@@ -96,6 +96,7 @@ class ProductDetailsFragment : Fragment() {
             } else {
                 navToLoginScreen()
             }
+
         }
 
         binding.btnAddToFav.setOnClickListener {
