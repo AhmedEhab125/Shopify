@@ -5,11 +5,8 @@
     android:id="@+id/signup_constarin_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".signup.sifnUpView.SignupFragment" >
-
-
-
-
+    android:background="#e9f8ff"
+    tools:context=".signup.sifnUpView.SignupFragment">
 
 
     <ProgressBar
@@ -314,7 +311,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/signPhoneTFLayout" />
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
