@@ -19,15 +19,18 @@ import com.example.shopify.databinding.FragmentPaymentBinding
 import com.example.shopify.nework.ApiState
 import com.example.shopify.nework.ShopifyAPi
 import com.example.shopify.payment.model.PaymentRepo
+import com.example.shopify.payment.paymentNetwork.NetworkPayment
 import com.example.shopify.payment.viewModel.PaymentViewModel
 import com.example.shopify.payment.viewModel.PaymentViewModelFactory
 import com.example.shopify.repo.RemoteSource
 import com.example.shopify.utiltes.Constants
 import com.example.shopify.utiltes.LoggedUserData
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import com.google.android.material.snackbar.Snackbar
+import com.stripe.android.PaymentConfiguration
+import com.stripe.android.paymentsheet.PaymentSheet
+import com.stripe.android.paymentsheet.PaymentSheetResult
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.collectLatest
 
 class PaymentFragment : Fragment() {
     lateinit var binding: FragmentPaymentBinding
@@ -35,12 +38,20 @@ class PaymentFragment : Fragment() {
     lateinit var paymentViewModelFactory: PaymentViewModelFactory
     lateinit var job: Job
     lateinit var itemList: MutableList<LineItem>
-
+    private lateinit var paymentSheet: PaymentSheet
+    private lateinit var postOrder: PostOrderModel
+    private lateinit var bundle:Bundle
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        PaymentConfiguration.init(requireContext(), Constants.publichKey)
+        paymentSheet = PaymentSheet(this) {
+            onPaymentSheetResult(it)
+        }
+        NetworkPayment.getCustomerId(requireContext())
         binding = FragmentPaymentBinding.inflate(inflater)
+        binding.paymentProgressBar.visibility = View.GONE
         // Inflate the layout for this fragment
         return binding.root
     }
@@ -78,8 +89,8 @@ class PaymentFragment : Fragment() {
         }
 
         binding.btnCheckout.setOnClickListener {
-            observeOrderCreated()
-            var order = PostOrderModel(
+
+            postOrder = PostOrderModel(
                 com.example.shopify.Models.postOrderModel.Order(
                     "Cash",
                     "EGP",
@@ -90,16 +101,22 @@ class PaymentFragment : Fragment() {
                         LocalDataSource.getInstance().readFromShared(requireContext())?.userId
                             ?: 1L,
                         ""
-                    ),
-
-                       itemList
-                    ,
-                    // ShippingAddress("2st amjad ", "alex", "Egassypt", "ahmed", "012", "ehab"),
-                    Constants.selectedAddress!!,
-                    "0"
+                    ), itemList, Constants.selectedAddress!!, "0"
                 )
             )
-            createOrder(order)
+            if (binding.cashOnDelevaryRB.isChecked) {
+                createOrder(postOrder)
+            } else if (binding.onlinePaymentRB.isChecked) {
+                paymentFlow()
+            } else {
+                Snackbar.make(
+                    binding.btnCheckout,
+                    "Please Choose the method of payment.",
+                    Snackbar.LENGTH_LONG
+                ).show()
+            }
+
+
         }
 
     }
@@ -111,32 +128,34 @@ class PaymentFragment : Fragment() {
 
     fun createOrder(order: PostOrderModel) {
         paymentViewModel.createOrder(order)
+        observeOrderCreated()
     }
 
     fun observeOrderCreated() {
         job = lifecycleScope.launch(Dispatchers.IO) {
-            paymentViewModel.accessOrder.collect { result ->
+            paymentViewModel._order.collectLatest { result ->
                 when (result) {
                     is ApiState.Success<*> -> {
 
                         var order = result.date as RetriveOrder?
                         withContext(Dispatchers.Main) {
-
+                            //binding.paymentProgressBar.visibility = View.VISIBLE
 
                             if (order != null) {
-                                val bundle = Bundle().apply {
+                                bundle = Bundle().apply {
                                     putSerializable("order", order.order)
                                 }
-                                Navigation.findNavController(requireView()).navigate(
-                                    R.id.action_paymentFragment_to_orderDetailsFragment,
-                                    bundle
-                                )
-
+                                    Navigation.findNavController(requireView()).navigate(
+                                        R.id.action_paymentFragment_to_orderDetailsFragment,
+                                        bundle
+                                    )
+                                // binding.paymentProgressBar.visibility = View.GONE
                                 Toast.makeText(
                                     requireContext(),
                                     "order set succssfully",
                                     Toast.LENGTH_LONG
                                 ).show()
+                                paymentViewModel._order.value=ApiState.Loading
                             } else {
                                 Toast.makeText(
                                     requireContext(),
@@ -154,15 +173,35 @@ class PaymentFragment : Fragment() {
                     is ApiState.Loading -> {
 
                     }
-
                 }
-
             }
-
         }
-
-
     }
 
+    private fun paymentFlow() {
+        //createOrder(postOrder)
+        lifecycleScope.launch(Dispatchers.Main){
+           binding.paymentProgressBar.visibility = View.VISIBLE
+            delay(3000)
+            binding.paymentProgressBar.visibility = View.GONE
+            paymentSheet.presentWithPaymentIntent(
+                NetworkPayment.clientSecret, PaymentSheet.Configuration(
+                    "Shopify",
+                    PaymentSheet.CustomerConfiguration(
+                        NetworkPayment.customerId,
+                        NetworkPayment.sphericalKey
+                    )
+                )
+            )
+        }
+    }
+    private fun onPaymentSheetResult(paymentSheetResult: PaymentSheetResult) {
 
+        if (paymentSheetResult is PaymentSheetResult.Completed) {
+            Toast.makeText(requireContext(), "Payment Success!!", Toast.LENGTH_SHORT).show()
+            createOrder(postOrder)
+        }else{
+            Toast.makeText(requireContext(), "Payment Canceled", Toast.LENGTH_SHORT).show()
+        }
+    }
 }
