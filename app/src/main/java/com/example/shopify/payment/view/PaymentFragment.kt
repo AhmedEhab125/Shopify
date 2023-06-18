@@ -123,13 +123,14 @@ class PaymentFragment : Fragment() {
         voucherListen()
     }
 
-    private fun calcTotalPrice():Float {
+    private fun calcTotalPrice():Int {
         var count = 0F
         LoggedUserData.orderItemsList.forEach { item ->
             count += (item.price!!.toFloat()) * (item.quantity!!) * Constants.currencyValue
         }
-        binding.tvProductFees.text = "${count} ${ Constants.currencyType}"
-        return count
+
+        binding.tvProductFees.text = "${(count).toInt()} ${ Constants.currencyType}"
+        return (count).toInt()
     }
 
     private fun voucherListen(){

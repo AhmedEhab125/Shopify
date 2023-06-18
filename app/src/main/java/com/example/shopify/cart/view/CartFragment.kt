@@ -154,7 +154,7 @@ class CartFragment : Fragment(), Communicator {
         LoggedUserData.orderItemsList.forEach { item ->
             count += (item.price!!.toFloat()) * (item.quantity!!) * Constants.currencyValue
         }
-        cartBinding.totalPrice.text = count.toString() +" ${ Constants.currencyType}"
+        cartBinding.totalPrice.text = ((count).toInt()).toString() +" ${ Constants.currencyType}"
     }
 
 
