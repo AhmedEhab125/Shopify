@@ -6,20 +6,19 @@ import com.example.shopify.Models.draftOrderCreation.DraftOrderPost
 import com.example.shopify.nework.ApiState
 import com.example.shopify.repo.IBrands
 import com.example.shopify.repo.ICart
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.launch
 
 class CartViewModel(var remoteSource: ICart) : ViewModel() {
     private var _cartItems = MutableStateFlow<ApiState>(ApiState.Loading)
     var  accessCartItems : StateFlow<ApiState> = _cartItems
-
+    val coroutineExceptionHandler = CoroutineExceptionHandler { _, throwable ->
+        throwable.printStackTrace()
+    }
     fun getCartItems(draftId:Long) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO+coroutineExceptionHandler) {
             remoteSource.getCartItems(draftId).catch { error ->
                 _cartItems.value = ApiState.Failure(error)
             }.collect { brands ->
@@ -28,7 +27,7 @@ class CartViewModel(var remoteSource: ICart) : ViewModel() {
         }
     }
     fun updateCartItem(draftId:Long,draftOrderPost: DraftOrderPost){
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO+coroutineExceptionHandler) {
             remoteSource.upDateCartOrderDraft(draftId,draftOrderPost)
         }
     }

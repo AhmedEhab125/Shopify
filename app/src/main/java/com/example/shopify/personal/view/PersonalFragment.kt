@@ -88,6 +88,7 @@ class PersonalFragment : Fragment() {
             favViewModel.getFavItems(wishListId?:1592654688)
         }
         if(FirebaseAuth.getInstance().currentUser==null){
+            personalBinding.personProgressBar.visibility = View.GONE
             personalBinding.orderRV.visibility = View.GONE
             personalBinding.whishListRV.visibility = View.GONE
             personalBinding.orderMore.visibility = View.GONE

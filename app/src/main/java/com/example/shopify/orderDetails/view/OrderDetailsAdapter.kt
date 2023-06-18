@@ -37,10 +37,10 @@ class OrderDetailsAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.binding.tvOrderProuductQuantity.text = "${orderProductList[position].quantity}"
         holder.binding.tvOrderProductName.text = orderProductList[position].name
-        holder.binding.tvOrderProductPrice.text = "Price : ${
+        holder.binding.tvOrderProductPrice.text = "Price : ${(
             orderProductList[position].price?.toDouble()
                 ?.times(Constants.currencyValue)
-        }  ${Constants.currencyType}"
+                )?.toInt()}  ${Constants.currencyType}"
         println(productListFromApi)
 
         productListFromApi.forEach {

@@ -110,7 +110,9 @@ class CategoryFragment : Fragment(),OnClickToShowDetalisOfCategory {
             filterList()
         }
         binding.radioSale.setOnClickListener {
-            filterList()
+            disableAllRadioBtns()
+            filteredList =myProducts
+            myAdapter.updateData(myProducts)
         }
 
 
@@ -125,6 +127,7 @@ class CategoryFragment : Fragment(),OnClickToShowDetalisOfCategory {
             filteredList = myProducts.filter {  it.tags?.contains(filterByGender()) ?: true  }
 
         }
+        binding.radioSale.isChecked = false
 
         myAdapter.updateData(filteredList)
     }

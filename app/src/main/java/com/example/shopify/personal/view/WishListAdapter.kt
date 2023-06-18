@@ -38,8 +38,8 @@ class WishListAdapter (var wishList: List<LineItem>): RecyclerView.Adapter<WishL
                 Glide.with(holder.binding.root).load(imageUrl).into(holder.binding.favImg)
             }
             holder.binding.favProductName.text = favItem.title
-            holder.binding.favProductPrice.text = "${favItem.price?.toDouble()
-                ?.times(Constants.currencyValue)} ${Constants.currencyType}"
+            holder.binding.favProductPrice.text = "${(favItem.price?.toDouble()
+                ?.times(Constants.currencyValue))?.toInt()} ${Constants.currencyType}"
             holder.binding.deleteBtn.visibility = View.GONE
         }
 

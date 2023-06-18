@@ -58,11 +58,16 @@ class OrderListFragment : Fragment() {
                        // homeBinding.progressBar.visibility = View.GONE
 
                         var orders = result.date as List<Order>
+                        if (orders.size==0){
+                            binding.noOrderLotte.visibility = View.VISIBLE
+                        }else{
+                            myAdapter.setOrderList(orders)
 
+                        }
+                        binding.orderListProgressBar.visibility= View.GONE
                        // smartCollections = brands?.smart_collections ?: listOf()
                       //  brandsAdapter.setBrandsList(smartCollections)
-                        myAdapter.setOrderList(orders)
-                        binding.orderListProgressBar.visibility= View.GONE
+
                     }
                     is ApiState.Failure -> {
                       //  homeBinding.progressBar.visibility = View.GONE
