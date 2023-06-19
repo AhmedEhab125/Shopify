@@ -111,8 +111,6 @@ object NetworkPayment {
                 override fun getParams(): Map<String, String> {
                     val param: HashMap<String, String> = HashMap<String, String>()
                     param["customer"] = customerId
-                    //val str = "10000"
-                    //val list = str.split(".")
                     param["amount"] = "${totalCost*100}"
                     param["currency"] = currency
                     param["automatic_payment_methods[enabled]"] = "true"
