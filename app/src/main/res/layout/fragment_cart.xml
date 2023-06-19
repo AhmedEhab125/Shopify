@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:alpha="1"
-    android:background="#e9f8ff"
+    android:background="@drawable/back_ground_color"
     tools:context=".cart.view.CartFragment">
 
     <com.airbnb.lottie.LottieAnimationView

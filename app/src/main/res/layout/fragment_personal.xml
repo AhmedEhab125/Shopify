@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#e9f8ff"
+    android:background="@drawable/back_ground_color"
     tools:context=".personal.view.PersonalFragment">
 
     <Button
@@ -15,11 +15,11 @@
         android:layout_marginTop="20dp"
         android:layout_marginEnd="10dp"
         android:backgroundTint="#0483f9"
-         android:textSize="14sp"
-        android:textStyle="bold"
         android:text="@string/logout"
-        app:cornerRadius="20dp"
         android:textAllCaps="false"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:cornerRadius="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/whishListRV" />
@@ -32,7 +32,7 @@
         android:background="#00FFFFFF"
         android:backgroundTint="#00D11D1D"
         android:text="@string/more"
-        android:textColor="#215CF3"
+        android:textColor="@color/purple_700"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/textView7"
@@ -100,7 +100,7 @@
         android:background="#00FFFFFF"
         android:backgroundTint="#00D11D1D"
         android:text="@string/more"
-        android:textColor="#215CF3"
+        android:textColor="#E1FFFFFF"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/textView5"
