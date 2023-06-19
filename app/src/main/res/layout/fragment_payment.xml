@@ -11,16 +11,56 @@
         android:id="@+id/textView14"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="24dp"
+        android:gravity="center"
         android:text="@string/paymrnt_method"
-        android:textColor="#000000"
+        android:textColor="#1E90FF"
         android:textSize="22sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/radioGroup2"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/voutcherTF" />
+
+    <RadioGroup
+        android:id="@+id/radioGroup2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:orientation="horizontal"
+        android:weightSum="2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView14">
+
+        <RadioButton
+            android:id="@+id/onlinePaymentRB"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableStart="@drawable/visa"
+            android:drawablePadding="8dp"
+            android:text="@string/onlline_payment"
+            android:textSize="16sp">
+
+        </RadioButton>
+
+        <RadioButton
+            android:id="@+id/cashOnDelevaryRB"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableStart="@drawable/money"
+            android:drawablePadding="8dp"
+            android:text="@string/cash_on_delevary"
+            android:textSize="16sp" />
+    </RadioGroup>
 
     <ProgressBar
         android:id="@+id/paymentProgressBar"
@@ -38,8 +78,8 @@
         android:layout_height="61dp"
         android:layout_centerInParent="true"
         android:layout_marginHorizontal="10dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="15dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
         android:elevation="10dp"
         app:layout_constraintBottom_toBottomOf="@+id/voutcherTF"
         app:layout_constraintEnd_toEndOf="parent"
@@ -53,18 +93,17 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="326dp"
         android:layout_height="66dp"
-
-        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
         android:focusableInTouchMode="true"
-
         android:hint="@string/voutcher"
         android:minHeight="48dp"
         app:boxCornerRadiusBottomEnd="20dp"
         app:boxCornerRadiusBottomStart="20dp"
         app:boxCornerRadiusTopEnd="20dp"
         app:boxCornerRadiusTopStart="20dp"
-        app:layout_constraintStart_toStartOf="@+id/radioGroup2"
-        app:layout_constraintTop_toBottomOf="@+id/radioGroup2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardView2"
         app:startIconDrawable="@drawable/tag">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -78,57 +117,23 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <RadioGroup
-        android:id="@+id/radioGroup2"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView14">
-
-        <RadioButton
-            android:id="@+id/onlinePaymentRB"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginVertical="5dp"
-            android:drawableStart="@drawable/visa"
-            android:drawablePadding="8dp"
-            android:text="@string/onlline_payment"
-            android:textSize="16sp">
-
-        </RadioButton>
-
-        <RadioButton
-            android:id="@+id/cashOnDelevaryRB"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginVertical="5dp"
-            android:drawableStart="@drawable/money"
-            android:drawablePadding="8dp"
-            android:text="@string/cash_on_delevary"
-            android:textSize="16sp" />
-    </RadioGroup>
-
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="18dp"
+        android:layout_marginEnd="8dp"
         app:cardCornerRadius="20dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/voutcherTF"
-        app:layout_constraintTop_toBottomOf="@+id/voutcherTF">
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView29">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:background="#2CF1F1F1">
 
             <View
                 android:id="@+id/view3"
@@ -241,11 +246,26 @@
         android:id="@+id/btn_checkout"
         android:layout_width="200dp"
         android:layout_height="55dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="32dp"
         android:backgroundTint="@color/blue_app_color"
         android:text="@string/check_out"
         app:cornerRadius="20dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardView2" />
+        app:layout_constraintTop_toBottomOf="@+id/radioGroup2" />
+
+    <TextView
+        android:id="@+id/textView29"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Check Out"
+        android:textColor="@color/blue_app_color"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

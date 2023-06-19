@@ -338,12 +338,12 @@ class ProductDetailsFragment : Fragment() {
                             (it.date as? DraftOrderPost)?.draft_order?.line_items ?: mutableListOf()
                         )
                        // hena btdrb ya milad ab2 a3mel check 3aliha
-                        LoggedUserData.favOrderDraft.forEach { item->
+                     /*   LoggedUserData.favOrderDraft.forEach { item->
                             if (item.title == myProduct.product?.title) {
                                 binding.btnAddToFav.setBackgroundResource(R.drawable.favorite_clicked)
                                 myProduct.product?.isFav = true
                             }
-                        }
+                        }*/
                     }
                     is ApiState.Failure -> {
                         Log.i(

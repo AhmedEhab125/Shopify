@@ -88,6 +88,8 @@ class PersonalFragment : Fragment() {
             favViewModel.getFavItems(wishListId?:1592654688)
         }
         if(FirebaseAuth.getInstance().currentUser==null){
+            personalBinding.view2.visibility =View.GONE
+            personalBinding.view3.visibility =View.GONE
             personalBinding.personProgressBar.visibility = View.GONE
             personalBinding.orderRV.visibility = View.GONE
             personalBinding.whishListRV.visibility = View.GONE
@@ -114,7 +116,7 @@ class PersonalFragment : Fragment() {
                 Navigation.findNavController(requireView()).navigate(R.id.action_personalFragment_to_orderListFragment)
             }
             personalBinding.whishListMore.setOnClickListener {
-                print("more of WishList")
+               Navigation.findNavController(requireView()).navigate(R.id.from_person_to_fav)
             }
             personalBinding.btnLogout.setOnClickListener {
 

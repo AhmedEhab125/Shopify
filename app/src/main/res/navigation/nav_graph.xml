@@ -60,6 +60,9 @@
         <action
             android:id="@+id/from_logout_to_home"
             app:destination="@id/homeFragment" />
+        <action
+            android:id="@+id/from_person_to_fav"
+            app:destination="@id/favouriteFragment" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
