@@ -68,6 +68,12 @@ class CartFragment : Fragment(), Communicator {
             lifecycleScope.launch {
                 cartViewModel.accessCartItems.collect {
                     when (it) {
+                        is ApiState.Loading -> {
+                            cartBinding.lottieSplash.visibility = View.GONE
+                            cartBinding.lottieMessage.visibility = View.GONE
+                            cartBinding.cartProgressBar.visibility = View.VISIBLE
+
+                        }
                         is ApiState.Success<*> -> {
                             if(it.date!=null) {
                                 flag = true
@@ -88,12 +94,7 @@ class CartFragment : Fragment(), Communicator {
                                 Snackbar.LENGTH_LONG
                             ).show()
                         }
-                        is ApiState.Loading -> {
-                            cartBinding.lottieSplash.visibility = View.GONE
-                            cartBinding.lottieMessage.visibility = View.GONE
-                            cartBinding.cartProgressBar.visibility = View.VISIBLE
 
-                        }
                     }
                 }
             }
@@ -139,11 +140,12 @@ class CartFragment : Fragment(), Communicator {
 
         }
     }
-    fun showHideAnimation(){
+    private fun showHideAnimation(){
         if(LoggedUserData.orderItemsList.size ==1){
             cartBinding.lottieSplash.visibility = View.VISIBLE
             cartBinding.lottieMessage.visibility = View.VISIBLE
             cartBinding.lottieMessage.text = "There is no items."
+
         }else{
             cartBinding.lottieSplash.visibility = View.GONE
             cartBinding.lottieMessage.visibility = View.GONE

@@ -49,8 +49,8 @@ class LoginFragment : Fragment() {
             Navigation.findNavController(requireView()).navigate(action)
         }
         binding.loginBtn.setOnClickListener {
-            var email = binding.loginEmailTF.text.toString()
-            var password = binding.loginPassTF.text.toString()
+            val email = binding.loginEmailTF.text.toString()
+            val password = binding.loginPassTF.text.toString()
             if (isDataValid()){
                 binding.loginProgressBar.visibility = View.VISIBLE
                 auth.signInWithEmailAndPassword(email,password).addOnCompleteListener {
@@ -79,11 +79,25 @@ class LoginFragment : Fragment() {
                     }else{
                         Toast.makeText(requireContext(),it.exception.toString(),Toast.LENGTH_SHORT).show()
                         Log.i("erorr",it.exception.toString())
+                        binding.loginProgressBar.visibility = View.GONE
                     }
 
                 }
             }
 
+        }
+
+        binding.forgetPassTF.setOnClickListener {
+            val email = binding.loginEmailTF.text.toString()
+            if (checkDataForForgetPasswordIsValid()){
+               auth.sendPasswordResetEmail(email).addOnSuccessListener {
+                   Toast.makeText(requireContext(),"Please Check Your Email",Toast.LENGTH_SHORT).show()
+               }
+                   .addOnFailureListener {
+                       Toast.makeText(requireContext(),it.toString(),Toast.LENGTH_SHORT).show()
+                   }
+
+            }
         }
 
     }
@@ -118,6 +132,22 @@ class LoginFragment : Fragment() {
             return false
         }
 
+        return true
+    }
+
+
+
+    private fun checkDataForForgetPasswordIsValid() : Boolean{
+        val email = binding.loginEmailTF.text
+        if(binding.loginEmailTF.text.toString() == ""){
+            binding.loginEmailTFLayout.error = "This Is Required Filed"
+            return false
+        }
+
+        if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+            binding.loginEmailTFLayout.error = "Check Email Format"
+            return false
+        }
         return true
     }
 
