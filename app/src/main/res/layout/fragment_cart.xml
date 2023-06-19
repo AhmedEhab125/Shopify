@@ -111,6 +111,6 @@
         android:textSize="20sp"
         app:layout_constraintEnd_toStartOf="@+id/guideline3"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/trueLottie" />
+        app:layout_constraintTop_toBottomOf="@+id/lottieSplash" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -3,6 +3,7 @@ package com.example.shopify.payment.view
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -43,16 +44,25 @@ class PaymentFragment : Fragment() {
     private lateinit var paymentSheet: PaymentSheet
     private lateinit var postOrder: PostOrderModel
     private lateinit var bundle:Bundle
+    lateinit var curency:String
+    private var discount = ""
+    private var code = ""
+    private var totalCost=0
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         PaymentConfiguration.init(requireContext(), Constants.publichKey)
         paymentSheet = PaymentSheet(this) {
             onPaymentSheetResult(it)
         }
-        NetworkPayment.getCustomerId(requireContext())
+        curency = when(Constants.currencyType ){
+            "EGP" -> "EGP"
+            else -> "usd"
+        }
         binding = FragmentPaymentBinding.inflate(inflater)
+        NetworkPayment.getCustomerId(requireContext(),(calcTotalPrice() + 200),curency)
         binding.paymentProgressBar.visibility = View.GONE
         binding.trueLottie.visibility = View.GONE
         binding.tvDiscount.text = "0"
@@ -74,8 +84,8 @@ class PaymentFragment : Fragment() {
         )[PaymentViewModel::class.java]
         itemList = mutableListOf()
         LoggedUserData.orderItemsList.forEach { item ->
-            var productId = item.sku?.split(",")?.first()?.toLong()
-            var variantId = item.sku?.split(",")?.get(1)?.toLong()
+            val productId = item.sku?.split(",")?.first()?.toLong()
+            val variantId = item.sku?.split(",")?.get(1)?.toLong()
 
             println(item.sku)
             var data = productId?.let { pro_id->
@@ -91,20 +101,27 @@ class PaymentFragment : Fragment() {
         binding.btnCheckout.setOnClickListener {
             if (binding.cashOnDelevaryRB.isChecked) {
                 postOrder = PostOrderModel(
-                    com.example.shopify.Models.postOrderModel.Order("Cash", "${Constants.currencyType}", "150",
-                        Customer(LocalDataSource.getInstance().readFromShared(requireContext())?.firsName ?: "no name", LocalDataSource.getInstance().readFromShared(requireContext())?.userId ?: 1L,
+                    com.example.shopify.Models.postOrderModel.Order("Cash",
+                        "EGP", "150",
+                        Customer(
+                            LocalDataSource.getInstance().readFromShared(requireContext())?.firsName ?: "no name",
+                            LocalDataSource.getInstance().readFromShared(requireContext())?.userId ?: 1L,
                             "")
-                        , itemList, Constants.selectedAddress!!, "${(calcTotalPrice()*.20)/Constants.currencyValue}"
+                        , itemList, Constants.selectedAddress!!, discount
                     )
                 )
                 createOrder(postOrder)
+                val index = Constants.vouchersList.indexOf(code)
+                if(index>=0)
+                    Constants.vouchersList[index] = "null"
             } else if (binding.onlinePaymentRB.isChecked) {
+                Log.i("essam order online", "$discount")
                 postOrder = PostOrderModel(
                     com.example.shopify.Models.postOrderModel.Order(
-                        "Credit", "${Constants.currencyType}", "150",
+                        "Credit", "EGP", "150",
                         Customer(LocalDataSource.getInstance().readFromShared(requireContext())?.firsName ?: "no name",
                             LocalDataSource.getInstance().readFromShared(requireContext())?.userId ?: 1L, "")
-                        , itemList, Constants.selectedAddress!!, "${(calcTotalPrice()*.20)/Constants.currencyValue}"
+                        , itemList, Constants.selectedAddress!!, discount
                     )
                 )
                 paymentFlow()
@@ -115,8 +132,8 @@ class PaymentFragment : Fragment() {
                     Snackbar.LENGTH_LONG
                 ).show()
             }
-
-
+            Log.i("essam checkout btn", "$discount")
+            discount = ""
         }
         calcTotalPrice()
         binding.tvTotalFees.text = "${calcTotalPrice() + 200} ${Constants.currencyType}"
@@ -151,14 +168,32 @@ class PaymentFragment : Fragment() {
     }
 
     private fun check(text:String) {
-        if(text == "RXKJ2Q"|| text == "ALC1" || text == "IMA1115"||text == "TEZL"||text == "TEPU"||text == "A21C"){
+        if( text == Constants.vouchersList[0] ||
+            text == Constants.vouchersList[1] ||
+            text == Constants.vouchersList[2] ||
+            text == Constants.vouchersList[3] ||
+            text == Constants.vouchersList[4] ||
+            text == Constants.vouchersList[5]
+        ){
+            NetworkPayment.getCustomerId(requireContext(),(calcTotalPrice() - (calcTotalPrice()*.20).toInt() + 200),curency)
+            discount = if(Constants.currencyType == "EGP"){
+                "${(calcTotalPrice()*.20)/Constants.currencyValue}"
+                 }else{
+                     "${(calcTotalPrice()*.20)}"
+                 }
+            Log.i("essam order check", "$discount")
             binding.trueLottie.visibility = View.VISIBLE
             binding.tvDiscount.text = "${(calcTotalPrice()*.20).toInt()}"
-            binding.tvTotalFees.text = "${calcTotalPrice() - (calcTotalPrice()*.20).toInt() + 200} ${ Constants.currencyType}"
+            totalCost = calcTotalPrice() - (calcTotalPrice()*.20).toInt() + 200
+            binding.tvTotalFees.text = "${totalCost} ${ Constants.currencyType}"
+            code = text
         }else {
+            NetworkPayment.getCustomerId(requireContext(),(calcTotalPrice() + 200),curency)
+            discount = "0"
             binding.trueLottie.visibility = View.GONE
             binding.tvDiscount.text = "0"
-            binding.tvTotalFees.text = "${calcTotalPrice() + 200} ${Constants.currencyType}"
+            totalCost = calcTotalPrice() + 200
+            binding.tvTotalFees.text = "${totalCost} ${Constants.currencyType}"
         }
     }
 
@@ -190,12 +225,8 @@ class PaymentFragment : Fragment() {
                                     R.id.action_paymentFragment_to_orderDetailsFragment,
                                     bundle
                                 )
-                                // binding.paymentProgressBar.visibility = View.GONE
-                                Toast.makeText(
-                                    requireContext(),
-                                    "order set succssfully",
-                                    Toast.LENGTH_LONG
-                                ).show()
+                                Toast.makeText( requireContext(),"order set succssfully",Toast.LENGTH_LONG ).show()
+                                Toast.makeText(requireContext(), "Payment Success!!", Toast.LENGTH_SHORT).show()
                                 paymentViewModel._order.value=ApiState.Loading
                             } else {
                                 Toast.makeText(
@@ -209,7 +240,6 @@ class PaymentFragment : Fragment() {
                     }
                     is ApiState.Failure -> {
                         Toast.makeText(requireContext(), "order not set ", Toast.LENGTH_LONG).show()
-
                     }
                     is ApiState.Loading -> {
 
@@ -238,10 +268,13 @@ class PaymentFragment : Fragment() {
     private fun onPaymentSheetResult(paymentSheetResult: PaymentSheetResult) {
 
         if (paymentSheetResult is PaymentSheetResult.Completed) {
-            Toast.makeText(requireContext(), "Payment Success!!", Toast.LENGTH_SHORT).show()
+            val index = Constants.vouchersList.indexOf(code)
+            if(index>=0)
+                Constants.vouchersList[index] = "null"
             createOrder(postOrder)
         }else{
             Toast.makeText(requireContext(), "Payment Canceled", Toast.LENGTH_SHORT).show()
         }
     }
+
 }

@@ -79,6 +79,7 @@ class LoginFragment : Fragment() {
                     }else{
                         Toast.makeText(requireContext(),it.exception.toString(),Toast.LENGTH_SHORT).show()
                         Log.i("erorr",it.exception.toString())
+                        binding.loginProgressBar.visibility = View.GONE
                     }
 
                 }

@@ -29,6 +29,7 @@ import com.example.shopify.mainActivity.MainActivity
 import com.example.shopify.nework.ApiState
 import com.example.shopify.nework.ShopifyAPi
 import com.example.shopify.repo.RemoteSource
+import com.example.shopify.utiltes.Constants
 import com.example.shopify.utiltes.LoggedUserData
 import kotlinx.coroutines.launch
 
@@ -98,12 +99,12 @@ class HomeFragment : Fragment() {
     private fun init() {
         handler = Handler(Looper.myLooper()!!)
         ads = ArrayList()
-        ads.add(Ads(R.drawable.discount1,"RXKJ2Q"))
-        ads.add(Ads(R.drawable.discount2,"ALC1"))
-        ads.add(Ads(R.drawable.discount3,"IMA1115"))
-        ads.add(Ads(R.drawable.discount4,"TEZL"))
-        ads.add(Ads(R.drawable.discount5,"TEPU"))
-        ads.add(Ads(R.drawable.discount6,"A21C"))
+        ads.add(Ads(R.drawable.discount1,Constants.vouchersList[0]))
+        ads.add(Ads(R.drawable.discount2,Constants.vouchersList[1]))
+        ads.add(Ads(R.drawable.discount3,Constants.vouchersList[2]))
+        ads.add(Ads(R.drawable.discount4,Constants.vouchersList[3]))
+        ads.add(Ads(R.drawable.discount5,Constants.vouchersList[4]))
+        ads.add(Ads(R.drawable.discount6,Constants.vouchersList[5]))
         adsAdapter = AdsAdapter(ads, viewPager2)
         homeBinding.dicountsSlider.adapter = adsAdapter
         viewPager2.clipToPadding = false
