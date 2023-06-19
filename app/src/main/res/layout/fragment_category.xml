@@ -5,8 +5,8 @@
     android:id="@+id/category_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#e9f8ff"
-    tools:context=".category.view.CategoryFragment" >
+    android:background="@drawable/back_ground_color"
+    tools:context=".category.view.CategoryFragment">
 
     <ScrollView
         android:id="@+id/scrollView2"

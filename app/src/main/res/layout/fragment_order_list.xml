@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#e9f8ff"
-    tools:context=".orderHistory.view.OrderListFragment" >
+    android:background="@drawable/back_ground_color"
+    tools:context=".orderHistory.view.OrderListFragment">
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/no_order_lotte"
