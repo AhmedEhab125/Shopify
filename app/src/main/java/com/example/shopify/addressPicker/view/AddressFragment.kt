@@ -29,6 +29,7 @@ import com.example.shopify.addressPicker.viewModel.AddAddressViewModel
 import com.example.shopify.addressPicker.viewModel.AddAddressViewModelFactory
 import com.example.shopify.database.LocalDataSource
 import com.example.shopify.databinding.FragmentAddressBinding
+import com.example.shopify.mainActivity.MainActivity
 import com.example.shopify.nework.ApiState
 import com.example.shopify.nework.ShopifyAPi
 import com.example.shopify.repo.RemoteSource
@@ -165,5 +166,10 @@ class AddressFragment : Fragment() {
         dialog.show()
     }
 
+
+    override fun onResume() {
+        super.onResume()
+        (context as MainActivity).hideNavigationBar(false)
+    }
 
 }

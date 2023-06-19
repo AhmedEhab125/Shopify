@@ -53,7 +53,7 @@
             android:layout_marginBottom="20dp"
             android:text="TextView"
             android:textColor="#EC9F08"
-            android:textSize="30sp"
+            android:textSize="24sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/copy"

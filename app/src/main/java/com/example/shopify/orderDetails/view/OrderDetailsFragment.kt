@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.shopify.Models.orderList.Order
 import com.example.shopify.Models.productDetails.Product
 import com.example.shopify.databinding.FragmentOrderDetailsBinding
+import com.example.shopify.mainActivity.MainActivity
 import com.example.shopify.nework.ApiState
 import com.example.shopify.nework.ShopifyAPi
 import com.example.shopify.orderDetails.model.OrderDetailsRepo
@@ -98,6 +99,11 @@ class OrderDetailsFragment : Fragment() {
                 }
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        (context as MainActivity).hideNavigationBar(false)
     }
 
 }

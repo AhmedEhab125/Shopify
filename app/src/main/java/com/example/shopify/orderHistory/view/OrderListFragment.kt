@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.shopify.Models.orderList.Order
 import com.example.shopify.database.LocalDataSource
 import com.example.shopify.databinding.FragmentOrderListBinding
+import com.example.shopify.mainActivity.MainActivity
 import com.example.shopify.nework.ApiState
 import com.example.shopify.orderHistory.model.OrderListRepo
 import com.example.shopify.orderHistory.viewModel.OrderListViewModel
@@ -83,5 +84,9 @@ class OrderListFragment : Fragment() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        (context as MainActivity).hideNavigationBar(false)
+    }
 
 }

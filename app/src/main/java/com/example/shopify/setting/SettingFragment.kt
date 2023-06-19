@@ -64,7 +64,7 @@ class SettingFragment : Fragment() {
     }
     override fun onResume() {
         super.onResume()
-        (context as MainActivity).hideNavigationBar(true)
+        (context as MainActivity).hideNavigationBar(false)
     }
     fun createCurrencyDropDownList(){
 
@@ -87,7 +87,7 @@ class SettingFragment : Fragment() {
             Constraints.LayoutParams.WRAP_CONTENT
         )
         //window?.setBackgroundDrawableResource(R.color.transparent);
-        dialog.setCanceledOnTouchOutside(false)
+        dialog.setCanceledOnTouchOutside(true)
         dialog.show()
 
 
@@ -110,6 +110,7 @@ class SettingFragment : Fragment() {
 
     }
     fun currencyDialog() {
+
         var dialog = Dialog(requireContext())
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setContentView(R.layout.currancy_dialog)
@@ -119,8 +120,15 @@ class SettingFragment : Fragment() {
             Constraints.LayoutParams.MATCH_PARENT,
             Constraints.LayoutParams.WRAP_CONTENT
         )
-        //window?.setBackgroundDrawableResource(R.color.transparent);
-        dialog.setCanceledOnTouchOutside(true)
+        if (configrations.getString(Constants.currency,"").equals(Constants.pound)){
+            dialog.findViewById<RadioButton>(R.id.poundRadioButton).isChecked = true
+        }else{
+            dialog.findViewById<RadioButton>(R.id.dollarRadioButton).isChecked = true
+        }
+
+
+
+        dialog.setCanceledOnTouchOutside(false)
         dialog.show()
 
          dialog.findViewById<RadioButton>(R.id.poundRadioButton).setOnClickListener {
