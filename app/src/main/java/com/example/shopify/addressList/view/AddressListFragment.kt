@@ -22,6 +22,7 @@ import com.example.shopify.addressList.viewModel.AddressesViewModel
 import com.example.shopify.addressList.viewModel.AddressesViewModelFactory
 import com.example.shopify.database.LocalDataSource
 import com.example.shopify.databinding.FragmentAddressListBinding
+import com.example.shopify.mainActivity.MainActivity
 import com.example.shopify.nework.ApiState
 import com.example.shopify.nework.ShopifyAPi
 import com.example.shopify.repo.RemoteSource
@@ -122,6 +123,12 @@ class AddressListFragment : Fragment(),RemoveCustomerAddress {
             addressesViewModel.removeAddress(it,addressId)
         }
 
+    }
+
+
+    override fun onResume() {
+        super.onResume()
+        (context as MainActivity).hideNavigationBar(false)
     }
 
 

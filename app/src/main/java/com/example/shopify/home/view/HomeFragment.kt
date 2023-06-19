@@ -81,7 +81,6 @@ class HomeFragment : Fragment() {
         setBrandData()
         homeViewModel.getBrands()
         searchForBrands()
-        LoggedUserData.favOrderDraft.clear()
     }
 
     override fun onPause() {

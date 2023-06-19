@@ -32,7 +32,7 @@
         android:background="#00FFFFFF"
         android:backgroundTint="#00D11D1D"
         android:text="@string/more"
-        android:textColor="@color/purple_700"
+        android:textColor="#E1FFFFFF"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/textView7"
@@ -132,12 +132,10 @@
         android:id="@+id/settingsBtn"
         android:layout_width="35dp"
         android:layout_height="35dp"
-        android:layout_marginStart="95dp"
-        android:layout_marginEnd="36dp"
+        android:layout_marginEnd="24dp"
         android:src="@drawable/outline_settings_24"
         app:layout_constraintBottom_toBottomOf="@+id/userName"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/userName"
         app:layout_constraintTop_toTopOf="@+id/userName" />
 
 

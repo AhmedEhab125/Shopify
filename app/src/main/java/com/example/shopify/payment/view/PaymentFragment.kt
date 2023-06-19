@@ -19,6 +19,7 @@ import com.example.shopify.Models.postOrderModel.PostOrderModel
 import com.example.shopify.R
 import com.example.shopify.database.LocalDataSource
 import com.example.shopify.databinding.FragmentPaymentBinding
+import com.example.shopify.mainActivity.MainActivity
 import com.example.shopify.nework.ApiState
 import com.example.shopify.nework.ShopifyAPi
 import com.example.shopify.payment.model.PaymentRepo
@@ -275,6 +276,11 @@ class PaymentFragment : Fragment() {
         }else{
             Toast.makeText(requireContext(), "Payment Canceled", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        (context as MainActivity).hideNavigationBar(false)
     }
 
 }

@@ -101,7 +101,7 @@
                     android:id="@+id/loginPassTF"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-
+                    android:inputType="textPassword"
                     android:hint="@string/login_pass_hint">
 
                 </com.google.android.material.textfield.TextInputEditText>

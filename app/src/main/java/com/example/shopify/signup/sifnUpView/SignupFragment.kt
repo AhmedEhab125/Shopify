@@ -278,10 +278,15 @@ class SignupFragment : Fragment() {
                     }
                     is ApiState.Success<*> -> {
                         val myUser = it.date as? CustomerRegistrationModel
-                        Log.i("Mizooo", myUser?.customer?.id.toString())
-                        myFirebaseUser?.userId = myUser?.customer?.id
-                        myFirebaseUser?.firsName = myUser?.customer?.first_name
-                        signupViewModel.postWishListDraftPrder(draftOrderPost)
+                      if(myUser != null) {
+                          Log.i("Mizooo", myUser?.customer?.id.toString())
+                          myFirebaseUser?.userId = myUser?.customer?.id
+                          myFirebaseUser?.firsName = myUser?.customer?.first_name
+                          signupViewModel.postWishListDraftPrder(draftOrderPost)
+                      }else{
+                          Toast.makeText(requireContext(),"Email And Passowrd Is ALearedy Taken Before",Toast.LENGTH_SHORT).show()
+                          binding.signUpPrograssBar.visibility = View.GONE
+                      }
                     }
                     else -> {
                         val snakbar = Snackbar.make(
