@@ -20,7 +20,7 @@ object NetworkPayment {
     lateinit var clientSecret: String
     private var _paymentList = MutableStateFlow(ThirdPartyResponse("","",""))
     var  paymentList : StateFlow<ThirdPartyResponse> = _paymentList
-    fun getCustomerId(context: Context) {
+    fun getCustomerId(context: Context,totalCost:Int,currency:String) {
         val request: StringRequest = object : StringRequest(
             Method.POST, "https://api.stripe.com/v1/customers",
             Response.Listener { response ->
@@ -28,7 +28,7 @@ object NetworkPayment {
                     val jsonObject = JSONObject(response)
                     customerId = jsonObject.getString("id")
                     //Toast.makeText(context, "Customer Id: $customerId", Toast.LENGTH_SHORT).show()
-                    getSphericalKey(customerId, context)
+                    getSphericalKey(customerId, context,totalCost,currency)
                 } catch (e: JSONException) {
                     e.printStackTrace()
                 }
@@ -48,7 +48,7 @@ object NetworkPayment {
         requestQueue.add(request)
     }
 
-    private fun getSphericalKey(customerId: String, context: Context) {
+    private fun getSphericalKey(customerId: String, context: Context,totalCost:Int,currency:String) {
         val request: StringRequest = object : StringRequest(
             Method.POST, "https://api.stripe.com/v1/ephemeral_keys",
             Response.Listener { response ->
@@ -56,7 +56,7 @@ object NetworkPayment {
                     val jsonObject = JSONObject(response)
                     sphericalKey = jsonObject.getString("id")
                     // Toast.makeText(context, "Epherical Key: $sphericalKey",Toast.LENGTH_SHORT).show()
-                    getClientSecret(customerId, context)
+                    getClientSecret(customerId, context,totalCost,currency)
                 } catch (e: JSONException) {
                     e.printStackTrace()
                 }
@@ -83,7 +83,7 @@ object NetworkPayment {
         requestQueue.add(request)
     }
 
-    private fun getClientSecret(customerId: String, context: Context) {
+    private fun getClientSecret(customerId: String, context: Context,totalCost:Int,currency:String) {
         val request: StringRequest =
             object : StringRequest(Method.POST, "https://api.stripe.com/v1/payment_intents",
                 Response.Listener { response ->
@@ -113,8 +113,8 @@ object NetworkPayment {
                     param["customer"] = customerId
                     //val str = "10000"
                     //val list = str.split(".")
-                    param["amount"] = "1000000"
-                    param["currency"] = "usd"
+                    param["amount"] = "${totalCost*100}"
+                    param["currency"] = currency
                     param["automatic_payment_methods[enabled]"] = "true"
                     return param
                 }
