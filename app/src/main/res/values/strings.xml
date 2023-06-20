@@ -61,7 +61,7 @@
     <string name="address">Address : </string>
     <string name="order_items">Order items</string>
     <string name="deleteBtn">Delete</string>
-    <string name="deleteMessage" >Are You Sure</string>
+    <string name="deleteMessage">Are You Sure</string>
     <string name="deleteMessageBody">You want delete this item from cart</string>
     <string name="delete_address">You want delete address </string>
     <string name="close">close</string>
