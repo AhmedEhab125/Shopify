@@ -37,6 +37,7 @@ import com.example.shopify.repo.RemoteSource
 import com.example.shopify.utiltes.Constants
 import com.example.shopify.utiltes.LoggedUserData
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -271,6 +272,10 @@ class ProductDetailsFragment : Fragment() {
     private fun setData() {
         imgAdapter = ImagePagerAdapter(requireContext(), myProduct.product?.images)
         binding.imgsViewPager.adapter = imgAdapter
+
+        TabLayoutMediator(binding.indicator, binding.imgsViewPager) { tab, position ->
+            // Set the text for each tab
+        }.attach()
         binding.tvProductName.text = myProduct.product?.title
         val random = Random.nextInt(3,6).toFloat()
         binding.productRatingBar.rating = random

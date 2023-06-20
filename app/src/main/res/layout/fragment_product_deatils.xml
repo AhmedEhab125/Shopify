@@ -26,6 +26,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="270dp" />
 
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/indicator"
+                android:layout_width="match_parent"
+                android:layout_height="8dp"
+                android:layout_gravity="center"
+                app:tabMode="fixed" />
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
