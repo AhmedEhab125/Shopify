@@ -12,18 +12,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="32dp"
         android:layout_marginEnd="24dp"
         android:gravity="center"
         android:text="@string/paymrnt_method"
         android:textColor="@color/black"
         android:textSize="22sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/radioGroup2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/voutcherTF" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <RadioGroup
         android:id="@+id/radioGroup2"
@@ -45,6 +44,7 @@
             android:layout_weight="1"
             android:drawableStart="@drawable/visa"
             android:drawablePadding="8dp"
+            android:buttonTint="@color/black"
             android:text="@string/onlline_payment"
             android:textSize="16sp">
 
@@ -53,6 +53,8 @@
         <RadioButton
             android:id="@+id/cashOnDelevaryRB"
             android:layout_width="match_parent"
+            android:buttonTint="@color/black"
+
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:drawableStart="@drawable/money"
@@ -90,7 +92,7 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
         android:layout_height="66dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="24dp"
         android:focusableInTouchMode="true"
         android:hint="@string/voutcher"
@@ -101,7 +103,7 @@
         app:boxCornerRadiusTopStart="20dp"
         app:layout_constraintEnd_toStartOf="@+id/trueLottie"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardView2"
+        app:layout_constraintTop_toBottomOf="@+id/radioGroup2"
         app:startIconDrawable="@drawable/tag">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -244,26 +246,27 @@
         android:id="@+id/btn_checkout"
         android:layout_width="200dp"
         android:layout_height="55dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="16dp"
         android:backgroundTint="@color/blue_app_color"
         android:text="@string/check_out"
         app:cornerRadius="20dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintHorizontal_bias="0.559"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/radioGroup2" />
+        app:layout_constraintTop_toBottomOf="@+id/cardView2" />
 
     <TextView
         android:id="@+id/textView29"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="16dp"
         android:text="Check Out"
         android:textColor="@color/black"
         android:textSize="22sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/voutcherTF" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
