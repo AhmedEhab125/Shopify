@@ -237,8 +237,8 @@ class PaymentFragment : Fragment() {
                                     R.id.action_paymentFragment_to_orderDetailsFragment,
                                     bundle
                                 )
-                                Toast.makeText( requireContext(),"order set succssfully",Toast.LENGTH_LONG ).show()
-                                Toast.makeText(requireContext(), "Payment Success!!", Toast.LENGTH_SHORT).show()
+                                //Toast.makeText( requireContext(),"order set succssfully",Toast.LENGTH_LONG ).show()
+                                //Toast.makeText(requireContext(), "Payment Success!!", Toast.LENGTH_SHORT).show()
                                 paymentViewModel._order.value=ApiState.Loading
                             } else {
                                 Toast.makeText(
@@ -262,9 +262,13 @@ class PaymentFragment : Fragment() {
     }
 
     private fun clearCart() {
-        for (i in 1 until LoggedUserData.orderItemsList.size){
-            LoggedUserData.orderItemsList.removeAt(i)
-        }
+        LoggedUserData.orderItemsList.clear()
+        LoggedUserData.orderItemsList.add(0,
+            com.example.shopify.Models.draftOrderCreation.LineItem(
+                null, null, "Custome Item", "00.0",
+                null, null, 1, null, "Custom Item",
+                null, null, null
+            ))
     }
 
     private fun paymentFlow() {

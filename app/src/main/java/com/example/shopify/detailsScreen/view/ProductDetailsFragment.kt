@@ -223,6 +223,7 @@ class ProductDetailsFragment : Fragment() {
                 title = myProduct.product?.title
             )
             LoggedUserData.orderItemsList.add(lineItem)
+            Log.i("essamcount", "${LoggedUserData.orderItemsList.size}")
         }
         //Snackbar.make(binding.tvProductDetails,"Item Is Added To Cart",Snackbar.LENGTH_LONG).show()
         Toast.makeText(requireContext(),"Item Is Added To Cart",Toast.LENGTH_LONG).show()
