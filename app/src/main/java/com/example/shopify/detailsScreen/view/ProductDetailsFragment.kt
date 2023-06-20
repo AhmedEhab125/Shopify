@@ -2,6 +2,8 @@ package com.example.shopify.detailsScreen.view
 
 import android.app.Dialog
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +16,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
+import androidx.viewpager2.widget.ViewPager2
 import com.example.shopify.Models.draftOrderCreation.DraftOrder
 import com.example.shopify.Models.draftOrderCreation.DraftOrderPost
 import com.example.shopify.Models.draftOrderCreation.LineItem
@@ -61,12 +64,18 @@ class ProductDetailsFragment : Fragment() {
     private var noOfItems = 1
     private var wishListId : Long = 0
     private lateinit var jop : Job
-  //  private var isFav = false
+    private val runnable = Runnable {
+        binding.imgsViewPager.currentItem = binding.imgsViewPager.currentItem + 1
+    }
+    private lateinit var handler: Handler
+
+    //  private var isFav = false
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentProductDeatilsBinding.inflate(layoutInflater)
+      handler = Handler(Looper.myLooper()!!)
+      binding = FragmentProductDeatilsBinding.inflate(layoutInflater)
         cartFactory = CartViewModelFactory(CartRepo(RemoteSource(ShopifyAPi.retrofitService)))
         cartViewModel = ViewModelProvider(requireActivity(), cartFactory)[CartViewModel::class.java]
         favFactory = FavoriteViewModelFactory(ConcreteFavClass(RemoteSource(ShopifyAPi.retrofitService)))
@@ -182,6 +191,7 @@ class ProductDetailsFragment : Fragment() {
     override fun onPause() {
         super.onPause()
         jop.cancel()
+        handler.removeCallbacks(runnable)
 
     }
 
@@ -210,6 +220,8 @@ class ProductDetailsFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        handler.postDelayed(runnable, 5000)
+
 
     }
     private fun addToCart() {
@@ -276,6 +288,13 @@ class ProductDetailsFragment : Fragment() {
         TabLayoutMediator(binding.indicator, binding.imgsViewPager) { tab, position ->
             // Set the text for each tab
         }.attach()
+        binding.imgsViewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                handler.removeCallbacks(runnable)
+                handler.postDelayed(runnable, 5000)
+            }
+        })
         binding.tvProductName.text = myProduct.product?.title
         val random = Random.nextInt(3,6).toFloat()
         binding.productRatingBar.rating = random
