@@ -77,6 +77,6 @@ class SignUpViewModelTest{
         assertEquals(result.draft_order.id,responseOfDraftOrderPost.draft_order.id)
     }
 
-    
+
 
 }
