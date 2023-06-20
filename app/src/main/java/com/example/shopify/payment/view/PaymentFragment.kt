@@ -1,5 +1,6 @@
 package com.example.shopify.payment.view
 
+import android.app.Dialog
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -7,7 +8,11 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
+import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
+import androidx.constraintlayout.widget.Constraints
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -22,6 +27,7 @@ import com.example.shopify.cart.viewModel.CartViewModel
 import com.example.shopify.cart.viewModel.CartViewModelFactory
 import com.example.shopify.database.LocalDataSource
 import com.example.shopify.databinding.FragmentPaymentBinding
+import com.example.shopify.detailsScreen.view.ProductDetailsFragmentDirections
 import com.example.shopify.mainActivity.MainActivity
 import com.example.shopify.nework.ApiState
 import com.example.shopify.nework.ShopifyAPi
@@ -53,9 +59,11 @@ class PaymentFragment : Fragment() {
     lateinit var curency:String
     private var discount = ""
     private var code = ""
-    private var totalCost=0
     private var draftId: Long = 0L
-
+    private var limit = when(Constants.currencyType){
+        "EGP" -> 10000
+        else -> 1000
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -110,20 +118,25 @@ class PaymentFragment : Fragment() {
         }
         binding.btnCheckout.setOnClickListener {
             if (binding.cashOnDelevaryRB.isChecked) {
-                postOrder = PostOrderModel(
-                    com.example.shopify.Models.postOrderModel.Order("Cash",
-                        "EGP", "150",
-                        Customer(
-                            LocalDataSource.getInstance().readFromShared(requireContext())?.firsName ?: "no name",
-                            LocalDataSource.getInstance().readFromShared(requireContext())?.userId ?: 1L,
-                            "")
-                        , itemList, Constants.selectedAddress!!, discount
+                if (calcTotalPrice()>limit)
+                agreeOnCash()
+                else{
+                    postOrder = PostOrderModel(
+                        com.example.shopify.Models.postOrderModel.Order("Cash",
+                            "EGP", "150",
+                            Customer(
+                                LocalDataSource.getInstance().readFromShared(requireContext())?.firsName ?: "no name",
+                                LocalDataSource.getInstance().readFromShared(requireContext())?.userId ?: 1L,
+                                "")
+                            , itemList, Constants.selectedAddress!!, discount
+                        )
                     )
-                )
-                createOrder(postOrder)
-                val index = Constants.vouchersList.indexOf(code)
-                if(index>=0)
-                    Constants.vouchersList[index] = "null"
+                    createOrder(postOrder)
+                    val index = Constants.vouchersList.indexOf(code)
+                    if(index>=0)
+                        Constants.vouchersList[index] = "null"
+                }
+
             } else if (binding.onlinePaymentRB.isChecked) {
                 Log.i("essam order online", "$discount")
                 postOrder = PostOrderModel(
@@ -178,6 +191,7 @@ class PaymentFragment : Fragment() {
     }
 
     private fun check(text:String) {
+        var totalCost: Int
         if( text == Constants.vouchersList[0] ||
             text == Constants.vouchersList[1] ||
             text == Constants.vouchersList[2] ||
@@ -185,6 +199,7 @@ class PaymentFragment : Fragment() {
             text == Constants.vouchersList[4] ||
             text == Constants.vouchersList[5]
         ){
+
             NetworkPayment.getCustomerId(requireContext(),(calcTotalPrice() - (calcTotalPrice()*.20).toInt() + 20),curency)
             discount = if(Constants.currencyType == "EGP"){
                 "${(calcTotalPrice()*.20)/Constants.currencyValue}"
@@ -303,5 +318,22 @@ class PaymentFragment : Fragment() {
         super.onResume()
         (context as MainActivity).hideNavigationBar(false)
     }
-
+    private fun agreeOnCash() {
+        val dialog = Dialog(requireContext())
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(R.layout.cant_delete_address_dialog)
+        dialog.findViewById<TextView>(R.id.tv_dialog_header).text ="Sorry you cant paid in cash"
+        dialog.findViewById<TextView>(R.id.textView31).text ="This is a large amount of money.you should pay by credit."
+        dialog.findViewById<Button>(R.id.cancel).setOnClickListener {
+            dialog.dismiss()
+        }
+        val window: Window? = dialog.window
+        window?.setBackgroundDrawableResource(android.R.color.transparent)
+        window?.setLayout(
+            Constraints.LayoutParams.MATCH_PARENT,
+            Constraints.LayoutParams.WRAP_CONTENT
+        )
+        dialog.setCanceledOnTouchOutside(true)
+        dialog.show()
+    }
 }
