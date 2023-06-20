@@ -17,6 +17,9 @@ import com.example.shopify.Models.postOrderModel.Customer
 import com.example.shopify.Models.postOrderModel.LineItem
 import com.example.shopify.Models.postOrderModel.PostOrderModel
 import com.example.shopify.R
+import com.example.shopify.cart.model.CartRepo
+import com.example.shopify.cart.viewModel.CartViewModel
+import com.example.shopify.cart.viewModel.CartViewModelFactory
 import com.example.shopify.database.LocalDataSource
 import com.example.shopify.databinding.FragmentPaymentBinding
 import com.example.shopify.mainActivity.MainActivity
@@ -40,6 +43,8 @@ class PaymentFragment : Fragment() {
     lateinit var binding: FragmentPaymentBinding
     lateinit var paymentViewModel: PaymentViewModel
     lateinit var paymentViewModelFactory: PaymentViewModelFactory
+    private lateinit var cartFactory: CartViewModelFactory
+    private lateinit var cartViewModel: CartViewModel
     lateinit var job: Job
     lateinit var itemList: MutableList<LineItem>
     private lateinit var paymentSheet: PaymentSheet
@@ -49,6 +54,7 @@ class PaymentFragment : Fragment() {
     private var discount = ""
     private var code = ""
     private var totalCost=0
+    private var draftId: Long = 0L
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -63,11 +69,14 @@ class PaymentFragment : Fragment() {
             else -> "usd"
         }
         binding = FragmentPaymentBinding.inflate(inflater)
-        NetworkPayment.getCustomerId(requireContext(),(calcTotalPrice() + 200),curency)
+        NetworkPayment.getCustomerId(requireContext(),(calcTotalPrice() + 20),curency)
         binding.paymentProgressBar.visibility = View.GONE
         binding.trueLottie.visibility = View.GONE
         binding.tvDiscount.text = "0"
-        binding.tvDelevaryFees.text = "200 ${Constants.currencyType}"
+        binding.tvDelevaryFees.text = "20 ${Constants.currencyType}"
+        cartFactory = CartViewModelFactory(CartRepo(RemoteSource(ShopifyAPi.retrofitService)))
+        cartViewModel = ViewModelProvider(requireActivity(), cartFactory)[CartViewModel::class.java]
+        draftId = LocalDataSource.getInstance().readFromShared(requireContext())?.cartdraftOrderId ?: 0
         return binding.root
     }
 
@@ -137,7 +146,7 @@ class PaymentFragment : Fragment() {
             discount = ""
         }
         calcTotalPrice()
-        binding.tvTotalFees.text = "${calcTotalPrice() + 200} ${Constants.currencyType}"
+        binding.tvTotalFees.text = "${calcTotalPrice() + 20} ${Constants.currencyType}"
         voucherListen()
     }
 
@@ -176,24 +185,24 @@ class PaymentFragment : Fragment() {
             text == Constants.vouchersList[4] ||
             text == Constants.vouchersList[5]
         ){
-            NetworkPayment.getCustomerId(requireContext(),(calcTotalPrice() - (calcTotalPrice()*.20).toInt() + 200),curency)
+            NetworkPayment.getCustomerId(requireContext(),(calcTotalPrice() - (calcTotalPrice()*.20).toInt() + 20),curency)
             discount = if(Constants.currencyType == "EGP"){
                 "${(calcTotalPrice()*.20)/Constants.currencyValue}"
-                 }else{
-                     "${(calcTotalPrice()*.20)}"
-                 }
+            }else{
+                "${(calcTotalPrice()*.20)}"
+            }
             Log.i("essam order check", "$discount")
             binding.trueLottie.visibility = View.VISIBLE
             binding.tvDiscount.text = "${(calcTotalPrice()*.20).toInt()}"
-            totalCost = calcTotalPrice() - (calcTotalPrice()*.20).toInt() + 200
+            totalCost = calcTotalPrice() - (calcTotalPrice()*.20).toInt() + 20
             binding.tvTotalFees.text = "${totalCost} ${ Constants.currencyType}"
             code = text
         }else {
-            NetworkPayment.getCustomerId(requireContext(),(calcTotalPrice() + 200),curency)
+            NetworkPayment.getCustomerId(requireContext(),(calcTotalPrice() + 20),curency)
             discount = "0"
             binding.trueLottie.visibility = View.GONE
             binding.tvDiscount.text = "0"
-            totalCost = calcTotalPrice() + 200
+            totalCost = calcTotalPrice() + 20
             binding.tvTotalFees.text = "${totalCost} ${Constants.currencyType}"
         }
     }
@@ -221,7 +230,9 @@ class PaymentFragment : Fragment() {
                             if (order != null) {
                                 bundle = Bundle().apply {
                                     putSerializable("order", order.order)
+                                    putString("from","payment")
                                 }
+                                clearCart()
                                 Navigation.findNavController(requireView()).navigate(
                                     R.id.action_paymentFragment_to_orderDetailsFragment,
                                     bundle
@@ -247,6 +258,12 @@ class PaymentFragment : Fragment() {
                     }
                 }
             }
+        }
+    }
+
+    private fun clearCart() {
+        for (i in 1 until LoggedUserData.orderItemsList.size){
+            LoggedUserData.orderItemsList.removeAt(i)
         }
     }
 

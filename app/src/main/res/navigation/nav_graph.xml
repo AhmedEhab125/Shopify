@@ -22,9 +22,6 @@
         <action
             android:id="@+id/action_cartFragment_to_addressListFragment"
             app:destination="@id/addressListFragment" />
-        <action
-            android:id="@+id/from_payment_to_checkout"
-            app:destination="@id/paymentFragment" />
     </fragment>
     <fragment
         android:id="@+id/favouriteFragment"
@@ -166,6 +163,11 @@
             android:name="comesFrom"
             app:argType="string"
             android:defaultValue='"setting"' />
+        <action
+            android:id="@+id/action_addressListFragment_to_cartFragment"
+            app:destination="@id/cartFragment"
+            app:popUpTo="@id/cartFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/paymentFragment"
@@ -176,6 +178,11 @@
             android:id="@+id/action_paymentFragment_to_orderDetailsFragment"
             app:destination="@id/orderDetailsFragment"
             app:popUpToInclusive="false" />
+        <action
+            android:id="@+id/action_paymentFragment_to_cartFragment"
+            app:destination="@id/cartFragment"
+            app:popUpTo="@id/cartFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/orderListFragment"
@@ -190,5 +197,9 @@
         android:id="@+id/orderDetailsFragment"
         android:name="com.example.shopify.orderDetails.view.OrderDetailsFragment"
         android:label="fragment_order_details"
-        tools:layout="@layout/fragment_order_details" />
+        tools:layout="@layout/fragment_order_details" >
+        <action
+            android:id="@+id/action_orderDetailsFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+    </fragment>
 </navigation>

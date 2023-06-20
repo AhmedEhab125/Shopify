@@ -1,15 +1,20 @@
 package com.example.shopify.orderDetails.view
 
+import android.app.Dialog
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
+import androidx.constraintlayout.widget.Constraints
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.shopify.Models.orderList.Order
 import com.example.shopify.Models.productDetails.Product
+import com.example.shopify.R
 import com.example.shopify.databinding.FragmentOrderDetailsBinding
 import com.example.shopify.mainActivity.MainActivity
 import com.example.shopify.nework.ApiState
@@ -38,6 +43,20 @@ class OrderDetailsFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentOrderDetailsBinding.inflate(inflater)
+        when(arguments?.getString("from")){
+            "payment" -> {
+                doneDialog()
+                binding.BkHome.setOnClickListener {
+                    activity?.recreate()
+                    Navigation.findNavController(requireView()).navigate(R.id.action_orderDetailsFragment_to_homeFragment)
+                }
+
+            }
+            else->{
+                binding.BkHome.visibility = View.GONE
+            }
+
+        }
         return binding.root
     }
 
@@ -72,7 +91,7 @@ class OrderDetailsFragment : Fragment() {
             binding.tvOrderPhome.text = order.customer?.phone ?: ""
             binding.tvOrderPrice.text = "${
                 (order.current_total_price?.toDouble()
-                    ?.times(Constants.currencyValue))?.toInt()?.plus(200)
+                    ?.times(Constants.currencyValue))?.toInt()?.plus(50)
             }  ${Constants.currencyType}"
             binding.tvPaymentMethod.text = order.tags
 
@@ -105,5 +124,17 @@ class OrderDetailsFragment : Fragment() {
         super.onResume()
         (context as MainActivity).hideNavigationBar(false)
     }
-
+    private fun doneDialog() {
+        val dialog = Dialog(requireContext())
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(R.layout.congratulation_dialog)
+        val window: Window? = dialog.window
+        window?.setBackgroundDrawableResource(android.R.color.transparent)
+        window?.setLayout(
+            Constraints.LayoutParams.MATCH_PARENT,
+            Constraints.LayoutParams.WRAP_CONTENT
+        )
+        dialog.setCanceledOnTouchOutside(true)
+        dialog.show()
+    }
 }

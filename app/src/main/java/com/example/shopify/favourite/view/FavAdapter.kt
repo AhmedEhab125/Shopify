@@ -30,7 +30,6 @@ class FavAdapter (var favList: List<LineItem> , var listener : OnDelete):Recycle
 
     override fun onBindViewHolder(holder: FavViewHolder, position: Int) {
         var favItem = favList[position+1]
-
         var id_imageUrl = (favItem.sku?:",").split(",")
         if(id_imageUrl.size == 2){
             var id = id_imageUrl[0]
@@ -38,8 +37,8 @@ class FavAdapter (var favList: List<LineItem> , var listener : OnDelete):Recycle
             Glide.with(holder.binding.root).load(imageUrl).into(holder.binding.favImg)
         }
         holder.binding.favProductName.text = favItem.title
-        holder.binding.favProductPrice.text = "${favItem.price?.toDouble()
-            ?.times(Constants.currencyValue)} ${Constants.currencyType}"
+        holder.binding.favProductPrice.text = "${(favItem.price?.toDouble()
+            ?.times(Constants.currencyValue))?.toInt()} ${Constants.currencyType}"
         holder.binding.deleteBtn.setOnClickListener {
             listener.deleteFromFav(position+1)
         }

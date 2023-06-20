@@ -41,7 +41,6 @@ class CartFragment : Fragment(), Communicator {
     private lateinit var cartViewModel: CartViewModel
     private lateinit var draftOrderPost: DraftOrderPost
     //private lateinit var cartItemsList: MutableList<LineItem>
-    private var flag = false
     private var draftId: Long? = 0L
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -57,8 +56,11 @@ class CartFragment : Fragment(), Communicator {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        cartBinding.checkoutBtn.isEnabled = false
         if(LoggedUserData.orderItemsList.size == 0 ){
             cartViewModel.getCartItems(draftId ?: 0)
+        }else if (LoggedUserData.orderItemsList.size>1){
+            cartBinding.checkoutBtn.isEnabled = true
         }
         cartBinding.cartRV.adapter = cartAdapter
         cartBinding.cartRV.layoutManager = LinearLayoutManager(requireContext())
@@ -70,13 +72,13 @@ class CartFragment : Fragment(), Communicator {
                     when (it) {
                         is ApiState.Loading -> {
                             cartBinding.lottieSplash.visibility = View.GONE
-                            cartBinding.lottieMessage.visibility = View.GONE
                             cartBinding.cartProgressBar.visibility = View.VISIBLE
 
                         }
                         is ApiState.Success<*> -> {
                             if(it.date!=null) {
-                                flag = true
+                                if(LoggedUserData.orderItemsList.size>1)
+                                cartBinding.checkoutBtn.isEnabled = true
                                 cartBinding.cartProgressBar.visibility = View.GONE
                                 draftOrderPost = it.date as DraftOrderPost
                                 if(LoggedUserData.orderItemsList.size ==0)
@@ -143,8 +145,6 @@ class CartFragment : Fragment(), Communicator {
     private fun showHideAnimation(){
         if(LoggedUserData.orderItemsList.size ==1){
             cartBinding.lottieSplash.visibility = View.VISIBLE
-            cartBinding.lottieMessage.visibility = View.VISIBLE
-            cartBinding.lottieMessage.text = "There is no items."
 
         }else{
             cartBinding.lottieSplash.visibility = View.GONE
@@ -168,6 +168,7 @@ class CartFragment : Fragment(), Communicator {
             LoggedUserData.orderItemsList.removeAt(position)
             calcTotalPrice()
             cartAdapter.updateCartList(LoggedUserData.orderItemsList)
+            cartBinding.checkoutBtn.isEnabled = false
             showHideAnimation()
             dialog.dismiss()
         }

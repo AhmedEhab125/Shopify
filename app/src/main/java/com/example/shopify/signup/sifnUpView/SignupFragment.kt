@@ -98,6 +98,7 @@ class SignupFragment : Fragment() {
                             firstName + "" + secondName + address + "" + city + "" + country + "" + phone + "" + email
                         )
                     } else {
+                        binding.signUpPrograssBar.visibility = View.GONE
                         Toast.makeText(
                             requireContext(),
                             it.exception.toString(),

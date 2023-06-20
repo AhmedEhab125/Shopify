@@ -1,17 +1,24 @@
 package com.example.shopify.orderHistory.view
 
+import android.app.Dialog
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
+import android.widget.Button
+import androidx.constraintlayout.widget.Constraints
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.shopify.Models.orderList.Order
+import com.example.shopify.R
 import com.example.shopify.database.LocalDataSource
 import com.example.shopify.databinding.FragmentOrderListBinding
+import com.example.shopify.detailsScreen.view.ProductDetailsFragmentDirections
 import com.example.shopify.mainActivity.MainActivity
 import com.example.shopify.nework.ApiState
 import com.example.shopify.orderHistory.model.OrderListRepo

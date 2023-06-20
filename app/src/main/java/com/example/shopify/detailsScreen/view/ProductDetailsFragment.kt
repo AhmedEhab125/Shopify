@@ -43,6 +43,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlin.random.Random
 
 class ProductDetailsFragment : Fragment() {
     private lateinit var binding: FragmentProductDeatilsBinding
@@ -270,7 +271,8 @@ class ProductDetailsFragment : Fragment() {
         imgAdapter = ImagePagerAdapter(requireContext(), myProduct.product?.images)
         binding.imgsViewPager.adapter = imgAdapter
         binding.tvProductName.text = myProduct.product?.title
-        binding.productRatingBar.rating = 3.5f
+        val random = Random.nextInt(3,6).toFloat()
+        binding.productRatingBar.rating = random
         binding.productRatingBar.isEnabled = false
         binding.tvProductPrice.text = "${((myProduct.product?.variants?.get(0)?.price?.toDouble()
             ?.times(Constants.currencyValue)))?.toInt()} ${Constants.currencyType}"
@@ -282,6 +284,10 @@ class ProductDetailsFragment : Fragment() {
                 binding.btnAddToFav.setBackgroundResource(R.drawable.favorite_clicked)
                 myProduct.product?.isFav = true
             }
+        }
+        if (FirebaseAuth.getInstance().currentUser == null){
+            binding.btnAddToFav.setBackgroundResource(R.drawable.favourite_btn)
+
         }
     }
     private fun navToLoginScreen() {

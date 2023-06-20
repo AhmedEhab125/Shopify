@@ -96,7 +96,7 @@ class CategoryAdapter  (private var myProducts: List<Product> , val listener:OnC
                 iterator.remove()
             }
         }
-        //  Toast.makeText(requireContext(), "Product Removed From Favorite List", Toast.LENGTH_SHORT).show()
+          Toast.makeText(context, "Product Removed From Favorite List", Toast.LENGTH_SHORT).show()
         Log.i("adapter","removed")
     }
 
@@ -110,6 +110,7 @@ class CategoryAdapter  (private var myProducts: List<Product> , val listener:OnC
           sku = "${product.id},${product.image?.src}",
           title = product.title
       )
+      Toast.makeText(context, "Product Added To Favorite List", Toast.LENGTH_SHORT).show()
       LoggedUserData.favOrderDraft.add(lineItem)
       Log.i("adapter", "Added")
   }

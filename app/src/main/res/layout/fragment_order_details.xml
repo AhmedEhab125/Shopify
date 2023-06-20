@@ -7,7 +7,18 @@
     android:background="@drawable/back_ground_color"
     tools:context=".orderDetails.view.OrderDetailsFragment">
 
+    <Button
+        android:id="@+id/BkHome"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:text="Back To Home"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollView3"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginStart="8dp"
@@ -181,7 +192,10 @@
                 android:id="@+id/rv_order_products"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                tools:listitem="@layout/order_product_item" />
+                tools:listitem="@layout/order_product_item">
+
+            </androidx.recyclerview.widget.RecyclerView>
+
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
