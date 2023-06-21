@@ -10,6 +10,7 @@ import com.example.shopify.createUserToSaveAtApi
 import com.example.shopify.detailsScreen.viewModel.getProductDetails
 import com.example.shopify.repo.FakeProductDetalisInterface
 import com.example.shopify.repo.FakeRegisterUserInterFace
+import com.example.shopify.repo.ProductDetalisInterface
 import com.example.shopify.responseOfCreatingUser
 import com.example.shopify.responseOfDraftCreation
 import com.example.shopify.signup.model.ConcreteRegisterUser
@@ -35,7 +36,7 @@ class ConcreteProductDetalisTest {
     @get:Rule
     var mainDispatcherRule = MainDispatcherRule()
 
-    lateinit var remoteSource: FakeProductDetalisInterface
+    lateinit var remoteSource: ProductDetalisInterface
     lateinit var detilsRepo : ConcreteProductDetalis
     lateinit var fakeProductDetailsResponse : ProductModel
 

@@ -7,6 +7,7 @@ import com.example.shopify.Models.registrashonModel.CustomerRegistrationModel
 import com.example.shopify.creatDraftOrderToPostAtApi
 import com.example.shopify.createUserToSaveAtApi
 import com.example.shopify.repo.FakeRegisterUserInterFace
+import com.example.shopify.repo.RegisterUserInterFace
 import com.example.shopify.responseOfCreatingUser
 import com.example.shopify.responseOfDraftCreation
 import com.example.wetharapplication.MainDispatcherRule
@@ -32,7 +33,7 @@ class ConcreteRegisterUserTest {
     @get:Rule
     var mainDispatcherRule = MainDispatcherRule()
 
-    lateinit var remoteSource: FakeRegisterUserInterFace
+    lateinit var remoteSource: RegisterUserInterFace
     lateinit var userRepo : ConcreteRegisterUser
     lateinit var fakeRegitserUser : CustomerRegistrationModel
     lateinit var responseOfRegisterUser : CustomerRegistrationModel
