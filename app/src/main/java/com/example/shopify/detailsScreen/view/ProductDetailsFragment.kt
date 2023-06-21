@@ -42,11 +42,9 @@ import com.example.shopify.utiltes.LoggedUserData
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.auth.FirebaseAuth
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import java.lang.Runnable
 import kotlin.random.Random
 
 class ProductDetailsFragment : Fragment() {
@@ -80,27 +78,30 @@ class ProductDetailsFragment : Fragment() {
         cartViewModel = ViewModelProvider(requireActivity(), cartFactory)[CartViewModel::class.java]
         favFactory = FavoriteViewModelFactory(ConcreteFavClass(RemoteSource(ShopifyAPi.retrofitService)))
         favViewModel =  ViewModelProvider(requireActivity(), favFactory)[FavoriteViewModel::class.java]
-        draftId = LocalDataSource.getInstance().readFromShared(requireContext())?.cartdraftOrderId ?:0
-        wishListId = LocalDataSource.getInstance().readFromShared(requireContext())?.whiDraftOedredId ?:0
+
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if(LoggedUserData.orderItemsList.size ==0){
-            cartViewModel.getCartItems(draftId)
+        if(FirebaseAuth.getInstance().currentUser!=null&& LoggedUserData.orderItemsList.size ==0){
+            lifecycleScope.launch(Dispatchers.Main) {
+                delay(500)
+                draftId = LocalDataSource.getInstance().readFromShared(requireContext())?.cartdraftOrderId ?:0
+                cartViewModel.getCartItems(draftId)
+            }
             observeAtGetOrderDraft()
         }
-        if (LoggedUserData.favOrderDraft.size == 0){
-            favViewModel.getFavItems(wishListId)
+        if (FirebaseAuth.getInstance().currentUser!=null&&LoggedUserData.favOrderDraft.size == 0){
+            lifecycleScope.launch(Dispatchers.Main) {
+                delay(500)
+                wishListId = LocalDataSource.getInstance().readFromShared(requireContext())?.whiDraftOedredId ?:0
+                favViewModel.getFavItems(wishListId)
+            }
             observeAtFavItems()
         }
-
-
-
         productIdRecived = requireArguments().getLong("product_Id")
-
         binding.btnContinue.setOnClickListener {
             if (FirebaseAuth.getInstance().currentUser != null) {
                 addToCart()
@@ -344,7 +345,7 @@ class ProductDetailsFragment : Fragment() {
                 when (it) {
                     is ApiState.Loading->binding.progressBar5.visibility = View.VISIBLE
                     is ApiState.Success<*> -> {
-                        LoggedUserData.orderItemsList.addAll( (it.date as? DraftOrderPost)?.draft_order?.line_items ?: mutableListOf())
+                        LoggedUserData.orderItemsList= (it.date as? DraftOrderPost)?.draft_order?.line_items as? MutableList<LineItem>?: mutableListOf()
                     }
                     is ApiState.Failure -> {
                         print("error in get order list in details screen ${it.error.message}")
@@ -362,9 +363,8 @@ class ProductDetailsFragment : Fragment() {
                 when (it) {
                     is ApiState.Loading -> binding.progressBar5.visibility = View.VISIBLE
                     is ApiState.Success<*> -> {
-                        LoggedUserData.favOrderDraft.addAll(
-                            (it.date as? DraftOrderPost)?.draft_order?.line_items ?: mutableListOf()
-                        )
+                        LoggedUserData.favOrderDraft=
+                            ((it.date as? DraftOrderPost)?.draft_order?.line_items ?: mutableListOf()) as MutableList<LineItem>
                     }
                     is ApiState.Failure -> {
                             print("error in get order list in details screen ${it.error.message}")
