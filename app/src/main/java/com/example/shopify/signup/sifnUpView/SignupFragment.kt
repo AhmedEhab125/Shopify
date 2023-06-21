@@ -69,7 +69,7 @@ class SignupFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         signupFactory =
-            SignUpViewModelFactory(ConcreteRegisterUser(RemoteSource(ShopifyAPi.retrofitService)))
+            SignUpViewModelFactory(ConcreteRegisterUser(RemoteSource()))
         signupViewModel =
             ViewModelProvider(requireActivity(), signupFactory).get(SignUpViewModel::class.java)
 

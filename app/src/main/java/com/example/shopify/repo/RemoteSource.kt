@@ -13,13 +13,14 @@ import com.example.shopify.Models.productDetails.ProductModel
 import com.example.shopify.Models.products.CollectProductsModel
 import com.example.shopify.Models.registrashonModel.Addresse
 import com.example.shopify.Models.registrashonModel.CustomerRegistrationModel
+import com.example.shopify.nework.ShopifyAPi
 import com.example.shopify.nework.ShopifyApiService
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
-class RemoteSource(var network: ShopifyApiService) : IBrands, ProductDetalisInterface,
-    CollectionProductsInterface, IAllProducts, RegisterUserInterFace, IAddresses,
-    IAddCustomerAddress ,IOrderList,ISelectedProducts,ICart,IPostOrder{
+class RemoteSource() : RemoteSourceInterface {
+
+    var network: ShopifyApiService = ShopifyAPi.retrofitService
     override suspend fun getBrands(): Flow<BrandModel?> {
         return flowOf(network.getBrands().body())
     }

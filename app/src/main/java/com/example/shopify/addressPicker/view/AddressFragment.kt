@@ -54,7 +54,7 @@ class AddressFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         addAddressViewModelFactory =
-            AddAddressViewModelFactory(AddAddressRepo(RemoteSource(ShopifyAPi.retrofitService)))
+            AddAddressViewModelFactory(AddAddressRepo(RemoteSource()))
         addAddressViewModel = ViewModelProvider(
             requireActivity(),
             addAddressViewModelFactory

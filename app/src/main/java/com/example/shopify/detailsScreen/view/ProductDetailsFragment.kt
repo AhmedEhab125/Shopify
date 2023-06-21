@@ -81,9 +81,9 @@ class ProductDetailsFragment : Fragment() {
     ): View {
       handler = Handler(Looper.myLooper()!!)
       binding = FragmentProductDeatilsBinding.inflate(layoutInflater)
-        cartFactory = CartViewModelFactory(CartRepo(RemoteSource(ShopifyAPi.retrofitService)))
+        cartFactory = CartViewModelFactory(CartRepo(RemoteSource()))
         cartViewModel = ViewModelProvider(requireActivity(), cartFactory)[CartViewModel::class.java]
-        favFactory = FavoriteViewModelFactory(ConcreteFavClass(RemoteSource(ShopifyAPi.retrofitService)))
+        favFactory = FavoriteViewModelFactory(ConcreteFavClass(RemoteSource()))
         favViewModel =  ViewModelProvider(requireActivity(), favFactory)[FavoriteViewModel::class.java]
         draftId = LocalDataSource.getInstance().readFromShared(requireContext())?.cartdraftOrderId ?:0
         wishListId = LocalDataSource.getInstance().readFromShared(requireContext())?.whiDraftOedredId ?:0
@@ -127,7 +127,7 @@ class ProductDetailsFragment : Fragment() {
             }
         }
 
-        productDetalisFactory =ProductDetalisFactory(ConcreteProductDetalis(RemoteSource(ShopifyAPi.retrofitService)))
+        productDetalisFactory =ProductDetalisFactory(ConcreteProductDetalis(RemoteSource()))
         productDetalisViewModel = ViewModelProvider(requireActivity(),productDetalisFactory)[ProductDetalisViewModel::class.java]
         productDetalisViewModel.getProductDetalis(productIdRecived)
 

@@ -71,7 +71,7 @@ class OrderDetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         orderDetailsViewModelFactory = OrderDetailsViewModelFactory(
             OrderDetailsRepo(
-                RemoteSource(ShopifyAPi.retrofitService)
+                RemoteSource()
             )
         )
         orderDetailsViewModel = ViewModelProvider(

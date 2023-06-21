@@ -50,7 +50,7 @@ class AddressListFragment : Fragment(),RemoveCustomerAddress {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         addressesViewModelFactory =
-            AddressesViewModelFactory(AddressesRepo(RemoteSource(ShopifyAPi.retrofitService)))
+            AddressesViewModelFactory(AddressesRepo(RemoteSource()))
         addressesViewModel = ViewModelProvider(
             requireActivity(),
             addressesViewModelFactory

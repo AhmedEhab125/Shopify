@@ -47,7 +47,7 @@ class ProductsFragment : Fragment(),OnClickToShowDetalis {
         productsBinding = FragmentProductsBinding.inflate(inflater)
         productsAdapter = ProductsAdapter(listOf(),this)
         val factory =
-            ProductsViewModelFactory(CollectionProductsRepo(RemoteSource(ShopifyAPi.retrofitService)))
+            ProductsViewModelFactory(CollectionProductsRepo(RemoteSource()))
         viewModel = ViewModelProvider(requireActivity(), factory)[ProductsViewModel::class.java]
         return productsBinding.root
     }

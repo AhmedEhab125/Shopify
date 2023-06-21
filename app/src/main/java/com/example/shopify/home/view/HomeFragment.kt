@@ -64,7 +64,7 @@ class HomeFragment : Fragment() {
     ): View? {
         smartCollections = listOf()
         homeViewModelFactory =
-            HomeViewModelFactory(HomeRepo(RemoteSource(ShopifyAPi.retrofitService)))
+            HomeViewModelFactory(HomeRepo(RemoteSource()))
         homeViewModel = ViewModelProvider(
             requireActivity(),
             homeViewModelFactory
