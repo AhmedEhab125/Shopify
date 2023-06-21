@@ -288,7 +288,6 @@ class CategoryFragment : Fragment(),OnClickToShowDetalisOfCategory {
                    }
                    else ->{
                        binding.progressBar3.visibility = View.GONE
-                       Log.i("Failure", "There is Erorr")
                        Snackbar.make(
                            requireView(),
                            "Failed to obtain data from api",

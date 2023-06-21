@@ -1,10 +1,8 @@
 package com.example.shopify.products.view
 
-import android.app.ProgressDialog
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,7 +14,6 @@ import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.shopify.Models.productDetails.Product
 import com.example.shopify.Models.products.CollectProductsModel
-import com.example.shopify.R
 import com.example.shopify.databinding.FragmentProductsBinding
 import com.example.shopify.nework.ApiState
 import com.example.shopify.nework.ShopifyAPi
@@ -24,11 +21,10 @@ import com.example.shopify.products.model.CollectionProductsRepo
 import com.example.shopify.products.viewModel.ProductsViewModel
 import com.example.shopify.products.viewModel.ProductsViewModelFactory
 import com.example.shopify.repo.RemoteSource
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 
-class ProductsFragment : Fragment(),OnClickToShowDetalis {
+class ProductsFragment : Fragment(),OnClickToShowDetails {
     private lateinit var productsBinding: FragmentProductsBinding
     private lateinit var productsAdapter: ProductsAdapter
     private lateinit var viewModel: ProductsViewModel

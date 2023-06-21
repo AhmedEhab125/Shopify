@@ -35,7 +35,6 @@ class CartAdapter(var cartList: List<LineItem>,val cartDelegate:Communicator) :
               if(id_imageUrl.size == 3){
                   var id = id_imageUrl[0]
                   var imageUrl = id_imageUrl[2]
-                  Log.i("essamImage", ""+imageUrl)
                   Glide.with(holder.binding.root).load(imageUrl).into(holder.binding.productImg)
               }
 

@@ -36,8 +36,8 @@ class OrderListViewModelTest{
 
     }
     @Test
-    fun getOrderList()= runBlocking{
-        orderViewModel.getOrders(12231321)
+    fun getOrderList()= mainDispatcherRule.runBlockingTest{
+        orderViewModel.getOrders(6966588965186)
         val apiState = orderViewModel.accessOrderList.getOrAwaitValue {  } as ApiState.Success<*>
         val result = apiState.date as RetriveOrderModel?
 

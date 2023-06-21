@@ -139,7 +139,6 @@ class ProductDetailsFragment : Fragment() {
                         binding.progressBar5.visibility = View.GONE
                         showComponantes()
                         setData()
-                        Log.i("Ehabbbbb","Observeation")
 
                     }
                     else -> {
@@ -236,7 +235,6 @@ class ProductDetailsFragment : Fragment() {
                 title = myProduct.product?.title
             )
             LoggedUserData.orderItemsList.add(lineItem)
-            Log.i("essamcount", "${LoggedUserData.orderItemsList.size}")
         }
         //Snackbar.make(binding.tvProductDetails,"Item Is Added To Cart",Snackbar.LENGTH_LONG).show()
         Toast.makeText(requireContext(),"Item Is Added To Cart",Toast.LENGTH_LONG).show()
@@ -349,7 +347,7 @@ class ProductDetailsFragment : Fragment() {
                         LoggedUserData.orderItemsList.addAll( (it.date as? DraftOrderPost)?.draft_order?.line_items ?: mutableListOf())
                     }
                     is ApiState.Failure -> {
-                        Log.i("Failure", "error in get order list in details screen ${it.error.message}")
+                        print("error in get order list in details screen ${it.error.message}")
                     }
 
                 }
@@ -364,33 +362,19 @@ class ProductDetailsFragment : Fragment() {
                 when (it) {
                     is ApiState.Loading -> binding.progressBar5.visibility = View.VISIBLE
                     is ApiState.Success<*> -> {
-
                         LoggedUserData.favOrderDraft.addAll(
                             (it.date as? DraftOrderPost)?.draft_order?.line_items ?: mutableListOf()
                         )
-                       // hena btdrb ya milad ab2 a3mel check 3aliha
-                     /*   LoggedUserData.favOrderDraft.forEach { item->
-                            if (item.title == myProduct.product?.title) {
-                                binding.btnAddToFav.setBackgroundResource(R.drawable.favorite_clicked)
-                                myProduct.product?.isFav = true
-                            }
-                        }*/
                     }
                     is ApiState.Failure -> {
-                        Log.i(
-                            "Failure",
-                            "error in get order list in details screen ${it.error.message}"
-                        )
+                            print("error in get order list in details screen ${it.error.message}")
                     }
 
                 }
             }
 
         }
-
-
     }
-
 
     private fun isAleradyFav(name:String) : Boolean{
         LoggedUserData.favOrderDraft.forEach { item->

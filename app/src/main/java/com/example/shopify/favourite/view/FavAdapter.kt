@@ -25,7 +25,6 @@ class FavAdapter (var favList: List<LineItem> , var listener : OnDelete):Recycle
     fun updateFavList(favListUpdated : List<LineItem>){
         favList = favListUpdated
         notifyDataSetChanged()
-        Log.i("ListAdapter",""+favList.size)
     }
 
     override fun onBindViewHolder(holder: FavViewHolder, position: Int) {
