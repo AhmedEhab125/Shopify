@@ -25,6 +25,7 @@ import com.example.shopify.repo.RemoteSource
 import com.example.shopify.utiltes.Constants
 import com.example.shopify.utiltes.LoggedUserData
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.snackbar.Snackbar
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -98,6 +99,10 @@ class MainActivity : AppCompatActivity() {
         } else {
             binding.bottomNavigationView.visibility = View.GONE
         }
+    }
+    fun showSnakeBar() {
+        val snackbar = Snackbar.make(binding.root, "No Internet Connection ", Snackbar.LENGTH_LONG)
+        snackbar.show()
     }
 
     override fun onResume() {
