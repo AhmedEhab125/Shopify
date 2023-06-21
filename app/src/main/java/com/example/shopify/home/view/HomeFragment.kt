@@ -25,6 +25,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.example.shopify.Models.brands.BrandModel
 import com.example.shopify.Models.brands.SmartCollection
 import com.example.shopify.R
+import com.example.shopify.ckeckNetwork.InternetStatus
 import com.example.shopify.ckeckNetwork.NetworkConectivityObserver
 import com.example.shopify.ckeckNetwork.NetworkObservation
 import com.example.shopify.databinding.FragmentHomeBinding
@@ -56,7 +57,7 @@ class HomeFragment : Fragment() {
     private val runnable = Runnable {
         viewPager2.currentItem = viewPager2.currentItem + 1
     }
-    var internetCheck = false
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -115,15 +116,18 @@ class HomeFragment : Fragment() {
             networkObservation.observeOnNetwork().collectLatest {
                 when (it.name) {
                     "Avaliavle" -> {
-                        internetCheck = true
+
                         Log.i("Internet", it.name)
-
-
+                        retry()
                     }
                     "Lost" -> {
-                        internetCheck = false
+
                         showInternetDialog()
 
+                    }
+                    InternetStatus.UnAvailable.name-> {
+                        Log.i("Internet", it.name)
+                        showInternetDialog()
                     }
                 }
             }
@@ -131,35 +135,12 @@ class HomeFragment : Fragment() {
     }
 
     private fun showInternetDialog() {
+        (context as MainActivity).showSnakeBar()
 
-        val snackbar =
-            Snackbar.make(homeBinding.root, "Snackbar message", Snackbar.LENGTH_INDEFINITE)
-
-        val button = snackbar.setAction("retry") {
-            // Handle button click here
-        }.view.findViewById<Button>(com.google.android.material.R.id.snackbar_action)
-
-        button.setOnTouchListener { _, _ ->
-            // Handle button touch here
-            false // Consume the touch event
-        }
-
-
-
-        snackbar.setAction("Retry", View.OnClickListener {
-
-            retry()
-            if (internetCheck) {
-                snackbar.dismiss()
-            }
-        })
-            snackbar.show()
     }
 
     fun retry() {
-        //calling setting data ()
-        // Ahmead's Logic here
-        Log.i("Retray", "Done")
+
         homeViewModel.getBrands()
 
     }

@@ -17,6 +17,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.shopify.Models.draftOrderCreation.DraftOrderPost
 import com.example.shopify.Models.draftOrderCreation.LineItem
 import com.example.shopify.R
+import com.example.shopify.ckeckNetwork.InternetStatus
+import com.example.shopify.ckeckNetwork.NetworkConectivityObserver
+import com.example.shopify.ckeckNetwork.NetworkObservation
 import com.example.shopify.database.LocalDataSource
 import com.example.shopify.databinding.FragmentFavouriteBinding
 import com.example.shopify.favourite.favViewModel.FavoriteViewModel
@@ -31,6 +34,7 @@ import com.example.shopify.utiltes.LoggedUserData
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class FavouriteFragment : Fragment(),OnDelete {
@@ -39,6 +43,7 @@ class FavouriteFragment : Fragment(),OnDelete {
     private lateinit var favViewModel : FavoriteViewModel
     private lateinit var favFactory : FavoriteViewModelFactory
     private lateinit var favDraftOrderPost: DraftOrderPost
+    lateinit var networkObservation: NetworkObservation
     private var wishListId :Long?= 0L
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -54,6 +59,7 @@ class FavouriteFragment : Fragment(),OnDelete {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        checkNetwork()
         if (LoggedUserData.favOrderDraft.size == 0){
             favViewModel.getFavItems(wishListId?:1592654688)
         }
@@ -119,6 +125,38 @@ class FavouriteFragment : Fragment(),OnDelete {
 
     override fun deleteFromFav(index: Int) {
         deleteDialog(index)
+
+    }
+    fun checkNetwork() {
+        networkObservation = NetworkConectivityObserver(requireContext())
+        lifecycleScope.launch {
+            networkObservation.observeOnNetwork().collectLatest {
+                when (it.name) {
+                    "Avaliavle" -> {
+
+                        Log.i("Internet", it.name)
+                        retry()
+                    }
+                    "Lost" -> {
+                        showInternetDialog()
+                    }
+                    InternetStatus.UnAvailable.name-> {
+                        Log.i("Internet", it.name)
+                        showInternetDialog()
+                    }
+                }
+            }
+        }
+    }
+
+    private fun showInternetDialog() {
+
+        (context as MainActivity).showSnakeBar()
+    }
+
+    fun retry() {
+
+        favViewModel.getFavItems(wishListId?:1592654688)
 
     }
 

@@ -20,10 +20,13 @@ class NetworkConectivityObserver(private val context: Context) : NetworkObservat
                     super.onAvailable(network)
                     launch { send(InternetStatus.Avaliavle) }
                 }
-
                 override fun onLost(network: Network) {
                     super.onLost(network)
                     launch { send(InternetStatus.Lost) }
+                }
+                override fun onUnavailable() {
+                    super.onUnavailable()
+                    launch { send(InternetStatus.UnAvailable) }
                 }
             }
             connectivityManger.registerDefaultNetworkCallback(callback)
@@ -39,5 +42,5 @@ interface NetworkObservation {
 
 }
 enum class InternetStatus {
-    Avaliavle , Lost
+    Avaliavle , Lost, UnAvailable
 }

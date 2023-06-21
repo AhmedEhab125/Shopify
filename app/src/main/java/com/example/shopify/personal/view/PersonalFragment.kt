@@ -18,6 +18,9 @@ import com.example.shopify.R
 import com.example.shopify.cart.model.CartRepo
 import com.example.shopify.cart.viewModel.CartViewModel
 import com.example.shopify.cart.viewModel.CartViewModelFactory
+import com.example.shopify.ckeckNetwork.InternetStatus
+import com.example.shopify.ckeckNetwork.NetworkConectivityObserver
+import com.example.shopify.ckeckNetwork.NetworkObservation
 import com.example.shopify.database.LocalDataSource
 import com.example.shopify.databinding.FragmentPersonalBinding
 import com.example.shopify.favourite.favViewModel.FavoriteViewModel
@@ -33,6 +36,7 @@ import com.example.shopify.repo.RemoteSource
 import com.example.shopify.utiltes.LoggedUserData
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 
@@ -51,6 +55,7 @@ class PersonalFragment : Fragment() {
     lateinit var orderListViewModel: OrderListViewModel
     lateinit var orderListViewModelFactory: OrderListViewModelFactory
      var userId :Long = 0L
+    lateinit var networkObservation: NetworkObservation
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -86,8 +91,11 @@ class PersonalFragment : Fragment() {
         ).get(OrderListViewModel::class.java)
         if (LoggedUserData.favOrderDraft.size == 0){
             favViewModel.getFavItems(wishListId?:1592654688)
+
         }
+        checkNetwork()
         if(FirebaseAuth.getInstance().currentUser==null){
+
             personalBinding.view2.visibility =View.GONE
             personalBinding.view3.visibility =View.GONE
             personalBinding.personProgressBar.visibility = View.GONE
@@ -104,6 +112,7 @@ class PersonalFragment : Fragment() {
                 Navigation.findNavController(requireView()).navigate(action)
             }
         }else{
+
             val logineUser = LocalDataSource.getInstance().readFromShared(requireContext())
             personalBinding.userName.text = logineUser?.firsName ?: "GEdooooooo"
             personalBinding.orderRV.adapter = ordersAdapter
@@ -219,6 +228,40 @@ class PersonalFragment : Fragment() {
 
             }
         }
+    }
+    fun checkNetwork() {
+        networkObservation = NetworkConectivityObserver(requireContext())
+        lifecycleScope.launch {
+            networkObservation.observeOnNetwork().collectLatest {
+                when (it.name) {
+                    "Avaliavle" -> {
+
+                        Log.i("Internet", it.name)
+                        retry()
+                    }
+                    "Lost" -> {
+                        showInternetDialog()
+                    }
+                    InternetStatus.UnAvailable.name-> {
+                        Log.i("Internet", it.name)
+                        showInternetDialog()
+                    }
+                }
+            }
+        }
+    }
+
+    private fun showInternetDialog() {
+
+        (context as MainActivity).showSnakeBar()
+    }
+
+    fun retry() {
+        if(FirebaseAuth.getInstance().currentUser!=null){
+        orderListViewModel.getOrders(userId)
+        favViewModel.getFavItems(wishListId?:1592654688)
+        }
+
     }
 
 
