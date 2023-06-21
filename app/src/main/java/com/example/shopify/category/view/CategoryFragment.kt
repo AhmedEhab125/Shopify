@@ -63,7 +63,7 @@ class CategoryFragment : Fragment(),OnClickToShowDetalisOfCategory {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentCategoryBinding.inflate(inflater, container, false)
-        favFactory = FavoriteViewModelFactory(ConcreteFavClass(RemoteSource(ShopifyAPi.retrofitService)))
+        favFactory = FavoriteViewModelFactory(ConcreteFavClass(RemoteSource()))
         favViewModel =  ViewModelProvider(requireActivity(), favFactory)[FavoriteViewModel::class.java]
         wishListId = LocalDataSource.getInstance().readFromShared(requireContext())?.whiDraftOedredId
         return binding.root
@@ -74,7 +74,7 @@ class CategoryFragment : Fragment(),OnClickToShowDetalisOfCategory {
         super.onViewCreated(view, savedInstanceState)
         checkNetwork()
         categoryViewModelFactory =
-            CategoryViewModelFactory(CategoryRepo(RemoteSource(ShopifyAPi.retrofitService)))
+            CategoryViewModelFactory(CategoryRepo(RemoteSource()))
         categoryViewModel = ViewModelProvider(
             requireActivity(),
             categoryViewModelFactory

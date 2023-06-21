@@ -42,10 +42,10 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        cartFactory = CartViewModelFactory(CartRepo(RemoteSource(ShopifyAPi.retrofitService)))
+        cartFactory = CartViewModelFactory(CartRepo(RemoteSource()))
         cartViewModel = ViewModelProvider(this, cartFactory)[CartViewModel::class.java]
         draftId = LocalDataSource.getInstance().readFromShared(this)?.cartdraftOrderId ?: 0
-        favFactory = FavoriteViewModelFactory(ConcreteFavClass(RemoteSource(ShopifyAPi.retrofitService)))
+        favFactory = FavoriteViewModelFactory(ConcreteFavClass(RemoteSource()))
         favViewModel =  ViewModelProvider(this, favFactory)[FavoriteViewModel::class.java]
         wishListId = LocalDataSource.getInstance().readFromShared(this)?.whiDraftOedredId ?: 0
         binding = ActivityMainBinding.inflate(layoutInflater)

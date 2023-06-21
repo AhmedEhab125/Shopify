@@ -68,10 +68,10 @@ class PersonalFragment : Fragment() {
         personalBinding = FragmentPersonalBinding.inflate(inflater)
         ordersAdapter = OrdersAdapter(listOf())
         wishListAdapter = WishListAdapter(listOf())
-        favFactory = FavoriteViewModelFactory(ConcreteFavClass(RemoteSource(ShopifyAPi.retrofitService)))
+        favFactory = FavoriteViewModelFactory(ConcreteFavClass(RemoteSource()))
         favViewModel =  ViewModelProvider(requireActivity(), favFactory)[FavoriteViewModel::class.java]
         wishListId = LocalDataSource.getInstance().readFromShared(requireContext())?.whiDraftOedredId ?: 0
-        cartFactory = CartViewModelFactory(CartRepo(RemoteSource(ShopifyAPi.retrofitService)))
+        cartFactory = CartViewModelFactory(CartRepo(RemoteSource()))
         cartViewModel = ViewModelProvider(requireActivity(), cartFactory)[CartViewModel::class.java]
         draftId = LocalDataSource.getInstance().readFromShared(requireContext())?.cartdraftOrderId ?: 0
         userId = LocalDataSource.getInstance().readFromShared(requireContext())?.userId ?:0L
@@ -82,7 +82,7 @@ class PersonalFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         orderListViewModelFactory =  OrderListViewModelFactory(
             OrderListRepo(
-            RemoteSource(ShopifyAPi.retrofitService)
+            RemoteSource()
         )
         )
         orderListViewModel = ViewModelProvider(

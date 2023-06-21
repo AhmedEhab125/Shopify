@@ -48,7 +48,7 @@ class CartFragment : Fragment(), Communicator {
     ): View {
         cartBinding = FragmentCartBinding.inflate(inflater)
         cartAdapter = CartAdapter(listOf(), this)
-        cartFactory = CartViewModelFactory(CartRepo(RemoteSource(ShopifyAPi.retrofitService)))
+        cartFactory = CartViewModelFactory(CartRepo(RemoteSource()))
         cartViewModel = ViewModelProvider(requireActivity(), cartFactory)[CartViewModel::class.java]
         draftId = LocalDataSource.getInstance().readFromShared(requireContext())?.cartdraftOrderId
         return cartBinding.root

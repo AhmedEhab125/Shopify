@@ -28,6 +28,7 @@ import com.example.shopify.nework.ApiState
 import com.example.shopify.orderHistory.model.OrderListRepo
 import com.example.shopify.orderHistory.viewModel.OrderListViewModel
 import com.example.shopify.orderHistory.viewModel.OrderListViewModelFactory
+import com.example.shopify.repo.RemoteSource
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -52,7 +53,7 @@ class OrderListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         orderListViewModelFactory =  OrderListViewModelFactory(OrderListRepo(
-            com.example.shopify.repo.RemoteSource(com.example.shopify.nework.ShopifyAPi.retrofitService)
+            RemoteSource()
         ))
         orderListViewModel = ViewModelProvider(
             requireActivity(),

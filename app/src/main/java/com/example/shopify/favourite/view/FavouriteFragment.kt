@@ -51,7 +51,7 @@ class FavouriteFragment : Fragment(),OnDelete {
     ): View? {
         favouriteBinding = FragmentFavouriteBinding.inflate(inflater)
         favAdapter = FavAdapter(listOf(),this)
-        favFactory = FavoriteViewModelFactory(ConcreteFavClass(RemoteSource(ShopifyAPi.retrofitService)))
+        favFactory = FavoriteViewModelFactory(ConcreteFavClass(RemoteSource()))
         favViewModel =  ViewModelProvider(requireActivity(), favFactory)[FavoriteViewModel::class.java]
         wishListId = LocalDataSource.getInstance().readFromShared(requireContext())?.whiDraftOedredId
         return favouriteBinding.root
