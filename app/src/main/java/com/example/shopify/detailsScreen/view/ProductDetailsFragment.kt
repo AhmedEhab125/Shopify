@@ -25,6 +25,9 @@ import com.example.shopify.R
 import com.example.shopify.cart.model.CartRepo
 import com.example.shopify.cart.viewModel.CartViewModel
 import com.example.shopify.cart.viewModel.CartViewModelFactory
+import com.example.shopify.ckeckNetwork.InternetStatus
+import com.example.shopify.ckeckNetwork.NetworkConectivityObserver
+import com.example.shopify.ckeckNetwork.NetworkObservation
 import com.example.shopify.database.LocalDataSource
 import com.example.shopify.databinding.FragmentProductDeatilsBinding
 import com.example.shopify.detailsScreen.model.ConcreteProductDetalis
@@ -34,6 +37,7 @@ import com.example.shopify.favourite.favViewModel.FavoriteViewModel
 import com.example.shopify.favourite.favViewModel.FavoriteViewModelFactory
 import com.example.shopify.favourite.model.ConcreteFavClass
 import com.example.shopify.login.LoginFragment
+import com.example.shopify.mainActivity.MainActivity
 import com.example.shopify.nework.ApiState
 import com.example.shopify.nework.ShopifyAPi
 import com.example.shopify.repo.RemoteSource
@@ -67,6 +71,7 @@ class ProductDetailsFragment : Fragment() {
     private val runnable = Runnable {
         binding.imgsViewPager.currentItem = binding.imgsViewPager.currentItem + 1
     }
+    lateinit var networkObservation: NetworkObservation
     private lateinit var handler: Handler
 
     //  private var isFav = false
@@ -87,7 +92,7 @@ class ProductDetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        checkNetwork()
         if(LoggedUserData.orderItemsList.size ==0){
             cartViewModel.getCartItems(draftId)
             observeAtGetOrderDraft()
@@ -400,6 +405,39 @@ class ProductDetailsFragment : Fragment() {
         return false
     }
 
+    fun checkNetwork() {
+        networkObservation = NetworkConectivityObserver(requireContext())
+        lifecycleScope.launch {
+            networkObservation.observeOnNetwork().collectLatest {
+                when (it.name) {
+                    "Avaliavle" -> {
+
+                        Log.i("Internet", it.name)
+                        retry()
+                    }
+                    "Lost" -> {
+                        showInternetDialog()
+
+
+                    }
+                    InternetStatus.UnAvailable.name-> {
+                        Log.i("Internet", it.name)
+                        showInternetDialog()
+                    }
+                }
+            }
+        }
+    }
+
+    private fun showInternetDialog() {
+        (context as MainActivity).showSnakeBar()
+    }
+
+    fun retry() {
+
+        productDetalisViewModel.getProductDetalis(productIdRecived)
+
+    }
 
 
 
