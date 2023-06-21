@@ -219,6 +219,7 @@ class PaymentFragment : Fragment() {
             binding.tvDiscount.text = "0"
             totalCost = calcTotalPrice() + 20
             binding.tvTotalFees.text = "${totalCost} ${Constants.currencyType}"
+            binding.voutcherTF.error = "This Code May be Used Before Or Not Found In Our Cuopon"
         }
     }
 
