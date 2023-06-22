@@ -259,7 +259,10 @@ class CategoryFragment : Fragment(),OnClickToShowDetalisOfCategory {
             }
             myAdapter.updateData(fillterdProducts)
             if (fillterdProducts.isEmpty()) {
-                Toast.makeText(requireContext(), "Sorry,No Data Founded", Toast.LENGTH_SHORT).show()
+                binding.tvNoProducts.visibility =View.VISIBLE
+            }else{
+                binding.tvNoProducts.visibility =View.GONE
+
             }
         }
     }
