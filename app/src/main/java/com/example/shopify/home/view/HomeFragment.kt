@@ -205,6 +205,7 @@ class HomeFragment : Fragment() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
 
                 filterBrands(s.toString())
+
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -225,7 +226,10 @@ class HomeFragment : Fragment() {
         }
         brandsAdapter.setBrandsList(filterdBrands)
         if (filterdBrands.isEmpty()) {
-            Toast.makeText(requireContext(), "Sorry,No Data Founded", Toast.LENGTH_SHORT).show()
+            homeBinding.tbNoBrands.visibility = View.VISIBLE
+            }else{
+            homeBinding.tbNoBrands.visibility = View.GONE
+
         }
 
     }

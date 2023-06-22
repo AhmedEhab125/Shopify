@@ -171,6 +171,14 @@ class PersonalFragment : Fragment() {
                                     (favDraftOrderPost.draft_order.line_items
                                         ?: mutableListOf()) as MutableList<LineItem>
                             }
+                            if(LoggedUserData.favOrderDraft.size ==1){
+                                personalBinding.tvNoFav.visibility=View.VISIBLE
+
+                            }else{
+                                personalBinding.tvNoFav.visibility=View.GONE
+
+                            }
+                          //  personalBinding.tvNoFav.visibility=View.VISIBLE
 
                             wishListAdapter.updateWishList(LoggedUserData.favOrderDraft)
                         }
@@ -202,6 +210,14 @@ class PersonalFragment : Fragment() {
 
                         var orders = result.date as List<Order>
                         personalBinding.personProgressBar.visibility= View.GONE
+                        if (orders.size==0){
+                            personalBinding.tvNoOrders.visibility=View.VISIBLE
+
+                        }
+                        else{
+                            personalBinding.tvNoOrders.visibility=View.GONE
+                        }
+
 
                         // smartCollections = brands?.smart_collections ?: listOf()
                         //  brandsAdapter.setBrandsList(smartCollections)

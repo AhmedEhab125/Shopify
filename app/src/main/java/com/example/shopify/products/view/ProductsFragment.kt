@@ -111,7 +111,10 @@ class ProductsFragment : Fragment(),OnClickToShowDetails {
         }
         productsAdapter.updateList(filtteredProducts)
         if (filtteredProducts.isEmpty()){
-            Toast.makeText(requireContext(),"Sorry,No Data Founded", Toast.LENGTH_SHORT).show()
+            productsBinding.tvNoProduct.visibility =View.VISIBLE
+        }else{
+            productsBinding.tvNoProduct.visibility =View.GONE
+
         }
 
     }
