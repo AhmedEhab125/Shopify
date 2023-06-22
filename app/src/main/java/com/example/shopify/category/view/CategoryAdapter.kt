@@ -48,7 +48,6 @@ class CategoryAdapter  (private var myProducts: List<Product> , val listener:OnC
         if (id_imageUrl[0].equals(product.id.toString())) {
             holder.binding.categoryAddToFav.setBackgroundResource(R.drawable.favorite_clicked)
             product.isFav = true
-            Log.i("Hooopaaaa", id_imageUrl[0] + " is Equal " + product.id)
             break
         } else {
             holder.binding.categoryAddToFav.setBackgroundResource(R.drawable.favourite_btn)
@@ -97,12 +96,10 @@ class CategoryAdapter  (private var myProducts: List<Product> , val listener:OnC
             }
         }
           Toast.makeText(context, "Product Removed From Favorite List", Toast.LENGTH_SHORT).show()
-        Log.i("adapter","removed")
     }
 
     private fun addToFav(product: Product) {
   if (isAleradyFav(product)){
-      Log.i("adapter", "Aleardy Added")
   }else {
       val lineItem = LineItem(
           price = product.variants?.get(0)?.price,
@@ -112,7 +109,6 @@ class CategoryAdapter  (private var myProducts: List<Product> , val listener:OnC
       )
       Toast.makeText(context, "Product Added To Favorite List", Toast.LENGTH_SHORT).show()
       LoggedUserData.favOrderDraft.add(lineItem)
-      Log.i("adapter", "Added")
   }
 
     }
@@ -128,7 +124,6 @@ class CategoryAdapter  (private var myProducts: List<Product> , val listener:OnC
 
 
     override fun getItemCount(): Int {
-        Log.i("Fav Count",LoggedUserData.favOrderDraft.size.toString())
         return myProducts.size
 
     }

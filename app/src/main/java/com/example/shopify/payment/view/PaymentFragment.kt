@@ -138,7 +138,6 @@ class PaymentFragment : Fragment() {
                 }
 
             } else if (binding.onlinePaymentRB.isChecked) {
-                Log.i("essam order online", "$discount")
                 postOrder = PostOrderModel(
                     com.example.shopify.Models.postOrderModel.Order(
                         "Credit", "EGP", "150",
@@ -155,7 +154,6 @@ class PaymentFragment : Fragment() {
                     Snackbar.LENGTH_LONG
                 ).show()
             }
-            Log.i("essam checkout btn", "$discount")
             discount = ""
         }
         calcTotalPrice()
@@ -206,7 +204,6 @@ class PaymentFragment : Fragment() {
             }else{
                 "${(calcTotalPrice()*.20)}"
             }
-            Log.i("essam order check", "$discount")
             binding.trueLottie.visibility = View.VISIBLE
             binding.tvDiscount.text = "${(calcTotalPrice()*.20).toInt()}"
             totalCost = calcTotalPrice() - (calcTotalPrice()*.20).toInt() + 20

@@ -11,7 +11,7 @@ data class SmartCollection(
     val published_scope: String,
     val rules: List<Rule>,
     val sort_order: String,
-    val template_suffix: Any,
+    val template_suffix: Any?,
     val title: String,
     val updated_at: String
 )

@@ -1,6 +1,5 @@
 package com.example.shopify.detailsScreen.viewModel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.shopify.nework.ApiState

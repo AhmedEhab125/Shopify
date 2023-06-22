@@ -1,6 +1,5 @@
 package com.example.shopify.products.view
 
-import android.app.ProgressDialog
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -33,7 +32,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 
-class ProductsFragment : Fragment(),OnClickToShowDetalis {
+class ProductsFragment : Fragment(),OnClickToShowDetails {
     private lateinit var productsBinding: FragmentProductsBinding
     private lateinit var productsAdapter: ProductsAdapter
     private lateinit var viewModel: ProductsViewModel
@@ -130,7 +129,6 @@ class ProductsFragment : Fragment(),OnClickToShowDetalis {
             networkObservation.observeOnNetwork().collectLatest {
                 when (it.name) {
                     "Avaliavle" -> {
-
                         Log.i("Internet", it.name)
                         retry()
                     }

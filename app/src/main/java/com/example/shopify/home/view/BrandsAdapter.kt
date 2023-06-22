@@ -35,8 +35,6 @@ class BrandsAdapter(var list: List<SmartCollection>) :
         holder.binding.brandName.text = list[position].title
         Glide.with(holder.binding.root).load(list[position].image.src).into(holder.binding.brandImg)
         holder.binding.root.setOnClickListener {
-            //Navigation.findNavController(it).navigate(R.id.homeFragment_to_productsFragment)
-            Log.i("essam id", ""+list[position].id)
             val action = HomeFragmentDirections.homeFragmentToProductsFragment(list[position].id)
             findNavController(it).navigate(action)
         }

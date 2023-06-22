@@ -93,10 +93,6 @@ class SignupFragment : Fragment() {
                         //create User Object And Post It To API
                         val user = it.result.user
                         creatUser(user as FirebaseUser)
-                        Log.i(
-                            "user",
-                            firstName + "" + secondName + address + "" + city + "" + country + "" + phone + "" + email
-                        )
                     } else {
                         binding.signUpPrograssBar.visibility = View.GONE
                         Toast.makeText(
@@ -104,7 +100,6 @@ class SignupFragment : Fragment() {
                             it.exception.toString(),
                             Toast.LENGTH_SHORT
                         ).show()
-                        Log.i("erorr", it.exception.toString())
                     }
 
                 }
@@ -274,13 +269,10 @@ class SignupFragment : Fragment() {
             signupViewModel.userInfo.collect {
                 when (it) {
                     is ApiState.Loading -> {
-                        Log.i("Loading", "It's Loading")
-                        //  binding.progressBar5.visibility = View.VISIBLE
                     }
                     is ApiState.Success<*> -> {
                         val myUser = it.date as? CustomerRegistrationModel
                       if(myUser != null) {
-                          Log.i("Mizooo", myUser?.customer?.id.toString())
                           myFirebaseUser?.userId = myUser?.customer?.id
                           myFirebaseUser?.firsName = myUser?.customer?.first_name
                           signupViewModel.postWishListDraftPrder(draftOrderPost)

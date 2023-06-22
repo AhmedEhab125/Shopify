@@ -35,11 +35,9 @@ class UserFireBaseDataBase {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     val myUser = snapshot.getValue(MyFireBaseUser::class.java)
                     if (myUser !=null) {
-                        Log.i("MiladMizo", myUser.toString())
                        LocalDataSource.getInstance().writeInShared(context,myUser)
                     }
                 }
-
                 override fun onCancelled(error: DatabaseError) {
                   Log.i("Fetch Error","Sorry There Is An Error in Fire Base")
 
