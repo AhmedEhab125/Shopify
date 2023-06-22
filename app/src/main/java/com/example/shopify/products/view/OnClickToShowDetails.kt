@@ -1,6 +1,6 @@
 package com.example.shopify.products.view
 
-interface OnClickToShowDetalis {
+interface OnClickToShowDetails {
 
    fun ShowProductDetalis(productId : Long)
 }

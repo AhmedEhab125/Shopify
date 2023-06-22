@@ -67,54 +67,45 @@ class FavouriteFragment : Fragment(),OnDelete {
         favouriteBinding.favRV.adapter = favAdapter
         favouriteBinding.favRV.layoutManager = GridLayoutManager(requireContext(),2)
 
-      if(FirebaseAuth.getInstance().currentUser!=null) {
-          lifecycleScope.launch {
-              favViewModel.favItems.collect {
-                  when (it) {
-                      is ApiState.Loading -> {
-                          favouriteBinding.favLottieSplash.visibility = View.GONE
-                          favouriteBinding.favLottieMessage.visibility = View.GONE
-                          favouriteBinding.favprogressBar.visibility = View.VISIBLE
-                      }
-                      is ApiState.Success<*> -> {
-                          if (it.date != null) {
-                              favouriteBinding.favprogressBar.visibility = View.GONE
-                              favDraftOrderPost = it.date as DraftOrderPost
-                              if (LoggedUserData.favOrderDraft.size == 0) {
-                                  LoggedUserData.favOrderDraft =
-                                      (favDraftOrderPost.draft_order.line_items
-                                          ?: mutableListOf()) as MutableList<LineItem>
-                              }
-                              showHiddenAnimation()
-                              favAdapter.updateFavList(LoggedUserData.favOrderDraft)
-                          }
-
-
-                          /*  if(LoggedUserData.favOrderDraft.size == 1){
-                           Log.i("No Data","There Is No Data")
-                       }else {
-                           favAdapter.updateFavList(LoggedUserData.favOrderDraft)
-                       }*/
-
-                      }
-                      else -> {
-                          favouriteBinding.favprogressBar.visibility = View.GONE
-                          Log.i("Failure", "There is Erorr")
-                          Snackbar.make(
-                              requireView(),
-                              "Failed to obtain data from api",
-                              Snackbar.LENGTH_LONG
-                          ).show()
-                      }
-                  }
-              }
-          }
-      }else{
-          favouriteBinding.favprogressBar.visibility = View.GONE
-          favouriteBinding.favLottieSplash.visibility = View.VISIBLE
-          favouriteBinding.favLottieMessage.visibility = View.VISIBLE
-          favouriteBinding.favLottieMessage.text = "Please Login To View Your Favorite items"
-      }
+        if(FirebaseAuth.getInstance().currentUser!=null) {
+            lifecycleScope.launch {
+                favViewModel.favItems.collect {
+                    when (it) {
+                        is ApiState.Loading -> {
+                            favouriteBinding.favLottieSplash.visibility = View.GONE
+                            favouriteBinding.favLottieMessage.visibility = View.GONE
+                            favouriteBinding.favprogressBar.visibility = View.VISIBLE
+                        }
+                        is ApiState.Success<*> -> {
+                            if (it.date != null) {
+                                favouriteBinding.favprogressBar.visibility = View.GONE
+                                favDraftOrderPost = it.date as DraftOrderPost
+                                if (LoggedUserData.favOrderDraft.size == 0) {
+                                    LoggedUserData.favOrderDraft =
+                                        (favDraftOrderPost.draft_order.line_items
+                                            ?: mutableListOf()) as MutableList<LineItem>
+                                }
+                                showHiddenAnimation()
+                                favAdapter.updateFavList(LoggedUserData.favOrderDraft)
+                            }
+                        }
+                        else -> {
+                            favouriteBinding.favprogressBar.visibility = View.GONE
+                            Snackbar.make(
+                                requireView(),
+                                "Failed to obtain data from api",
+                                Snackbar.LENGTH_LONG
+                            ).show()
+                        }
+                    }
+                }
+            }
+        }else{
+            favouriteBinding.favprogressBar.visibility = View.GONE
+            favouriteBinding.favLottieSplash.visibility = View.VISIBLE
+            favouriteBinding.favLottieMessage.visibility = View.VISIBLE
+            favouriteBinding.favLottieMessage.text = "Please Login To View Your Favorite items"
+        }
 
     }
 
@@ -188,7 +179,7 @@ class FavouriteFragment : Fragment(),OnDelete {
     fun showHiddenAnimation(){
         if(LoggedUserData.favOrderDraft.size ==1){
             favouriteBinding.favLottieSplash.visibility = View.VISIBLE
-             favouriteBinding.favLottieMessage.visibility = View.VISIBLE
+            favouriteBinding.favLottieMessage.visibility = View.VISIBLE
             favouriteBinding.favLottieMessage.text = "Sorry,There is No Items."
         }else{
             favouriteBinding.favLottieSplash.visibility = View.GONE

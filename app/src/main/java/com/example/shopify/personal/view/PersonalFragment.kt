@@ -174,18 +174,9 @@ class PersonalFragment : Fragment() {
 
                             wishListAdapter.updateWishList(LoggedUserData.favOrderDraft)
                         }
-
-
-                        /*  if(LoggedUserData.favOrderDraft.size == 1){
-                         Log.i("No Data","There Is No Data")
-                     }else {
-                         favAdapter.updateFavList(LoggedUserData.favOrderDraft)
-                     }*/
-
                     }
                     else -> {
                       //  favouriteBinding.favprogressBar.visibility = View.GONE
-                        Log.i("Failure", "There is Erorr")
                         Snackbar.make(
                             requireView(),
                             "Failed to obtain data from api",

@@ -14,6 +14,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.shopify.Models.draftOrderCreation.DraftOrderPost
+import com.example.shopify.Models.draftOrderCreation.LineItem
 import com.example.shopify.Models.productDetails.Product
 import com.example.shopify.Models.products.CollectProductsModel
 import com.example.shopify.R
@@ -34,6 +35,9 @@ import com.example.shopify.nework.ShopifyAPi
 import com.example.shopify.repo.RemoteSource
 import com.example.shopify.utiltes.LoggedUserData
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -65,7 +69,7 @@ class CategoryFragment : Fragment(),OnClickToShowDetalisOfCategory {
         binding = FragmentCategoryBinding.inflate(inflater, container, false)
         favFactory = FavoriteViewModelFactory(ConcreteFavClass(RemoteSource()))
         favViewModel =  ViewModelProvider(requireActivity(), favFactory)[FavoriteViewModel::class.java]
-        wishListId = LocalDataSource.getInstance().readFromShared(requireContext())?.whiDraftOedredId
+
         return binding.root
 
     }
@@ -80,8 +84,12 @@ class CategoryFragment : Fragment(),OnClickToShowDetalisOfCategory {
             categoryViewModelFactory
         ).get(CategoryViewModel::class.java)
 
-       if(LoggedUserData.favOrderDraft.size == 0){
-           favViewModel.getFavItems(wishListId?:0)
+       if(FirebaseAuth.getInstance().currentUser!=null&&LoggedUserData.favOrderDraft.size == 0){
+           lifecycleScope.launch(Dispatchers.Main) {
+               delay(500)
+               wishListId = LocalDataSource.getInstance().readFromShared(requireContext())?.whiDraftOedredId
+               favViewModel.getFavItems(wishListId ?: 0)
+           }
            observeOnFav()
        }
 
@@ -289,13 +297,12 @@ class CategoryFragment : Fragment(),OnClickToShowDetalisOfCategory {
                    }
                    is  ApiState.Success<*> -> {
                        binding.progressBar3.visibility = View.GONE
-                       LoggedUserData.favOrderDraft.addAll(
-                           (it.date as? DraftOrderPost)?.draft_order?.line_items ?: mutableListOf()
-                       )
+                       LoggedUserData.favOrderDraft=
+                           ((it.date as? DraftOrderPost)?.draft_order?.line_items ?: mutableListOf()) as MutableList<LineItem>
+
                    }
                    else ->{
                        binding.progressBar3.visibility = View.GONE
-                       Log.i("Failure", "There is Erorr")
                        Snackbar.make(
                            requireView(),
                            "Failed to obtain data from api",
