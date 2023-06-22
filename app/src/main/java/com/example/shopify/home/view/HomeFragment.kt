@@ -1,14 +1,19 @@
 package com.example.shopify.home.view
 
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.text.Editable
+import android.text.Html
 import android.text.TextWatcher
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -20,6 +25,9 @@ import androidx.viewpager2.widget.ViewPager2
 import com.example.shopify.Models.brands.BrandModel
 import com.example.shopify.Models.brands.SmartCollection
 import com.example.shopify.R
+import com.example.shopify.ckeckNetwork.InternetStatus
+import com.example.shopify.ckeckNetwork.NetworkConectivityObserver
+import com.example.shopify.ckeckNetwork.NetworkObservation
 import com.example.shopify.databinding.FragmentHomeBinding
 import com.example.shopify.home.model.Ads
 import com.example.shopify.home.model.HomeRepo
@@ -31,6 +39,8 @@ import com.example.shopify.nework.ShopifyAPi
 import com.example.shopify.repo.RemoteSource
 import com.example.shopify.utiltes.Constants
 import com.example.shopify.utiltes.LoggedUserData
+import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class HomeFragment : Fragment() {
@@ -42,7 +52,8 @@ class HomeFragment : Fragment() {
     private lateinit var viewPager2: ViewPager2
     lateinit var homeViewModel: HomeViewModel
     lateinit var homeViewModelFactory: HomeViewModelFactory
-    lateinit var smartCollections : List<SmartCollection>
+    lateinit var smartCollections: List<SmartCollection>
+    lateinit var networkObservation: NetworkObservation
     private val runnable = Runnable {
         viewPager2.currentItem = viewPager2.currentItem + 1
     }
@@ -52,7 +63,8 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         smartCollections = listOf()
-        homeViewModelFactory = HomeViewModelFactory(HomeRepo(RemoteSource(ShopifyAPi.retrofitService)))
+        homeViewModelFactory =
+            HomeViewModelFactory(HomeRepo(RemoteSource()))
         homeViewModel = ViewModelProvider(
             requireActivity(),
             homeViewModelFactory
@@ -75,13 +87,16 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        checkNetwork()
         brandsAdapter = BrandsAdapter(listOf())
         homeBinding.brandsRV.adapter = brandsAdapter
-        homeBinding.brandsRV.layoutManager = GridLayoutManager(requireContext(), 2,RecyclerView.HORIZONTAL, false)
+        homeBinding.brandsRV.layoutManager =
+            GridLayoutManager(requireContext(), 2, RecyclerView.HORIZONTAL, false)
         setBrandData()
         homeViewModel.getBrands()
         searchForBrands()
     }
+
 
     override fun onPause() {
         super.onPause()
@@ -95,15 +110,50 @@ class HomeFragment : Fragment() {
 
     }
 
+    fun checkNetwork() {
+        networkObservation = NetworkConectivityObserver(requireContext())
+        lifecycleScope.launch {
+            networkObservation.observeOnNetwork().collectLatest {
+                when (it.name) {
+                    "Avaliavle" -> {
+
+                        Log.i("Internet", it.name)
+                        retry()
+                    }
+                    "Lost" -> {
+
+                        showInternetDialog()
+
+                    }
+                    InternetStatus.UnAvailable.name-> {
+                        Log.i("Internet", it.name)
+                        showInternetDialog()
+                    }
+                }
+            }
+        }
+    }
+
+    private fun showInternetDialog() {
+        (context as MainActivity).showSnakeBar()
+
+    }
+
+    fun retry() {
+
+        homeViewModel.getBrands()
+
+    }
+
     private fun init() {
         handler = Handler(Looper.myLooper()!!)
         ads = ArrayList()
-        ads.add(Ads(R.drawable.discount1,Constants.vouchersList[0]))
-        ads.add(Ads(R.drawable.discount2,Constants.vouchersList[1]))
-        ads.add(Ads(R.drawable.discount3,Constants.vouchersList[2]))
-        ads.add(Ads(R.drawable.discount4,Constants.vouchersList[3]))
-        ads.add(Ads(R.drawable.discount5,Constants.vouchersList[4]))
-        ads.add(Ads(R.drawable.discount6,Constants.vouchersList[5]))
+        ads.add(Ads(R.drawable.discount1, Constants.vouchersList[0]))
+        ads.add(Ads(R.drawable.discount2, Constants.vouchersList[1]))
+        ads.add(Ads(R.drawable.discount3, Constants.vouchersList[2]))
+        ads.add(Ads(R.drawable.discount4, Constants.vouchersList[3]))
+        ads.add(Ads(R.drawable.discount5, Constants.vouchersList[4]))
+        ads.add(Ads(R.drawable.discount6, Constants.vouchersList[5]))
         adsAdapter = AdsAdapter(ads, viewPager2)
         homeBinding.dicountsSlider.adapter = adsAdapter
         viewPager2.clipToPadding = false
@@ -146,8 +196,8 @@ class HomeFragment : Fragment() {
     }
 
 
-    fun searchForBrands(){
-        homeBinding.homeSearch.addTextChangedListener(object :TextWatcher {
+    fun searchForBrands() {
+        homeBinding.homeSearch.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
 
             }
@@ -165,18 +215,17 @@ class HomeFragment : Fragment() {
     }
 
 
-
-    fun filterBrands(text:String){
+    fun filterBrands(text: String) {
         var filterdBrands = mutableListOf<SmartCollection>()
-        for(brand in smartCollections){
-            if (brand.title.lowercase().contains(text.lowercase()) ) {
-               filterdBrands.add(brand)
+        for (brand in smartCollections) {
+            if (brand.title.lowercase().contains(text.lowercase())) {
+                filterdBrands.add(brand)
             }
 
         }
         brandsAdapter.setBrandsList(filterdBrands)
-        if (filterdBrands.isEmpty()){
-            Toast.makeText(requireContext(),"Sorry,No Data Founded",Toast.LENGTH_SHORT).show()
+        if (filterdBrands.isEmpty()) {
+            Toast.makeText(requireContext(), "Sorry,No Data Founded", Toast.LENGTH_SHORT).show()
         }
 
     }

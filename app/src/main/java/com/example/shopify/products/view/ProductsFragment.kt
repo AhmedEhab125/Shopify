@@ -14,13 +14,20 @@ import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.shopify.Models.productDetails.Product
 import com.example.shopify.Models.products.CollectProductsModel
+import com.example.shopify.R
+import com.example.shopify.ckeckNetwork.InternetStatus
+import com.example.shopify.ckeckNetwork.NetworkConectivityObserver
+import com.example.shopify.ckeckNetwork.NetworkObservation
 import com.example.shopify.databinding.FragmentProductsBinding
+import com.example.shopify.mainActivity.MainActivity
 import com.example.shopify.nework.ApiState
 import com.example.shopify.nework.ShopifyAPi
 import com.example.shopify.products.model.CollectionProductsRepo
 import com.example.shopify.products.viewModel.ProductsViewModel
 import com.example.shopify.products.viewModel.ProductsViewModelFactory
 import com.example.shopify.repo.RemoteSource
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 
@@ -29,6 +36,8 @@ class ProductsFragment : Fragment(),OnClickToShowDetails {
     private lateinit var productsAdapter: ProductsAdapter
     private lateinit var viewModel: ProductsViewModel
     lateinit var myProducts : List<Product>
+    lateinit var networkObservation: NetworkObservation
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -36,7 +45,7 @@ class ProductsFragment : Fragment(),OnClickToShowDetails {
         productsBinding = FragmentProductsBinding.inflate(inflater)
         productsAdapter = ProductsAdapter(listOf(),this)
         val factory =
-            ProductsViewModelFactory(CollectionProductsRepo(RemoteSource(ShopifyAPi.retrofitService)))
+            ProductsViewModelFactory(CollectionProductsRepo(RemoteSource()))
         viewModel = ViewModelProvider(requireActivity(), factory)[ProductsViewModel::class.java]
         return productsBinding.root
     }
@@ -49,7 +58,7 @@ class ProductsFragment : Fragment(),OnClickToShowDetails {
         productsBinding.productsRV.layoutManager = GridLayoutManager(requireContext(), 2)
         updateRecycleView()
         searchForProduct()
-
+        checkNetwork()
     }
 
     private fun updateRecycleView() {
@@ -109,6 +118,38 @@ class ProductsFragment : Fragment(),OnClickToShowDetails {
     override fun ShowProductDetalis(productId: Long) {
         val action = ProductsFragmentDirections.fromProductToDetails(productId)
         Navigation.findNavController(requireView()).navigate(action)
+    }
+    fun checkNetwork() {
+        networkObservation = NetworkConectivityObserver(requireContext())
+        lifecycleScope.launch {
+            networkObservation.observeOnNetwork().collectLatest {
+                when (it.name) {
+                    "Avaliavle" -> {
+
+                        Log.i("Internet", it.name)
+                        retry()
+                    }
+                    "Lost" -> {
+                        showInternetDialog()
+                    }
+                    InternetStatus.UnAvailable.name-> {
+                        Log.i("Internet", it.name)
+                        showInternetDialog()
+                    }
+                }
+            }
+        }
+    }
+
+    private fun showInternetDialog() {
+
+        (context as MainActivity).showSnakeBar()
+    }
+
+    fun retry() {
+        val dataReceived = requireArguments().getLong("id")
+        viewModel.getCollectionProducts(dataReceived)
+
     }
 
 

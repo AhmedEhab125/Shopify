@@ -25,6 +25,7 @@ import com.example.shopify.repo.RemoteSource
 import com.example.shopify.utiltes.Constants
 import com.example.shopify.utiltes.LoggedUserData
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.snackbar.Snackbar
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -41,10 +42,10 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        cartFactory = CartViewModelFactory(CartRepo(RemoteSource(ShopifyAPi.retrofitService)))
+        cartFactory = CartViewModelFactory(CartRepo(RemoteSource()))
         cartViewModel = ViewModelProvider(this, cartFactory)[CartViewModel::class.java]
         draftId = LocalDataSource.getInstance().readFromShared(this)?.cartdraftOrderId ?: 0
-        favFactory = FavoriteViewModelFactory(ConcreteFavClass(RemoteSource(ShopifyAPi.retrofitService)))
+        favFactory = FavoriteViewModelFactory(ConcreteFavClass(RemoteSource()))
         favViewModel =  ViewModelProvider(this, favFactory)[FavoriteViewModel::class.java]
         wishListId = LocalDataSource.getInstance().readFromShared(this)?.whiDraftOedredId ?: 0
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -98,6 +99,10 @@ class MainActivity : AppCompatActivity() {
         } else {
             binding.bottomNavigationView.visibility = View.GONE
         }
+    }
+    fun showSnakeBar() {
+        val snackbar = Snackbar.make(binding.root, "No Internet Connection ", Snackbar.LENGTH_LONG)
+        snackbar.show()
     }
 
     override fun onResume() {

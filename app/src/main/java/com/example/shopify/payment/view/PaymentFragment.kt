@@ -82,7 +82,7 @@ class PaymentFragment : Fragment() {
         binding.trueLottie.visibility = View.GONE
         binding.tvDiscount.text = "0"
         binding.tvDelevaryFees.text = "20 ${Constants.currencyType}"
-        cartFactory = CartViewModelFactory(CartRepo(RemoteSource(ShopifyAPi.retrofitService)))
+        cartFactory = CartViewModelFactory(CartRepo(RemoteSource()))
         cartViewModel = ViewModelProvider(requireActivity(), cartFactory)[CartViewModel::class.java]
         draftId = LocalDataSource.getInstance().readFromShared(requireContext())?.cartdraftOrderId ?: 0
         return binding.root
@@ -92,7 +92,7 @@ class PaymentFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         paymentViewModelFactory = PaymentViewModelFactory(
             PaymentRepo(
-                RemoteSource(ShopifyAPi.retrofitService)
+                RemoteSource()
             )
         )
         job = Job()

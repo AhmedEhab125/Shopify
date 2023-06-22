@@ -5,8 +5,8 @@ import com.example.shopify.repo.IOrderList
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
-class FakeOrderListRepo: IOrderList {
+class FakeOrderListRepo : IOrderList {
     override suspend fun getOrderList(): Flow<RetriveOrderModel?> {
-        return flowOf(fakeOrderList())
+        return flowOf( getFakeOrderList())
     }
 }

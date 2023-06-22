@@ -21,6 +21,9 @@ import com.example.shopify.R
 import com.example.shopify.category.model.CategoryRepo
 import com.example.shopify.category.viewModel.CategoryViewModel
 import com.example.shopify.category.viewModel.CategoryViewModelFactory
+import com.example.shopify.ckeckNetwork.InternetStatus
+import com.example.shopify.ckeckNetwork.NetworkConectivityObserver
+import com.example.shopify.ckeckNetwork.NetworkObservation
 import com.example.shopify.database.LocalDataSource
 import com.example.shopify.databinding.FragmentCategoryBinding
 import com.example.shopify.favourite.favViewModel.FavoriteViewModel
@@ -36,6 +39,7 @@ import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 
@@ -50,6 +54,8 @@ class CategoryFragment : Fragment(),OnClickToShowDetalisOfCategory {
     private lateinit var favFactory : FavoriteViewModelFactory
     private lateinit var favDraftOrderPost: DraftOrderPost
     private var wishListId :Long?= 0L
+    lateinit var networkObservation: NetworkObservation
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -61,7 +67,7 @@ class CategoryFragment : Fragment(),OnClickToShowDetalisOfCategory {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentCategoryBinding.inflate(inflater, container, false)
-        favFactory = FavoriteViewModelFactory(ConcreteFavClass(RemoteSource(ShopifyAPi.retrofitService)))
+        favFactory = FavoriteViewModelFactory(ConcreteFavClass(RemoteSource()))
         favViewModel =  ViewModelProvider(requireActivity(), favFactory)[FavoriteViewModel::class.java]
 
         return binding.root
@@ -70,8 +76,9 @@ class CategoryFragment : Fragment(),OnClickToShowDetalisOfCategory {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        checkNetwork()
         categoryViewModelFactory =
-            CategoryViewModelFactory(CategoryRepo(RemoteSource(ShopifyAPi.retrofitService)))
+            CategoryViewModelFactory(CategoryRepo(RemoteSource()))
         categoryViewModel = ViewModelProvider(
             requireActivity(),
             categoryViewModelFactory
@@ -308,6 +315,38 @@ class CategoryFragment : Fragment(),OnClickToShowDetalisOfCategory {
 
            }
        }
+    fun checkNetwork() {
+        networkObservation = NetworkConectivityObserver(requireContext())
+        lifecycleScope.launch {
+            networkObservation.observeOnNetwork().collectLatest {
+                when (it.name) {
+                    "Avaliavle" -> {
+
+                        Log.i("Internet", it.name)
+                        retry()
+                    }
+                    "Lost" -> {
+                        showInternetDialog()
+                    }
+                    InternetStatus.UnAvailable.name-> {
+                        Log.i("Internet", it.name)
+                        showInternetDialog()
+                    }
+                }
+            }
+        }
+    }
+
+    private fun showInternetDialog() {
+
+        (context as MainActivity).showSnakeBar()
+    }
+
+    fun retry() {
+
+        categoryViewModel.getAllProducts()
+
+    }
 
 
 

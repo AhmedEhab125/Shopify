@@ -55,11 +55,9 @@ class CartFragment : Fragment(), Communicator {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.i("Order List", "Cart before if ${LoggedUserData.orderItemsList.size} ")
         cartBinding.checkoutBtn.isEnabled = false
         if(LoggedUserData.orderItemsList.size == 0 ){
             cartViewModel.getCartItems(draftId ?: 0)
-            Log.i("Order List", "Cart inside if ${LoggedUserData.orderItemsList.size} ")
         }else if (LoggedUserData.orderItemsList.size>1){
             cartBinding.checkoutBtn.isEnabled = true
             Log.i("Order List", "Cart inside else if ${LoggedUserData.orderItemsList.size} ")
@@ -77,17 +75,17 @@ class CartFragment : Fragment(), Communicator {
                         is ApiState.Loading -> {
                             cartBinding.lottieSplash.visibility = View.GONE
                             cartBinding.cartProgressBar.visibility = View.VISIBLE
+
                         }
                         is ApiState.Success<*> -> {
                             if(it.date!=null) {
+
                                 cartBinding.cartProgressBar.visibility = View.GONE
                                 draftOrderPost = it.date as DraftOrderPost
                                 if(LoggedUserData.orderItemsList.size ==0)
                                     LoggedUserData.orderItemsList = (draftOrderPost.draft_order.line_items?: mutableListOf()) as MutableList<LineItem>
-                                Log.i("Order List", "Cart inside observation ${LoggedUserData.orderItemsList.size} ")
                                 if(LoggedUserData.orderItemsList.size>1)
                                     cartBinding.checkoutBtn.isEnabled = true
-                                Log.i("Order List", "Cart list is grater than 1 ${LoggedUserData.orderItemsList.size} ")
                                 showHideAnimation()
                                 cartAdapter.updateCartList(LoggedUserData.orderItemsList)
                                 calcTotalPrice()
