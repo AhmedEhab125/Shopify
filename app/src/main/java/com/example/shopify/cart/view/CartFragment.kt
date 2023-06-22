@@ -46,8 +46,8 @@ class CartFragment : Fragment(), Communicator {
         savedInstanceState: Bundle?
     ): View {
         cartBinding = FragmentCartBinding.inflate(inflater)
-        cartAdapter = CartAdapter(LoggedUserData.orderItemsList, this)
-        cartFactory = CartViewModelFactory(CartRepo(RemoteSource(ShopifyAPi.retrofitService)))
+        cartAdapter = CartAdapter(listOf(), this)
+        cartFactory = CartViewModelFactory(CartRepo(RemoteSource()))
         cartViewModel = ViewModelProvider(requireActivity(), cartFactory)[CartViewModel::class.java]
         draftId = LocalDataSource.getInstance().readFromShared(requireContext())?.cartdraftOrderId
         return cartBinding.root
@@ -61,8 +61,6 @@ class CartFragment : Fragment(), Communicator {
         }else if (LoggedUserData.orderItemsList.size>1){
             cartBinding.checkoutBtn.isEnabled = true
             Log.i("Order List", "Cart inside else if ${LoggedUserData.orderItemsList.size} ")
-        }else{
-            showHideAnimation()
         }
         cartBinding.cartRV.adapter = cartAdapter
         cartBinding.cartRV.layoutManager = LinearLayoutManager(requireContext())

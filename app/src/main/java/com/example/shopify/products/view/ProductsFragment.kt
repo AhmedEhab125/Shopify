@@ -3,6 +3,7 @@ package com.example.shopify.products.view
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -125,7 +126,6 @@ class ProductsFragment : Fragment(),OnClickToShowDetails {
             networkObservation.observeOnNetwork().collectLatest {
                 when (it.name) {
                     "Avaliavle" -> {
-
                         Log.i("Internet", it.name)
                         retry()
                     }
