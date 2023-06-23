@@ -155,6 +155,7 @@ class HomeFragment : Fragment() {
         ads.add(Ads(R.drawable.discount5, Constants.vouchersList[4]))
         ads.add(Ads(R.drawable.discount6, Constants.vouchersList[5]))
         adsAdapter = AdsAdapter(ads, viewPager2)
+
         homeBinding.dicountsSlider.adapter = adsAdapter
         viewPager2.clipToPadding = false
         viewPager2.clipChildren = false
@@ -176,7 +177,7 @@ class HomeFragment : Fragment() {
                 when (result) {
                     is ApiState.Success<*> -> {
                         homeBinding.progressBar.visibility = View.GONE
-
+                        homeBinding.tbNoBrands.visibility = View.GONE
                         var brands = result.date as BrandModel?
                         smartCollections = brands?.smart_collections ?: listOf()
                         brandsAdapter.setBrandsList(smartCollections)

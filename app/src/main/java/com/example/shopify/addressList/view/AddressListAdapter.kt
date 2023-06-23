@@ -3,6 +3,7 @@ package com.example.shopify.addressList.view
 import android.app.Dialog
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.Button
@@ -16,7 +17,11 @@ import com.example.shopify.databinding.AdressessItemBinding
 import com.example.shopify.utiltes.Constants
 import com.example.shopify.utiltes.LoggedUserData
 
-class AddressListAdapter(var list: MutableList<Addresse>, var iView: RemoveCustomerAddress,var comesFrom : String) :
+class AddressListAdapter(
+    var list: MutableList<Addresse>,
+    var iView: RemoveCustomerAddress,
+    var comesFrom: String
+) :
     RecyclerView.Adapter<AddressListAdapter.ViewHolder>() {
     private lateinit var context: Context
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -40,28 +45,38 @@ class AddressListAdapter(var list: MutableList<Addresse>, var iView: RemoveCusto
 
         holder.binding.tvAddress.text =
             "${list[position].address1}, ${list[position].city}, ${list[position].country}"
+
+        if (list[position].default == true)
+            holder.binding.ivDefulteAddress.visibility = View.VISIBLE
+      //  holder.binding.imageView2.setImageResource(R.drawable.baseline_home_24)
+
         holder.binding.btnDeleteAddress.setOnClickListener {
-            if (list[position].default == true)
+            if (list[position].default == true) {
                 cantDialog(holder.binding.root.context)
-            else
-                deleteDialog(holder.binding.root.context,position)
+
+            } else
+                deleteDialog(holder.binding.root.context, position)
 
         }
         holder.binding.cvAddress.setOnClickListener {
-            if (comesFrom.equals("cart")){
-                Constants.selectedAddress  = ShippingAddress(address1 = list[position].address1!!
-                    , city = list[position].city!!
-                    , country = list[position].country!!
-                    , first_name = list[position]?.first_name ?:"ahmed"
-                    , phone = list[position].phone ?:"010"
-                    , last_name = "ehab")
-                Navigation.findNavController(it).navigate(R.id.action_addressListFragment_to_paymentFragment)
+            if (comesFrom.equals("cart")) {
+                Constants.selectedAddress = ShippingAddress(
+                    address1 = list[position].address1!!,
+                    city = list[position].city!!,
+                    country = list[position].country!!,
+                    first_name = list[position]?.first_name ?: "ahmed",
+                    phone = list[position].phone ?: "010",
+                    last_name = "ehab"
+                )
+                Navigation.findNavController(it)
+                    .navigate(R.id.action_addressListFragment_to_paymentFragment)
             }
         }
 
 
     }
-    fun deleteDialog(context: Context,position :Int) {
+
+    fun deleteDialog(context: Context, position: Int) {
         val dialog = Dialog(context)
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setContentView(R.layout.delete_address_dialog)
@@ -83,6 +98,7 @@ class AddressListAdapter(var list: MutableList<Addresse>, var iView: RemoveCusto
         dialog.setCanceledOnTouchOutside(true)
         dialog.show()
     }
+
     fun cantDialog(context: Context) {
         val dialog = Dialog(context)
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)

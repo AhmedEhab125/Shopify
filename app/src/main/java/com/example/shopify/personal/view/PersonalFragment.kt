@@ -95,6 +95,8 @@ class PersonalFragment : Fragment() {
         }
         checkNetwork()
         if(FirebaseAuth.getInstance().currentUser==null){
+            personalBinding.tvNoFav.visibility =View.GONE
+            personalBinding.tvNoOrders.visibility =View.GONE
 
             personalBinding.view2.visibility =View.GONE
             personalBinding.view3.visibility =View.GONE
