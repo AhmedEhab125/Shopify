@@ -150,7 +150,14 @@ class ProductsFragment : Fragment(), OnClickToShowDetails {
             }
             R.id.sectionAll ->{
                 productsAdapter.updateList(myProducts)
+
             }
+
+        }
+        if (filterList.size==0 && !productsBinding.sectionAll.isChecked){
+            productsBinding.tvNoProduct.visibility=View.VISIBLE
+        }else{
+            productsBinding.tvNoProduct.visibility=View.GONE
 
         }
     }
