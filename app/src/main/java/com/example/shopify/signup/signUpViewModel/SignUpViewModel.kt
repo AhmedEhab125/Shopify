@@ -34,7 +34,6 @@ class SignUpViewModel (var remoteSource: RegisterUserInterFace) : ViewModel() {
                 _userInfo.value = ApiState.Failure(error)
             }.collect { myUser ->
                 _userInfo.value = ApiState.Success(myUser)
-                Log.i("USER",myUser?.customer?.email?:"Milad")
             }
         }
     }

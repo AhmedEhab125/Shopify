@@ -24,7 +24,8 @@
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/imgs_view_pager"
                 android:layout_width="match_parent"
-                android:layout_height="270dp" />
+                android:layout_height="270dp"
+                android:layout_gravity="center" />
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/indicator"

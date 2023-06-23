@@ -46,11 +46,9 @@ import com.example.shopify.utiltes.LoggedUserData
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.auth.FirebaseAuth
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import java.lang.Runnable
 import kotlin.random.Random
 
 class ProductDetailsFragment : Fragment() {
@@ -85,27 +83,30 @@ class ProductDetailsFragment : Fragment() {
         cartViewModel = ViewModelProvider(requireActivity(), cartFactory)[CartViewModel::class.java]
         favFactory = FavoriteViewModelFactory(ConcreteFavClass(RemoteSource()))
         favViewModel =  ViewModelProvider(requireActivity(), favFactory)[FavoriteViewModel::class.java]
-        draftId = LocalDataSource.getInstance().readFromShared(requireContext())?.cartdraftOrderId ?:0
-        wishListId = LocalDataSource.getInstance().readFromShared(requireContext())?.whiDraftOedredId ?:0
+
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         checkNetwork()
-        if(LoggedUserData.orderItemsList.size ==0){
-            cartViewModel.getCartItems(draftId)
+        if(FirebaseAuth.getInstance().currentUser!=null&& LoggedUserData.orderItemsList.size ==0){
+            lifecycleScope.launch(Dispatchers.Main) {
+                delay(500)
+                draftId = LocalDataSource.getInstance().readFromShared(requireContext())?.cartdraftOrderId ?:0
+                cartViewModel.getCartItems(draftId)
+            }
             observeAtGetOrderDraft()
         }
-        if (LoggedUserData.favOrderDraft.size == 0){
-            favViewModel.getFavItems(wishListId)
+        if (FirebaseAuth.getInstance().currentUser!=null&&LoggedUserData.favOrderDraft.size == 0){
+            lifecycleScope.launch(Dispatchers.Main) {
+                delay(500)
+                wishListId = LocalDataSource.getInstance().readFromShared(requireContext())?.whiDraftOedredId ?:0
+                favViewModel.getFavItems(wishListId)
+            }
             observeAtFavItems()
         }
-
-
-
         productIdRecived = requireArguments().getLong("product_Id")
-
         binding.btnContinue.setOnClickListener {
             if (FirebaseAuth.getInstance().currentUser != null) {
                 addToCart()
@@ -144,7 +145,6 @@ class ProductDetailsFragment : Fragment() {
                         binding.progressBar5.visibility = View.GONE
                         showComponantes()
                         setData()
-                        Log.i("Ehabbbbb","Observeation")
 
                     }
                     else -> {
@@ -241,7 +241,6 @@ class ProductDetailsFragment : Fragment() {
                 title = myProduct.product?.title
             )
             LoggedUserData.orderItemsList.add(lineItem)
-            Log.i("essamcount", "${LoggedUserData.orderItemsList.size}")
         }
         //Snackbar.make(binding.tvProductDetails,"Item Is Added To Cart",Snackbar.LENGTH_LONG).show()
         Toast.makeText(requireContext(),"Item Is Added To Cart",Toast.LENGTH_LONG).show()
@@ -289,6 +288,9 @@ class ProductDetailsFragment : Fragment() {
     private fun setData() {
         imgAdapter = ImagePagerAdapter(requireContext(), myProduct.product?.images)
         binding.imgsViewPager.adapter = imgAdapter
+        binding.imgsViewPager.offscreenPageLimit = 3
+        binding.imgsViewPager.setPageTransformer(ZoomOutPageTransformer())
+
 
         TabLayoutMediator(binding.indicator, binding.imgsViewPager) { tab, position ->
             // Set the text for each tab
@@ -351,10 +353,10 @@ class ProductDetailsFragment : Fragment() {
                 when (it) {
                     is ApiState.Loading->binding.progressBar5.visibility = View.VISIBLE
                     is ApiState.Success<*> -> {
-                        LoggedUserData.orderItemsList.addAll( (it.date as? DraftOrderPost)?.draft_order?.line_items ?: mutableListOf())
+                        LoggedUserData.orderItemsList= (it.date as? DraftOrderPost)?.draft_order?.line_items as? MutableList<LineItem>?: mutableListOf()
                     }
                     is ApiState.Failure -> {
-                        Log.i("Failure", "error in get order list in details screen ${it.error.message}")
+                        print("error in get order list in details screen ${it.error.message}")
                     }
 
                 }
@@ -369,33 +371,18 @@ class ProductDetailsFragment : Fragment() {
                 when (it) {
                     is ApiState.Loading -> binding.progressBar5.visibility = View.VISIBLE
                     is ApiState.Success<*> -> {
-
-                        LoggedUserData.favOrderDraft.addAll(
-                            (it.date as? DraftOrderPost)?.draft_order?.line_items ?: mutableListOf()
-                        )
-                       // hena btdrb ya milad ab2 a3mel check 3aliha
-                     /*   LoggedUserData.favOrderDraft.forEach { item->
-                            if (item.title == myProduct.product?.title) {
-                                binding.btnAddToFav.setBackgroundResource(R.drawable.favorite_clicked)
-                                myProduct.product?.isFav = true
-                            }
-                        }*/
+                        LoggedUserData.favOrderDraft=
+                            ((it.date as? DraftOrderPost)?.draft_order?.line_items ?: mutableListOf()) as MutableList<LineItem>
                     }
                     is ApiState.Failure -> {
-                        Log.i(
-                            "Failure",
-                            "error in get order list in details screen ${it.error.message}"
-                        )
+                            print("error in get order list in details screen ${it.error.message}")
                     }
 
                 }
             }
 
         }
-
-
     }
-
 
     private fun isAleradyFav(name:String) : Boolean{
         LoggedUserData.favOrderDraft.forEach { item->

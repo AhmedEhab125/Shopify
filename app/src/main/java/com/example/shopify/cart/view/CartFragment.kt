@@ -14,7 +14,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.shopify.Models.draftOrderCreation.DraftOrder
 import com.example.shopify.Models.draftOrderCreation.DraftOrderPost
 import com.example.shopify.Models.draftOrderCreation.LineItem
 import com.example.shopify.R
@@ -32,6 +31,7 @@ import com.example.shopify.utiltes.Constants
 import com.example.shopify.utiltes.LoggedUserData
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class CartFragment : Fragment(), Communicator {
@@ -40,7 +40,6 @@ class CartFragment : Fragment(), Communicator {
     private lateinit var cartFactory: CartViewModelFactory
     private lateinit var cartViewModel: CartViewModel
     private lateinit var draftOrderPost: DraftOrderPost
-    //private lateinit var cartItemsList: MutableList<LineItem>
     private var draftId: Long? = 0L
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -61,6 +60,7 @@ class CartFragment : Fragment(), Communicator {
             cartViewModel.getCartItems(draftId ?: 0)
         }else if (LoggedUserData.orderItemsList.size>1){
             cartBinding.checkoutBtn.isEnabled = true
+            Log.i("Order List", "Cart inside else if ${LoggedUserData.orderItemsList.size} ")
         }
         cartBinding.cartRV.adapter = cartAdapter
         cartBinding.cartRV.layoutManager = LinearLayoutManager(requireContext())
@@ -87,6 +87,10 @@ class CartFragment : Fragment(), Communicator {
                                 showHideAnimation()
                                 cartAdapter.updateCartList(LoggedUserData.orderItemsList)
                                 calcTotalPrice()
+                            }else{
+                                cartBinding.cartProgressBar.visibility = View.GONE
+                                delay(3000)
+                                Snackbar.make(cartBinding.textView2,"Bad internet Connection",Snackbar.LENGTH_LONG).show()
                             }
                         }
                         is ApiState.Failure -> {

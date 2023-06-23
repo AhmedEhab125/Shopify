@@ -2,7 +2,7 @@
     <string name="app_name">Shopify</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="category_search_hint">Search</string>
+    <string name="category_search_hint">Search for Category</string>
     <string name="brand">Brands</string>
     <string name="cartButton">Proceed To Checkout</string>
     <string name="total">Total Cost:</string>
@@ -68,6 +68,10 @@
     <string name="cant_delete_address">you must have default addresses</string>
     <string name="Entre_Valide_Address">Entre Valide Address</string>
     <string name="cant_delete">Sorry  you cant Delete</string>
+    <string name="no_brand_found">No Brands Found</string>
+    <string name="no_products">No products Found</string>
+    <string name="no_orders">No Orders Yet</string>
+    <string name="no_fav_item">No Favourite Item</string>
 
 
 </resources>

@@ -55,10 +55,7 @@ class LoginFragment : Fragment() {
                 binding.loginProgressBar.visibility = View.VISIBLE
                 auth.signInWithEmailAndPassword(email,password).addOnCompleteListener {
                     if (it.isSuccessful){
-
-                        Log.i("login",email + "" + password)
                         UserFireBaseDataBase.getUserFromFireBase(requireContext(),auth.currentUser!!)
-                        Log.i("Hoba", auth.currentUser!!.uid)
                         LoggedUserData.favOrderDraft.clear()
                         LoggedUserData.orderItemsList.clear()
                         lifecycleScope.launch(Dispatchers.Main){
@@ -78,7 +75,6 @@ class LoginFragment : Fragment() {
 
                     }else{
                         Toast.makeText(requireContext(),it.exception.toString(),Toast.LENGTH_SHORT).show()
-                        Log.i("erorr",it.exception.toString())
                         binding.loginProgressBar.visibility = View.GONE
                     }
 

@@ -155,6 +155,7 @@ class HomeFragment : Fragment() {
         ads.add(Ads(R.drawable.discount5, Constants.vouchersList[4]))
         ads.add(Ads(R.drawable.discount6, Constants.vouchersList[5]))
         adsAdapter = AdsAdapter(ads, viewPager2)
+
         homeBinding.dicountsSlider.adapter = adsAdapter
         viewPager2.clipToPadding = false
         viewPager2.clipChildren = false
@@ -176,7 +177,7 @@ class HomeFragment : Fragment() {
                 when (result) {
                     is ApiState.Success<*> -> {
                         homeBinding.progressBar.visibility = View.GONE
-
+                        homeBinding.tbNoBrands.visibility = View.GONE
                         var brands = result.date as BrandModel?
                         smartCollections = brands?.smart_collections ?: listOf()
                         brandsAdapter.setBrandsList(smartCollections)
@@ -205,6 +206,7 @@ class HomeFragment : Fragment() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
 
                 filterBrands(s.toString())
+
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -225,7 +227,10 @@ class HomeFragment : Fragment() {
         }
         brandsAdapter.setBrandsList(filterdBrands)
         if (filterdBrands.isEmpty()) {
-            Toast.makeText(requireContext(), "Sorry,No Data Founded", Toast.LENGTH_SHORT).show()
+            homeBinding.tbNoBrands.visibility = View.VISIBLE
+            }else{
+            homeBinding.tbNoBrands.visibility = View.GONE
+
         }
 
     }

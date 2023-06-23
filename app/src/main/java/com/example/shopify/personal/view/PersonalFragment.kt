@@ -95,6 +95,8 @@ class PersonalFragment : Fragment() {
         }
         checkNetwork()
         if(FirebaseAuth.getInstance().currentUser==null){
+            personalBinding.tvNoFav.visibility =View.GONE
+            personalBinding.tvNoOrders.visibility =View.GONE
 
             personalBinding.view2.visibility =View.GONE
             personalBinding.view3.visibility =View.GONE
@@ -171,21 +173,20 @@ class PersonalFragment : Fragment() {
                                     (favDraftOrderPost.draft_order.line_items
                                         ?: mutableListOf()) as MutableList<LineItem>
                             }
+                            if(LoggedUserData.favOrderDraft.size ==1){
+                                personalBinding.tvNoFav.visibility=View.VISIBLE
+
+                            }else{
+                                personalBinding.tvNoFav.visibility=View.GONE
+
+                            }
+                          //  personalBinding.tvNoFav.visibility=View.VISIBLE
 
                             wishListAdapter.updateWishList(LoggedUserData.favOrderDraft)
                         }
-
-
-                        /*  if(LoggedUserData.favOrderDraft.size == 1){
-                         Log.i("No Data","There Is No Data")
-                     }else {
-                         favAdapter.updateFavList(LoggedUserData.favOrderDraft)
-                     }*/
-
                     }
                     else -> {
                       //  favouriteBinding.favprogressBar.visibility = View.GONE
-                        Log.i("Failure", "There is Erorr")
                         Snackbar.make(
                             requireView(),
                             "Failed to obtain data from api",
@@ -211,6 +212,14 @@ class PersonalFragment : Fragment() {
 
                         var orders = result.date as List<Order>
                         personalBinding.personProgressBar.visibility= View.GONE
+                        if (orders.size==0){
+                            personalBinding.tvNoOrders.visibility=View.VISIBLE
+
+                        }
+                        else{
+                            personalBinding.tvNoOrders.visibility=View.GONE
+                        }
+
 
                         // smartCollections = brands?.smart_collections ?: listOf()
                         //  brandsAdapter.setBrandsList(smartCollections)

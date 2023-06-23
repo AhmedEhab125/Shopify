@@ -8,6 +8,7 @@
     tools:context=".home.view.HomeFragment">
 
     <ScrollView
+        android:id="@+id/scrollView3"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -24,6 +25,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
+
+                <TextView
+                    android:id="@+id/tb_no_brands"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/no_brand_found"
+                    android:textColor="#000000"
+                    android:textSize="34sp"
+                    android:textStyle="bold"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/brandsRV" />
 
                 <androidx.constraintlayout.widget.Guideline
                     android:id="@+id/guideline"
@@ -50,7 +65,7 @@
                     android:drawableStart="@drawable/baseline_search_24"
                     android:drawablePadding="12dp"
                     android:ems="10"
-                    android:hint="@string/category_search_hint"
+                    android:hint="Search for Brand"
                     android:inputType="textPersonName"
                     android:minHeight="48dp"
                     android:paddingStart="12dp"
