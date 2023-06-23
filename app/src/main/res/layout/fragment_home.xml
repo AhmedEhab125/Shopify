@@ -65,7 +65,7 @@
                     android:drawableStart="@drawable/baseline_search_24"
                     android:drawablePadding="12dp"
                     android:ems="10"
-                    android:hint="Search ifro Brand"
+                    android:hint="Search for Brand"
                     android:inputType="textPersonName"
                     android:minHeight="48dp"
                     android:paddingStart="12dp"
