@@ -288,6 +288,9 @@ class ProductDetailsFragment : Fragment() {
     private fun setData() {
         imgAdapter = ImagePagerAdapter(requireContext(), myProduct.product?.images)
         binding.imgsViewPager.adapter = imgAdapter
+        binding.imgsViewPager.offscreenPageLimit = 3
+        binding.imgsViewPager.setPageTransformer(ZoomOutPageTransformer())
+
 
         TabLayoutMediator(binding.indicator, binding.imgsViewPager) { tab, position ->
             // Set the text for each tab

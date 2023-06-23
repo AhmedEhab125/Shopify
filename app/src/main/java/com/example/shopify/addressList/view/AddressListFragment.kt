@@ -81,6 +81,7 @@ class AddressListFragment : Fragment(),RemoveCustomerAddress {
         var data = requireArguments().getString("comesFrom")
         if (data.equals("cart")){
             binding.btnAddAddresses.visibility =View.GONE
+            binding.tvAddressHeader.text = "Select Delivery Address"
         }
 
         myAdapter = AddressListAdapter(mutableListOf(),this,data!!)
