@@ -36,6 +36,7 @@ class ProductsFragment : Fragment(), OnClickToShowDetails {
     lateinit var myProducts: List<Product>
     lateinit var networkObservation: NetworkObservation
     var ids = ""
+    lateinit var filterList : List<Product>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -55,6 +56,7 @@ class ProductsFragment : Fragment(), OnClickToShowDetails {
         viewModel.getCollectionProducts(dataReceived)
         productsBinding.productsRV.adapter = productsAdapter
         productsBinding.productsRV.layoutManager = GridLayoutManager(requireContext(), 2)
+        filterList = listOf()
         updateRecycleView()
         searchForProduct()
         checkNetwork()
@@ -103,6 +105,7 @@ class ProductsFragment : Fragment(), OnClickToShowDetails {
                         productsBinding.progressBar2.visibility = View.GONE
                         var apiProduct = result.date as List<Product>
                         myProducts = apiProduct
+                        filterList =myProducts
                         productsAdapter.updateList(myProducts)
                     }
                     is ApiState.Failure -> {
@@ -153,7 +156,7 @@ class ProductsFragment : Fragment(), OnClickToShowDetails {
     }
 
     fun filterProductsWithPrice(start: Int, end: Int): List<Product> {
-        var filterList = myProducts.filter {
+         filterList = myProducts.filter {
             it.variants?.get(0)?.price?.toDouble()
                 ?.toInt()!! >= start && it.variants?.get(0)?.price?.toDouble()?.toInt()!! <= end
         }
