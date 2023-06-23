@@ -7,7 +7,7 @@ import com.example.shopify.repo.RemoteSource
 import com.example.shopify.repo.RemoteSourceInterface
 import kotlinx.coroutines.flow.Flow
 
-class CollectionProductsRepo(var remoteSource: RemoteSourceInterface ): ICollectionProductsRepo {
+class CollectionProductsRepo(var remoteSource: ICollectionProductsRepo ): ICollectionProductsRepo {
     override suspend fun getCollectionProducts(id: Long): Flow<CollectProductsModel?> {
         return remoteSource.getCollectionProducts(id)
     }

@@ -23,7 +23,7 @@ class CollectionProductsRepoTest{
     @get:Rule
     var mainDispatcherRule = MainDispatcherRule()
 
-    lateinit var remoteSource: CollectionProductsInterface
+    lateinit var remoteSource: ICollectionProductsRepo
     lateinit var repo: CollectionProductsRepo
     lateinit var productsMock: CollectProductsModel
 

@@ -21,33 +21,50 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-
 class HomeViewModelTest{
-    lateinit var homeViewModel : HomeViewModel
-    lateinit var repo : FakeBrandsRepo
+
     @get:Rule
     var instanceExecuteRule = InstantTaskExecutorRule()
 
     @get:Rule
     var mainDispatcherRule = MainDispatcherRule()
 
+    lateinit var homeViewModel : HomeViewModel
+    lateinit var repo : FakeBrandsRepo
+    lateinit var fakeResponse : BrandModel
+
     @Before
     fun setup(){
         // given -> create objects of repo and view model
         repo = FakeBrandsRepo()
         homeViewModel = HomeViewModel(repo)
+        fakeResponse = getFakeResponseOfSmartCollections()
 
     }
     @Test
-    fun getBrandsAndCheckTheResponseAsExepectedOrNot() = runBlockingTest {
+    fun getBrandsAndCheckTheSizeOfListisEqualOne() = mainDispatcherRule.runBlockingTest {
         //when -> call the method in the view model
         homeViewModel.getBrands()
         val apiState = homeViewModel.accessBrandsList.getOrAwaitValue {  } as ApiState.Success<*>
         val result = apiState.date as BrandModel?
 
         //then -> Check the result as exepected or not
-        assertEquals(result?.smart_collections?.size,0)
+        assertEquals(result?.smart_collections?.size,1)
 
     }
+
+    @Test
+    fun getbrandsAndCheckTheResultAsExpectedOrNo()= mainDispatcherRule.runBlockingTest {
+        //when -> call the method in the view model
+        homeViewModel.getBrands()
+        val apiState = homeViewModel.accessBrandsList.getOrAwaitValue {  } as ApiState.Success<*>
+        val result = apiState.date as BrandModel?
+
+        //then -> Check the result as exepected or not
+        assertEquals(result?.smart_collections!![0].id,fakeResponse.smart_collections[0].id)
+
+    }
+
+
 
 }

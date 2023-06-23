@@ -5,6 +5,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.shopify.Models.products.CollectProductsModel
 import com.example.shopify.nework.ApiState
 import com.example.shopify.payment.model.ThirdPartyResponse
+import com.example.shopify.products.model.ICollectionProductsRepo
 import com.example.shopify.repo.CollectionProductsInterface
 import com.example.wetharapplication.MainDispatcherRule
 import com.example.wetharapplication.getOrAwaitValue
@@ -25,7 +26,7 @@ class ProductsViewModelTest {
     var mainDispatcherRule = MainDispatcherRule()
 
     lateinit var productsViewModel: ProductsViewModel
-    lateinit var repo : CollectionProductsInterface
+    lateinit var repo : ICollectionProductsRepo
     lateinit var responseProduct: CollectProductsModel
 
     @Before
