@@ -25,6 +25,7 @@ import com.example.shopify.products.model.CollectionProductsRepo
 import com.example.shopify.products.viewModel.ProductsViewModel
 import com.example.shopify.products.viewModel.ProductsViewModelFactory
 import com.example.shopify.repo.RemoteSource
+import com.example.shopify.utiltes.Constants
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -53,6 +54,11 @@ class ProductsFragment : Fragment(), OnClickToShowDetails {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val dataReceived = requireArguments().getLong("id")
+        if(Constants.currencyType == "EGP"){
+            productsBinding.section0150.text = "0 - 4500 EGP"
+            productsBinding.section151300.text = "4500 - 9000 EGP"
+        }
+
         viewModel.getCollectionProducts(dataReceived)
         productsBinding.productsRV.adapter = productsAdapter
         productsBinding.productsRV.layoutManager = GridLayoutManager(requireContext(), 2)
@@ -145,7 +151,7 @@ class ProductsFragment : Fragment(), OnClickToShowDetails {
                 productsAdapter.updateList(filterProductsWithPrice(0,150))
             }
             R.id.section151_300 ->{
-                productsAdapter.updateList(filterProductsWithPrice(151,300))
+                productsAdapter.updateList(filterProductsWithPrice(150,300))
 
             }
             R.id.sectionAll ->{

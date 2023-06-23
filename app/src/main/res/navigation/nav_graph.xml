@@ -158,7 +158,8 @@
             app:popUpToInclusive="false" />
         <action
             android:id="@+id/action_addressListFragment_to_paymentFragment"
-            app:destination="@id/paymentFragment" />
+            app:destination="@id/paymentFragment"
+            app:popUpTo="@id/cartFragment" />
         <argument
             android:name="comesFrom"
             app:argType="string"
@@ -177,7 +178,7 @@
         <action
             android:id="@+id/action_paymentFragment_to_orderDetailsFragment"
             app:destination="@id/orderDetailsFragment"
-            app:popUpToInclusive="false" />
+            app:popUpTo="@id/cartFragment" />
         <action
             android:id="@+id/action_paymentFragment_to_cartFragment"
             app:destination="@id/cartFragment"
