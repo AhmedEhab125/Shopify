@@ -129,7 +129,7 @@ class ProductDetailsFragment : Fragment() {
         }
 
         productDetalisFactory =ProductDetalisFactory(ConcreteProductDetalis(RemoteSource()))
-        productDetalisViewModel = ViewModelProvider(requireActivity(),productDetalisFactory)[ProductDetalisViewModel::class.java]
+        productDetalisViewModel = ViewModelProvider(this,productDetalisFactory)[ProductDetalisViewModel::class.java]
         productDetalisViewModel.getProductDetalis(productIdRecived)
 
        jop = lifecycleScope.launch {
@@ -225,7 +225,7 @@ class ProductDetailsFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        handler.postDelayed(runnable, 5000)
+        handler.postDelayed(runnable, 3000)
 
 
     }
@@ -299,7 +299,7 @@ class ProductDetailsFragment : Fragment() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
                 handler.removeCallbacks(runnable)
-                handler.postDelayed(runnable, 5000)
+                handler.postDelayed(runnable, 3000)
             }
         })
         binding.tvProductName.text = myProduct.product?.title
@@ -405,7 +405,6 @@ class ProductDetailsFragment : Fragment() {
                     "Lost" -> {
                         showInternetDialog()
 
-
                     }
                     InternetStatus.UnAvailable.name-> {
                         Log.i("Internet", it.name)
@@ -421,7 +420,6 @@ class ProductDetailsFragment : Fragment() {
     }
 
     fun retry() {
-
         productDetalisViewModel.getProductDetalis(productIdRecived)
 
     }

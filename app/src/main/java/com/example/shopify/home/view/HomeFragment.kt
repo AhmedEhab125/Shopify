@@ -66,7 +66,7 @@ class HomeFragment : Fragment() {
         homeViewModelFactory =
             HomeViewModelFactory(HomeRepo(RemoteSource()))
         homeViewModel = ViewModelProvider(
-            requireActivity(),
+            this,
             homeViewModelFactory
         ).get(HomeViewModel::class.java)
         homeBinding = FragmentHomeBinding.inflate(inflater)

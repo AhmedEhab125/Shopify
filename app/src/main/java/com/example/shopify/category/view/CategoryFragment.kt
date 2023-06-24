@@ -157,7 +157,7 @@ class CategoryFragment : Fragment(),OnClickToShowDetalisOfCategory {
             categoryViewModel.accessAllProductList.collect { result ->
                 when (result) {
                     is ApiState.Success<*> -> {
-
+                    binding.tvNoProducts.visibility=View.GONE
                         var products = result.date as CollectProductsModel?
                         products?.let {
                             myProducts =it.products

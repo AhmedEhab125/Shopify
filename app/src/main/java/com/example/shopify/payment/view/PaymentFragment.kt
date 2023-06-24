@@ -97,7 +97,7 @@ class PaymentFragment : Fragment() {
         )
         job = Job()
         paymentViewModel = ViewModelProvider(
-            requireActivity(),
+            this,
             paymentViewModelFactory
         )[PaymentViewModel::class.java]
         itemList = mutableListOf()
@@ -232,7 +232,7 @@ class PaymentFragment : Fragment() {
 
     fun observeOrderCreated() {
         job = lifecycleScope.launch(Dispatchers.IO) {
-            paymentViewModel._order.collectLatest { result ->
+            paymentViewModel.accessOrder.collectLatest { result ->
                 when (result) {
                     is ApiState.Success<*> -> {
 
@@ -252,7 +252,7 @@ class PaymentFragment : Fragment() {
                                 )
                                 //Toast.makeText( requireContext(),"order set succssfully",Toast.LENGTH_LONG ).show()
                                 //Toast.makeText(requireContext(), "Payment Success!!", Toast.LENGTH_SHORT).show()
-                                paymentViewModel._order.value=ApiState.Loading
+
                             } else {
                                 Toast.makeText(
                                     requireContext(),
