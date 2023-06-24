@@ -67,15 +67,17 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/signFirstNameTFLayout"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                        android:layout_width="150dp"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="8dp"
+                        android:layout_marginEnd="5dp"
                         android:minHeight="48dp"
                         app:boxCornerRadiusBottomEnd="20dp"
                         app:boxCornerRadiusBottomStart="20dp"
                         app:boxCornerRadiusTopEnd="20dp"
                         app:boxCornerRadiusTopStart="20dp"
+                        app:layout_constraintEnd_toStartOf="@+id/signLastNameTFLayout"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/textView10"
                         app:startIconDrawable="@drawable/baseline_person_24">
@@ -96,9 +98,9 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/signLastNameTFLayout"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                        android:layout_width="150dp"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="32dp"
+                        android:layout_marginStart="5dp"
                         android:layout_marginTop="8dp"
                         android:layout_marginEnd="16dp"
                         android:minHeight="48dp"
@@ -114,9 +116,9 @@
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/signLastNameTF"
                             android:layout_width="match_parent"
-                            android:maxLines="1"
                             android:layout_height="wrap_content"
-                            android:hint="@string/signUpLastName"></com.google.android.material.textfield.TextInputEditText>
+                            android:hint="@string/signUpLastName"
+                            android:maxLines="1"></com.google.android.material.textfield.TextInputEditText>
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -145,8 +147,8 @@
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/signEmailTF"
                             android:layout_width="match_parent"
-                            android:maxLines="1"
-                            android:layout_height="wrap_content">
+                            android:layout_height="wrap_content"
+                            android:maxLines="1">
 
                         </com.google.android.material.textfield.TextInputEditText>
 
@@ -174,11 +176,11 @@
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/signPassTF"
-                            android:maxLines="1"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/login_pass_hint"
-                            android:inputType="textPassword">
+                            android:inputType="textPassword"
+                            android:maxLines="1">
 
                         </com.google.android.material.textfield.TextInputEditText>
 
@@ -207,10 +209,10 @@
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/signCongrmPassTF"
-                            android:maxLines="1"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:inputType="textPassword">
+                            android:inputType="textPassword"
+                            android:maxLines="1">
 
                         </com.google.android.material.textfield.TextInputEditText>
 
@@ -238,9 +240,9 @@
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/signStreetTF"
-                            android:maxLines="1"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:maxLines="1"
 
                             >
 
@@ -252,12 +254,12 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/signCountryTFLayout"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                        android:layout_width="150dp"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="32dp"
+                        android:layout_marginStart="5dp"
+
                         android:layout_marginTop="16dp"
                         android:layout_marginEnd="16dp"
-
                         android:hint="@string/signUpCountry"
                         android:minHeight="48dp"
                         app:boxCornerRadiusBottomEnd="20dp"
@@ -271,9 +273,9 @@
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/signCounterTF"
-                            android:maxLines="1"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:maxLines="1"
 
                             >
 
@@ -285,26 +287,28 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/signCityTFLayout"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                        android:layout_width="150dp"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="16dp"
+                        android:layout_marginEnd="5dp"
+
                         android:hint="@string/signUpCity"
                         android:minHeight="48dp"
-
                         app:boxCornerRadiusBottomEnd="20dp"
                         app:boxCornerRadiusBottomStart="20dp"
                         app:boxCornerRadiusTopEnd="20dp"
                         app:boxCornerRadiusTopStart="20dp"
+                        app:layout_constraintEnd_toStartOf="@+id/signCountryTFLayout"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/signStreetTFLayout"
                         app:startIconDrawable="@drawable/baseline_location_on_24">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/signCityTF"
-                            android:maxLines="1"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:maxLines="1"
 
                             >
 
@@ -334,9 +338,9 @@
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/signPhoneTF"
-                            android:maxLines="1"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:maxLines="1"
 
                             >
 
