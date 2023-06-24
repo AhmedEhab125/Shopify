@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 
 class PaymentViewModel (var remoteSource: IPostOrder) : ViewModel() {
-     var _order = MutableStateFlow<ApiState>(ApiState.Loading)
+   private  var _order = MutableStateFlow<ApiState>(ApiState.Loading)
     var  accessOrder : StateFlow<ApiState> = _order
     val coroutineExceptionHandler = CoroutineExceptionHandler { _, throwable ->
         throwable.printStackTrace()

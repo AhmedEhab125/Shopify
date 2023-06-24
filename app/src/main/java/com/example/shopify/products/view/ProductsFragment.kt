@@ -47,7 +47,7 @@ class ProductsFragment : Fragment(), OnClickToShowDetails {
         productsAdapter = ProductsAdapter(listOf(), this)
         val factory =
             ProductsViewModelFactory(CollectionProductsRepo(RemoteSource()))
-        viewModel = ViewModelProvider(requireActivity(), factory)[ProductsViewModel::class.java]
+        viewModel = ViewModelProvider(this, factory)[ProductsViewModel::class.java]
         return productsBinding.root
     }
 
@@ -108,6 +108,7 @@ class ProductsFragment : Fragment(), OnClickToShowDetails {
             viewModel.accessProductList.collect() { result ->
                 when (result) {
                     is ApiState.Success<*> -> {
+                        productsBinding.tvNoProduct.visibility=View.GONE
                         productsBinding.progressBar2.visibility = View.GONE
                         var apiProduct = result.date as List<Product>
                         myProducts = apiProduct
@@ -179,20 +180,36 @@ class ProductsFragment : Fragment(), OnClickToShowDetails {
 
     fun filterProducts(text: String) {
         var filtteredProducts = mutableListOf<Product>()
-        for (product in myProducts) {
-            if (product.title?.lowercase()?.contains(text.lowercase())!!) {
-                filtteredProducts.add(product)
+        if (checkTheButtonIsChecked()) {
+            for (product in filterList) {
+                if (product.title?.lowercase()?.contains(text.lowercase())!!) {
+                    filtteredProducts.add(product)
+                }
+
+            }
+            productsAdapter.updateList(filtteredProducts)
+            if (filtteredProducts.isEmpty()) {
+                productsBinding.tvNoProduct.visibility = View.VISIBLE
+            } else {
+                productsBinding.tvNoProduct.visibility = View.GONE
+
+            }
+        } else {
+            for (product in myProducts) {
+                if (product.title?.lowercase()?.contains(text.lowercase())!!) {
+                    filtteredProducts.add(product)
+                }
+
+            }
+            productsAdapter.updateList(filtteredProducts)
+            if (filtteredProducts.isEmpty()) {
+                productsBinding.tvNoProduct.visibility = View.VISIBLE
+            } else {
+                productsBinding.tvNoProduct.visibility = View.GONE
+
             }
 
         }
-        productsAdapter.updateList(filtteredProducts)
-        if (filtteredProducts.isEmpty()) {
-            productsBinding.tvNoProduct.visibility = View.VISIBLE
-        } else {
-            productsBinding.tvNoProduct.visibility = View.GONE
-
-        }
-
     }
 
     override fun ShowProductDetalis(productId: Long) {
@@ -230,6 +247,14 @@ class ProductsFragment : Fragment(), OnClickToShowDetails {
         val dataReceived = requireArguments().getLong("id")
         viewModel.getCollectionProducts(dataReceived)
 
+    }
+
+
+    fun checkTheButtonIsChecked() : Boolean {
+        if(productsBinding.section0150.isChecked || productsBinding.section151300.isChecked){
+            return true
+        }
+        return false
     }
 
 
