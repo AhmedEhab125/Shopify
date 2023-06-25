@@ -5,6 +5,6 @@
         android:color="@android:color/white"/>
 
     <item android:state_checked="false"
-        android:color="#39c7a5"/>
+        android:color="@color/blue_app_color"/>
 
 </selector>
